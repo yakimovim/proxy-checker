@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Plugins/" />
+  <Folder Name="/Plugins/Loaders/">
+    <Project Path="ProxyChecker.Loaders.UriTextFile/ProxyChecker.Loaders.UriTextFile.csproj" Id="4082a546-6de4-4c63-b8ba-fd967a60c18d" />
+  </Folder>
+  <Project Path="ProxyChecker.Interfaces/ProxyChecker.Interfaces.csproj" Id="edf93d75-8833-4b26-833d-291a402f2e83" />
+  <Project Path="ProxyChecker/ProxyChecker.csproj" />
+</Solution>
