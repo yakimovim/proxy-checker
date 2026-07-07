@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ProxyChecker.Interfaces\ProxyChecker.Interfaces.csproj" />
   </ItemGroup>
 

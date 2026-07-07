@@ -3,10 +3,13 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ProxyChecker.Factories;
+using ProxyChecker.Interfaces.Services;
 using ProxyChecker.Services;
 using ProxyChecker.Storage;
 using ProxyChecker.ViewModels;
 using ProxyChecker.Views;
+using System.Drawing;
 
 namespace ProxyChecker
 {
@@ -43,6 +46,10 @@ namespace ProxyChecker
       collection.AddDbContext<AppDbContext>(options => {
         options.UseSqlite("Data Source=app.db");
       });
+
+      collection.AddSingleton<IDesktopProvider, DesktopProvider>();
+
+      collection.AddTransient<LoadersWindowFactory>();
 
       collection.AddTransient<MainWindowViewModel>();
 

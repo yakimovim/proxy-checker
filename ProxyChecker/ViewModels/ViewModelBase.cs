@@ -1,22 +1,15 @@
-﻿using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ProxyChecker.Interfaces.Services;
 
 namespace ProxyChecker.ViewModels
 {
   internal abstract class ViewModelBase : ObservableObject
   {
-    protected IClassicDesktopStyleApplicationLifetime? Desktop
-    {
-      get
-      {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-          return desktop;
-        }
+    protected readonly IDesktopProvider _desktopProvider;
 
-        return null;
-      }
+    protected ViewModelBase(IDesktopProvider desktopProvider)
+    {
+      _desktopProvider = desktopProvider ?? throw new System.ArgumentNullException(nameof(desktopProvider));
     }
   }
 }

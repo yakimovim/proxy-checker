@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Services;
 using ProxyChecker.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,11 +13,17 @@ namespace ProxyChecker.ViewModels
 {
   internal partial class MainWindowViewModel : ViewModelBase
   {
+    private readonly LoadersWindowFactory _loadersWindowFactory;
     private readonly ProxyCheckerService _proxyCheckerService;
 
-    public MainWindowViewModel(ProxyCheckerService proxyCheckerService)
+    public MainWindowViewModel(
+      IDesktopProvider desktopProvider,
+      LoadersWindowFactory loadersWindowFactory,
+      ProxyCheckerService proxyCheckerService)
+      : base(desktopProvider)
     {
-      _proxyCheckerService = proxyCheckerService;
+      _loadersWindowFactory = loadersWindowFactory ?? throw new System.ArgumentNullException(nameof(loadersWindowFactory));
+      _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
     }
 
     [ObservableProperty]
@@ -29,6 +37,7 @@ namespace ProxyChecker.ViewModels
     {
       LoadedProxies.Add(
         new ProxyViewModel(
+          _desktopProvider,
           new Proxy("http", "72.56.238.99", 1080)
         )
       );
@@ -56,7 +65,7 @@ namespace ProxyChecker.ViewModels
       await foreach (var proxy in _proxyCheckerService.Check(LoadedProxies.Select(pvm => pvm.ToProxy())))
       {
         ValidProxies.Add(
-          new ProxyViewModel(proxy)
+          new ProxyViewModel(_desktopProvider, proxy)
         );
       }
 
@@ -75,17 +84,19 @@ namespace ProxyChecker.ViewModels
     [RelayCommand]
     private void Exit()
     {
-      Desktop?.Shutdown();
+      _desktopProvider.GetDesktop()?.Shutdown();
     }
 
     [RelayCommand]
     private void ShowLoaders()
     {
-      if (Desktop?.MainWindow is not null)
-      {
-        var dialog = new LoadersWindow();
+      var mainWindow = _desktopProvider.MainWindow;
 
-        dialog.ShowDialog(Desktop?.MainWindow!);
+      if (mainWindow is not null)
+      {
+        var dialog = _loadersWindowFactory.CreateLoadersWindow();
+
+        dialog.ShowDialog(mainWindow!);
       }
     }
 

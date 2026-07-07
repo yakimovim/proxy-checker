@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Services;
 
 namespace ProxyChecker.ViewModels
 {
@@ -20,9 +21,12 @@ namespace ProxyChecker.ViewModels
     [ObservableProperty]
     private string? _password;
 
-    public ProxyViewModel() { }
+    public ProxyViewModel(IDesktopProvider desktopProvider)
+      : base(desktopProvider)
+    { }
 
-    public ProxyViewModel(Proxy proxy) 
+    public ProxyViewModel(IDesktopProvider desktopProvider, Proxy proxy) 
+      : base(desktopProvider)
     {
       _scheme = proxy?.Scheme ?? string.Empty;
       _host = proxy?.Host ?? string.Empty;
