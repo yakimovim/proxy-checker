@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
-using ProxyChecker.Interfaces.Services;
 using ProxyChecker.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,10 +16,8 @@ namespace ProxyChecker.ViewModels
     private readonly ProxyCheckerService _proxyCheckerService;
 
     public MainWindowViewModel(
-      IDesktopProvider desktopProvider,
       LoadersWindowFactory loadersWindowFactory,
       ProxyCheckerService proxyCheckerService)
-      : base(desktopProvider)
     {
       _loadersWindowFactory = loadersWindowFactory ?? throw new System.ArgumentNullException(nameof(loadersWindowFactory));
       _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
@@ -37,7 +34,6 @@ namespace ProxyChecker.ViewModels
     {
       LoadedProxies.Add(
         new ProxyViewModel(
-          _desktopProvider,
           new Proxy("http", "72.56.238.99", 1080)
         )
       );
@@ -65,7 +61,7 @@ namespace ProxyChecker.ViewModels
       await foreach (var proxy in _proxyCheckerService.Check(LoadedProxies.Select(pvm => pvm.ToProxy())))
       {
         ValidProxies.Add(
-          new ProxyViewModel(_desktopProvider, proxy)
+          new ProxyViewModel(proxy)
         );
       }
 
@@ -84,13 +80,13 @@ namespace ProxyChecker.ViewModels
     [RelayCommand]
     private void Exit()
     {
-      _desktopProvider.GetDesktop()?.Shutdown();
+      MainApplication.Desktop.Shutdown();
     }
 
     [RelayCommand]
     private void ShowLoaders()
     {
-      var mainWindow = _desktopProvider.MainWindow;
+      var mainWindow = MainApplication.MainWindow;
 
       if (mainWindow is not null)
       {

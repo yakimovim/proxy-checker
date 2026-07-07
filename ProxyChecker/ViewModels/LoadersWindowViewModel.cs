@@ -1,51 +1,44 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ProxyChecker.Interfaces.Loaders;
-using ProxyChecker.Interfaces.Services;
 using ProxyChecker.Models;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace ProxyChecker.ViewModels
 {
-  internal partial class LoadersWindowViewModel : ViewModelBase
-  {
-    private readonly IEnumerable<ILoaderCreator> _loaderCreators;
+	internal partial class LoadersWindowViewModel : ViewModelBase
+	{
+		private readonly Window _window; 
 
-    public LoadersWindowViewModel(
-      IDesktopProvider desktopProvider,
-      IEnumerable<ILoaderCreator> loaderCreators
-      ) 
-      : base(desktopProvider)
-    {
-      _loaderCreators = loaderCreators;
-    }
+		[ObservableProperty]
+		private ObservableCollection<LoaderViewModel> _loaders = new();
 
-    public Window Window { get; set; } = default!;
+		public LoadersWindowViewModel(Window window)
+		{
+			_window = window ?? throw new System.ArgumentNullException(nameof(window));
 
-    [ObservableProperty]
-    private ObservableCollection<LoaderViewModel> _loaders = new();
+			_window.DataContext = this;
+		}
 
-    [RelayCommand]
-    private async Task Add()
-    {
-      var dialog = new CreateLoaderWindow();
+		[RelayCommand]
+		private async Task Add()
+		{
+			var dialog = new CreateLoaderWindow();
 
-      var viewModel = new CreateLoaderWindowViewModel(dialog, _desktopProvider, _loaderCreators);
+			var viewModel = new CreateLoaderWindowViewModel(dialog);
 
-      var result = await dialog.ShowDialog<LoaderCreationModel?>(Window);
+			var result = await dialog.ShowDialog<LoaderCreationModel?>(_window);
 
-      if (result is not null)
-      {
-        Loaders.Add(
-          new LoaderViewModel(_desktopProvider)
-          {
-            Name = result.Name,
-          }
-        );
-      }
-    }
-  }
+			if (result is not null)
+			{
+				Loaders.Add(
+				  new LoaderViewModel
+				  {
+					  Name = result.Name,
+				  }
+				);
+			}
+		}
+	}
 }
