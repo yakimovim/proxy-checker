@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ProxyChecker.Interfaces.Loaders;
+using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Models;
 using ProxyChecker.Services;
 using System.Collections.Generic;
@@ -9,23 +10,18 @@ using System.Linq;
 
 namespace ProxyChecker.ViewModels
 {
-	internal partial class CreateLoaderWindowViewModel : ViewModelBase
+  internal partial class CreateLoaderWindowViewModel : ViewModelBase, IRequireWindow
 	{
-		private readonly Window _window;
-
-		public CreateLoaderWindowViewModel(
-		  Window window)
+		public CreateLoaderWindowViewModel()
 		{
-			_window = window ?? throw new System.ArgumentNullException(nameof(window));
-
 			SelectedLoaderCreator = LoaderCreators.FirstOrDefault();
-
-			_window.DataContext = this;
 		}
 
 		public IEnumerable<ILoaderCreator> LoaderCreators => Plugins.LoaderCreators;
 
-		[ObservableProperty]
+		public Window Window { get; set; } = default!;
+
+    [ObservableProperty]
 		[NotifyCanExecuteChangedFor(nameof(OkCommand))]
 		private string _name = string.Empty;
 
@@ -35,7 +31,7 @@ namespace ProxyChecker.ViewModels
 		[RelayCommand(CanExecute = nameof(CanCreate))]
 		private void Ok()
 		{
-			_window.Close(
+			Window.Close(
 			  new LoaderCreationModel
 			  {
 				  Name = Name,
@@ -50,7 +46,7 @@ namespace ProxyChecker.ViewModels
 		[RelayCommand]
 		private void Cancel()
 		{
-			_window.Close(null);
+			Window.Close(null);
 		}
 	}
 }

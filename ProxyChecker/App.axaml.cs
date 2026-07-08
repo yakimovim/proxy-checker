@@ -35,12 +35,9 @@ namespace ProxyChecker
 
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
-				desktop.MainWindow = new MainWindow
-				{
-					DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>()
-				};
+				serviceProvider.GetRequiredService<DesktopService>().Desktop = desktop;
 
-				MainApplication.Desktop = desktop;
+				desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
 			}
 
 			base.OnFrameworkInitializationCompleted();
@@ -53,11 +50,21 @@ namespace ProxyChecker
 				options.UseSqlite("Data Source=app.db");
 			});
 
-			collection.AddTransient<LoadersWindowFactory>();
+			collection.AddTransient<IWindowFactory, WindowFactory>();
 
+			collection.AddTransient<MainWindow>();
 			collection.AddTransient<MainWindowViewModel>();
 
-			collection.AddTransient<ProxyCheckerService>();
+			collection.AddTransient<LoadersWindow>();
+			collection.AddTransient<LoadersWindowViewModel>();
+
+      collection.AddTransient<CreateLoaderWindow>();
+      collection.AddTransient<CreateLoaderWindowViewModel>();
+
+			collection.AddSingleton<DesktopService>();
+			collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
+
+      collection.AddTransient<ProxyCheckerService>();
 		}
 
 		private void PreparePlugins(ServiceProvider serviceProvider)

@@ -1,11 +1,16 @@
 using Avalonia.Controls;
+using ProxyChecker.ViewModels;
 
 namespace ProxyChecker;
 
-public partial class LoadersWindow : Window
+internal partial class LoadersWindow : Window
 {
-    public LoadersWindow()
-    {
-        InitializeComponent();
-    }
+  public LoadersWindow(LoadersWindowViewModel model)
+  {
+    DataContext = model;
+
+    model.Window = this;
+
+    InitializeComponent();
+  }
 }

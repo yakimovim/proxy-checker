@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,16 +11,20 @@ using System.Threading.Tasks;
 
 namespace ProxyChecker.ViewModels
 {
-  internal partial class MainWindowViewModel : ViewModelBase
+  internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
   {
-    private readonly LoadersWindowFactory _loadersWindowFactory;
+    private readonly IDesktopService _desktopService;
+    private readonly IWindowFactory _windowFactory;
     private readonly ProxyCheckerService _proxyCheckerService;
 
     public MainWindowViewModel(
-      LoadersWindowFactory loadersWindowFactory,
-      ProxyCheckerService proxyCheckerService)
+      IDesktopService desktopService,
+      IWindowFactory windowFactory,
+      ProxyCheckerService proxyCheckerService
+      )
     {
-      _loadersWindowFactory = loadersWindowFactory ?? throw new System.ArgumentNullException(nameof(loadersWindowFactory));
+      _desktopService = desktopService;
+      _windowFactory = windowFactory ?? throw new System.ArgumentNullException(nameof(windowFactory));
       _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
     }
 
@@ -28,6 +33,8 @@ namespace ProxyChecker.ViewModels
 
     [ObservableProperty]
     private ObservableCollection<ProxyViewModel> _validProxies = new();
+
+    public Window Window { get; set; } = default!;
 
     [RelayCommand]
     private void LoadProxies()
@@ -80,20 +87,15 @@ namespace ProxyChecker.ViewModels
     [RelayCommand]
     private void Exit()
     {
-      MainApplication.Desktop.Shutdown();
+      _desktopService.Desktop.Shutdown();
     }
 
     [RelayCommand]
     private void ShowLoaders()
     {
-      var mainWindow = MainApplication.MainWindow;
+      var dialog = _windowFactory.CreateWindow<LoadersWindow>();
 
-      if (mainWindow is not null)
-      {
-        var dialog = _loadersWindowFactory.CreateLoadersWindow();
-
-        dialog.ShowDialog(mainWindow!);
-      }
+      dialog.ShowDialog(Window);
     }
 
     [RelayCommand]
