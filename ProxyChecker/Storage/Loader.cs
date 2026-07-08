@@ -7,7 +7,7 @@ namespace ProxyChecker.Storage
   {
     [Key]
     public int Id { get; set; }
-    public int Name { get; set; }
+    public string Name { get; set; } = default!;
     public Guid CreatorUid { get; set; }
     public string? JsonSettings { get; set; }
   }

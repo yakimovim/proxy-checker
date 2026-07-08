@@ -1,29 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using ProxyChecker.Storage;
 
 namespace ProxyChecker.ViewModels
 {
   internal partial class LoaderViewModel : ViewModelBase
   {
     [ObservableProperty]
+    private int _id;
+
+    [ObservableProperty]
     private string _name = string.Empty;
 
-    [RelayCommand]
-    private void Delete()
+    public LoaderViewModel(Loader loader)
     {
-
-    }
-
-    [RelayCommand]
-    private void ShowSettings()
-    {
-
-    }
-
-    [RelayCommand]
-    private void MakeActive()
-    {
-
+      Id = loader.Id;
+      Name = loader.Name;
     }
   }
 }

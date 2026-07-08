@@ -10,5 +10,7 @@ namespace ProxyChecker.Storage
     }
 
     public DbSet<Loader> Loaders { get; set; }
+
+    public DbSet<Settings> Settings { get; set; }
   }
 }

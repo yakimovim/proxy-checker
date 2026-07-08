@@ -11,6 +11,7 @@ using ProxyChecker.Storage;
 using ProxyChecker.ViewModels;
 using ProxyChecker.Views;
 using System;
+using System.Linq;
 
 namespace ProxyChecker
 {
@@ -33,6 +34,8 @@ namespace ProxyChecker
 
 			PreparePlugins(serviceProvider);
 
+			PrepareDatabase(serviceProvider);
+
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
 				serviceProvider.GetRequiredService<DesktopService>().Desktop = desktop;
@@ -43,7 +46,20 @@ namespace ProxyChecker
 			base.OnFrameworkInitializationCompleted();
 		}
 
-		private void RegisterApplicationServices(ServiceCollection collection)
+    private void PrepareDatabase(ServiceProvider serviceProvider)
+    {
+      var db = serviceProvider.GetRequiredService<AppDbContext>();
+      db.Database.EnsureCreated();
+
+			if (!db.Settings.Any())
+			{
+				db.Settings.Add(new Settings());
+
+				db.SaveChanges();
+			}
+    }
+
+    private void RegisterApplicationServices(ServiceCollection collection)
 		{
 			collection.AddDbContext<AppDbContext>(options =>
 			{
