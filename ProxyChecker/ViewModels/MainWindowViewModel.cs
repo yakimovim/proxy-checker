@@ -1,9 +1,13 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Services;
+using ProxyChecker.Storage;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -15,16 +19,22 @@ namespace ProxyChecker.ViewModels
   {
     private readonly IDesktopService _desktopService;
     private readonly IWindowFactory _windowFactory;
+    private readonly AppDbContext _db;
+    private readonly IEnumerable<ILoaderCreator> _loaderCreators;
     private readonly ProxyCheckerService _proxyCheckerService;
 
     public MainWindowViewModel(
       IDesktopService desktopService,
       IWindowFactory windowFactory,
+      AppDbContext db,
+      IEnumerable<ILoaderCreator> loaderCreators,
       ProxyCheckerService proxyCheckerService
       )
     {
       _desktopService = desktopService;
       _windowFactory = windowFactory ?? throw new System.ArgumentNullException(nameof(windowFactory));
+      _db = db;
+      _loaderCreators = loaderCreators;
       _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
     }
 
@@ -37,13 +47,43 @@ namespace ProxyChecker.ViewModels
     public Window Window { get; set; } = default!;
 
     [RelayCommand]
-    private void LoadProxies()
+    private async Task LoadProxiesAsync(CancellationToken cancellationToken)
     {
-      LoadedProxies.Add(
-        new ProxyViewModel(
-          new Proxy("http", "72.56.238.99", 1080)
-        )
-      );
+      var appSettings = _db.Settings.Single();
+
+      if (appSettings.LoaderId is null)
+      {
+        ShowLoaders();
+        
+        return;
+      }
+
+      var dbLoader = await _db.Loaders.FindAsync(appSettings.LoaderId.Value, cancellationToken);
+
+      if (dbLoader is null)
+      {
+        return;
+      }
+
+      var loaderCreator = _loaderCreators.SingleOrDefault(c => c.Uid == dbLoader.CreatorUid);
+
+      if (loaderCreator is null)
+      {
+        return;
+      }
+
+      var loader = loaderCreator.Create();
+
+      loader.SetSettings(dbLoader.JsonSettings is null ? null : JToken.Parse(dbLoader.JsonSettings));
+
+      await foreach(var proxy in loader.LoadAsync(cancellationToken))
+      {
+        LoadedProxies.Add(
+          new ProxyViewModel(
+            proxy
+          )
+        );
+      }
 
       ClearProxiesCommand.NotifyCanExecuteChanged();
       CheckProxiesCommand.NotifyCanExecuteChanged();
@@ -65,7 +105,7 @@ namespace ProxyChecker.ViewModels
     {
       ValidProxies.Clear();
 
-      await foreach (var proxy in _proxyCheckerService.Check(LoadedProxies.Select(pvm => pvm.ToProxy())))
+      await foreach (var proxy in _proxyCheckerService.CheckAsync(LoadedProxies.Select(pvm => pvm.ToProxy())))
       {
         ValidProxies.Add(
           new ProxyViewModel(proxy)

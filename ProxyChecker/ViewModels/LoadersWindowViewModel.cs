@@ -3,10 +3,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Models;
 using ProxyChecker.Storage;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -17,6 +20,7 @@ namespace ProxyChecker.ViewModels
   internal partial class LoadersWindowViewModel : ViewModelBase, IRequireWindow
   {
     private readonly IWindowFactory _windowFactory;
+    private readonly IEnumerable<ILoaderCreator> _loaderCreators;
     private readonly AppDbContext _db;
 
     [ObservableProperty]
@@ -26,16 +30,25 @@ namespace ProxyChecker.ViewModels
 
     public LoadersWindowViewModel(
       IWindowFactory windowFactory,
+      IEnumerable<ILoaderCreator> loaderCreators,
       AppDbContext db)
     {
       _windowFactory = windowFactory ?? throw new System.ArgumentNullException(nameof(windowFactory));
+      _loaderCreators = loaderCreators;
       _db = db;
 
       var storedLoaders = _db.Loaders.ToArray();
 
+      var settings = _db.Settings.Single();
+
       foreach (var loader in storedLoaders)
       {
-        Loaders.Add(new LoaderViewModel(loader));
+        Loaders.Add(
+          new LoaderViewModel(loader)
+          {
+            IsActive = (loader.Id == settings.LoaderId),
+          }
+        );
       }
     }
 
@@ -61,8 +74,10 @@ namespace ProxyChecker.ViewModels
 
         await _db.SaveChangesAsync(cancellationToken);
 
+        LoaderViewModel loaderViewModel = new(dbLoader);
+
         Loaders.Add(
-          new LoaderViewModel(dbLoader)
+          loaderViewModel
         );
 
         var settings = _db.Settings.Single();
@@ -70,6 +85,8 @@ namespace ProxyChecker.ViewModels
         if (settings.LoaderId is null)
         {
           settings.LoaderId = dbLoader.Id;
+
+          loaderViewModel.IsActive = true;
 
           await _db.SaveChangesAsync(cancellationToken);
         }
@@ -101,9 +118,48 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private void ShowSettings(LoaderViewModel loaderViewModel)
+    private async Task ShowSettings(LoaderViewModel loaderViewModel, CancellationToken cancellationToken)
     {
-      ;
+      var dbLoader = await _db.Loaders.FindAsync(loaderViewModel.Id, cancellationToken);
+
+      if (dbLoader is null)
+      {
+        return;
+      }
+
+      var loaderCreator = _loaderCreators.SingleOrDefault(c => c.Uid == dbLoader.CreatorUid);
+
+      if (loaderCreator is null)
+      {
+        return;
+      }
+
+      var loader = loaderCreator.Create();
+
+      var settingsToken = string.IsNullOrEmpty(dbLoader.JsonSettings) ? null : JToken.Parse(dbLoader.JsonSettings);
+
+      loader.SetSettings(settingsToken);
+
+      var settingsControl = loader.GetSettingsControl();
+
+      var viewModel = new LoaderSettingsWindowViewModel
+      {
+        Name = loaderViewModel.Name,
+        SettingsControl = settingsControl,
+      };
+
+      var dialog = new LoaderSettingsWindow(viewModel);
+
+      if(await dialog.ShowDialog<bool>(Window))
+      {
+        settingsToken = loader.GetSettingsFromControl(settingsControl);
+
+        dbLoader.Name = loaderViewModel.Name;
+
+        dbLoader.JsonSettings = settingsToken?.ToString(Formatting.None);
+
+        _db.SaveChanges();
+      }
     }
 
     [RelayCommand]

@@ -11,6 +11,9 @@ namespace ProxyChecker.ViewModels
     [ObservableProperty]
     private string _name = string.Empty;
 
+    [ObservableProperty]
+    private bool _isActive = false;
+
     public LoaderViewModel(Loader loader)
     {
       Id = loader.Id;

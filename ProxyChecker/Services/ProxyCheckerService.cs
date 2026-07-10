@@ -3,16 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProxyChecker.Services
 {
   internal class ProxyCheckerService
   {
-    public async IAsyncEnumerable<Proxy> Check(IEnumerable<Proxy> proxies)
+    public async IAsyncEnumerable<Proxy> CheckAsync(
+      IEnumerable<Proxy> proxies,
+      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
       foreach (var proxy in proxies)
       {
+        if (cancellationToken.IsCancellationRequested)
+        {
+          yield break;
+        }
+
         var isValid = await IsProxyValid(proxy);
 
         yield return proxy;

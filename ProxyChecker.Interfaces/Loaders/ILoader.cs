@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Avalonia.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace ProxyChecker.Interfaces.Loaders
 {
@@ -6,9 +7,13 @@ namespace ProxyChecker.Interfaces.Loaders
   {
     string Name { get; set; }
 
-    JToken GetSettings();
+    JToken? GetSettings();
 
-    void SetSettings(JToken settings);
+    Control? GetSettingsControl();
+
+    void SetSettings(JToken? settings);
+
+    JToken? GetSettingsFromControl(Control? control);
 
     IAsyncEnumerable<Proxy> LoadAsync(CancellationToken cancellationToken);
   }
