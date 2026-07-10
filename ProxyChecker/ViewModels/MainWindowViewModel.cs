@@ -100,20 +100,47 @@ namespace ProxyChecker.ViewModels
 
     private bool CanClearProxies() => LoadedProxies.Any();
 
+    private CancellationTokenSource? _proxyCheckingCancellationTokenSource;
+
     [RelayCommand(CanExecute = nameof(CanCheckProxies))]
     private async Task CheckProxiesAsync(CancellationToken cancellationToken)
     {
       ValidProxies.Clear();
 
-      await foreach (var proxy in _proxyCheckerService.CheckAsync(LoadedProxies.Select(pvm => pvm.ToProxy())))
+      try
       {
-        ValidProxies.Add(
-          new ProxyViewModel(proxy)
-        );
-      }
+        _proxyCheckingCancellationTokenSource = new CancellationTokenSource();
+        cancellationToken.Register(() => {
+          _proxyCheckingCancellationTokenSource?.Cancel();
+        });
 
-      ExportProxiesCommand.NotifyCanExecuteChanged();
+        CancelProxyCheckingCommand.NotifyCanExecuteChanged();
+
+        await foreach (var proxy in _proxyCheckerService.CheckAsync(LoadedProxies.Select(pvm => pvm.ToProxy()), _proxyCheckingCancellationTokenSource.Token))
+        {
+          ValidProxies.Add(
+            new ProxyViewModel(proxy)
+          );
+        }
+      }
+      finally
+      {
+        _proxyCheckingCancellationTokenSource?.Dispose();
+        _proxyCheckingCancellationTokenSource = null;
+
+        CancelProxyCheckingCommand.NotifyCanExecuteChanged();
+        ExportProxiesCommand.NotifyCanExecuteChanged();
+      }
     }
+
+    [RelayCommand(CanExecute = nameof(CanCancelProxyChecking))]
+    private async Task CancelProxyCheckingAsync()
+    {
+      _proxyCheckingCancellationTokenSource?.Cancel();
+    }
+
+    public bool CanCancelProxyChecking()
+      => _proxyCheckingCancellationTokenSource != null;
 
     private bool CanCheckProxies() => LoadedProxies.Any();
 

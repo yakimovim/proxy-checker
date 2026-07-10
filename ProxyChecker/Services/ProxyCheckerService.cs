@@ -22,13 +22,13 @@ namespace ProxyChecker.Services
           yield break;
         }
 
-        var isValid = await IsProxyValid(proxy);
+        var isValid = await IsProxyValid(proxy, cancellationToken);
 
         yield return proxy;
       }
     }
 
-    private async Task<bool> IsProxyValid(Proxy proxy)
+    private async Task<bool> IsProxyValid(Proxy proxy, CancellationToken cancellationToken)
     {
       var webProxy = new WebProxy
       {
@@ -49,7 +49,7 @@ namespace ProxyChecker.Services
       {
         // 4. Send your request
         // string response = await client.GetStringAsync("https://ipify.org");
-        var response = await client.GetAsync("https://google.com");
+        var response = await client.GetAsync("https://google.com", cancellationToken);
 
         return response.StatusCode == HttpStatusCode.OK;
 

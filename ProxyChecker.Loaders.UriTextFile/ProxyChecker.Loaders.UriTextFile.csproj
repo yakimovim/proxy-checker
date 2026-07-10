@@ -17,10 +17,10 @@
     <ProjectReference Include="..\ProxyChecker.Interfaces\ProxyChecker.Interfaces.csproj" />
   </ItemGroup>
 
-	<Target Name="CopyBuildResults" AfterTargets="AfterBuild">
-		<ItemGroup>
-			<BuildResults Include="$(TargetDir)**\*.*" />
-		</ItemGroup>
-		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Loaders\UriTextFile\%(RecursiveDir)" SkipUnchangedFiles="true" />
-	</Target>
+  <Target Name="CopyBuildResults" AfterTargets="AfterBuild">
+	  <ItemGroup>
+		  <BuildResults Include="$(TargetDir)**\*.*" />
+	  </ItemGroup>
+	  <Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Loaders\UriTextFile\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

@@ -63,6 +63,7 @@
 		<DockPanel Grid.Row="3" LastChildFill="True">
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
 				<Button Classes="action-button" Command="{Binding CheckProxiesCommand}">Check</Button>
+				<Button Classes="action-button" Command="{Binding CancelProxyCheckingCommand}">Cancel</Button>
 			</StackPanel>
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
 				<Button Classes="action-button" Command="{Binding ExportProxiesCommand}">Export</Button>

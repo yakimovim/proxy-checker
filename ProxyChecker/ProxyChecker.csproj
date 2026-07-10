@@ -31,10 +31,10 @@
     <ProjectReference Include="..\ProxyChecker.Interfaces\ProxyChecker.Interfaces.csproj" />
   </ItemGroup>
 
-	<Target Name="MakePluginsFolderAfterBuild" AfterTargets="Build">
-		<MakeDir Directories="$(TargetDir)Plugins" />
-		<MakeDir Directories="$(TargetDir)Plugins\Loaders" />
-		<MakeDir Directories="$(TargetDir)Plugins\Checkers" />
-		<MakeDir Directories="$(TargetDir)Plugins\Exporters" />
-	</Target>
+  <Target Name="MakePluginsFolderAfterBuild" AfterTargets="Build">
+	  <MakeDir Directories="$(TargetDir)Plugins" />
+	  <MakeDir Directories="$(TargetDir)Plugins\Loaders" />
+	  <MakeDir Directories="$(TargetDir)Plugins\Checkers" />
+	  <MakeDir Directories="$(TargetDir)Plugins\Exporters" />
+  </Target>
 </Project>
