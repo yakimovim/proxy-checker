@@ -7,11 +7,13 @@
         x:DataType="vm:LoaderSettingsWindowViewModel"
         x:Class="ProxyChecker.Loaders.UriTextFile.LoaderSettingsWindow"
         Title="LoaderSettingsWindow">
-	<DockPanel LastChildFill="True">
-		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-			<Button Command="{Binding OkCommand}">Ok</Button>
-			<Button Command="{Binding CancelCommand}">Cancel</Button>
-		</StackPanel>
-		<ContentControl Content="{Binding SettingsControl}"/>
-	</DockPanel>
+  <DockPanel LastChildFill="True">
+    <StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button Classes="action-button" Command="{Binding OkCommand}">Ok</Button>
+      <Button Classes="action-button" Command="{Binding CancelCommand}">Cancel</Button>
+    </StackPanel>
+    <ScrollViewer>
+      <ContentControl Content="{Binding SettingsControl}"/>
+    </ScrollViewer>
+  </DockPanel>
 </Window>

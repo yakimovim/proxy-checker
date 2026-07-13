@@ -9,9 +9,9 @@
         x:Class="ProxyChecker.CreateLoaderWindow"
         Title="CreateLoaderWindow">
 	<DockPanel LastChildFill="True">
-		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-			<Button Command="{Binding OkCommand}">Ok</Button>
-			<Button Command="{Binding CancelCommand}">Cancel</Button>
+		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button Classes="action-button" Command="{Binding OkCommand}">Ok</Button>
+      <Button Classes="action-button" Command="{Binding CancelCommand}">Cancel</Button>
 		</StackPanel>
 		<Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
 			<TextBlock Grid.Row ="0" Grid.Column="0">Name</TextBlock>

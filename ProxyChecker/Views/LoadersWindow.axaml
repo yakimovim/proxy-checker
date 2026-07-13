@@ -10,35 +10,37 @@
         ShowInTaskbar="False"
         Icon="/Assets/avalonia-logo.ico"
         Title="Loaders">
-	<DockPanel LastChildFill="True">
-		<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-			<Button Command="{Binding AddCommand}">Add</Button>
-		</StackPanel>
-		<ItemsControl ItemsSource="{Binding Loaders}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Border Margin="5,10,5,5"
+  <DockPanel LastChildFill="True">
+    <StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+      <Button Classes="action-button" Command="{Binding AddCommand}">Add</Button>
+    </StackPanel>
+    <ItemsControl ItemsSource="{Binding Loaders}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Margin="5,10,5,5"
 									CornerRadius="5"
 									BorderBrush="Gray" BorderThickness="1"
 									Padding="5">
-						<DockPanel>
-							<TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
-							<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-								<Button 
+            <DockPanel>
+              <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+              <StackPanel Classes="buttons-panel" DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button
+									Classes="action-button"
 									Command="{Binding $parent[Window].((vm:LoadersWindowViewModel)DataContext).ShowSettingsCommand}"
 									CommandParameter="{Binding}">
-									Settings
-								</Button>
-								<Button 
+                  Settings
+                </Button>
+                <Button
+                  Classes="action-button"
 									Command="{Binding $parent[Window].((vm:LoadersWindowViewModel)DataContext).DeleteCommand}"
 									CommandParameter="{Binding}">
-									Delete
-								</Button>
-							</StackPanel>
-						</DockPanel>
-					</Border>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</DockPanel>
+                  Delete
+                </Button>
+              </StackPanel>
+            </DockPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </DockPanel>
 </Window>
