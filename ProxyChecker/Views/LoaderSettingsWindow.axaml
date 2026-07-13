@@ -16,7 +16,9 @@
 			<Button Command="{Binding OkCommand}">Ok</Button>
 			<Button Command="{Binding CancelCommand}">Cancel</Button>
 		</StackPanel>
-		<ContentControl Content="{Binding SettingsControl}"/>
+    <ScrollViewer>
+      <ContentControl Content="{Binding SettingsControl}"/>
+		</ScrollViewer>
 	</DockPanel>
 
 </Window>
