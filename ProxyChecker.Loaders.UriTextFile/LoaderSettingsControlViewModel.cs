@@ -6,9 +6,11 @@ using CommunityToolkit.Mvvm.Input;
 namespace ProxyChecker.Loaders.UriTextFile
 {
 	internal partial class LoaderSettingsControlViewModel
-	  : ObservableObject
+	  : ObservableValidator
 	{
 		[ObservableProperty]
+		[NotifyDataErrorInfo]
+		[FileExists]
 		private string? _filePath;
 
 		public Control Control { get; set; } = default!;
