@@ -8,7 +8,7 @@
         x:DataType="vm:CreateLoaderWindowViewModel"
         x:Class="ProxyChecker.CreateLoaderWindow"
 				Width="400" Height="300" ShowInTaskbar="False" WindowStartupLocation="CenterScreen"
-				Icon="/Assets/avalonia-logo.ico"
+				Icon="/Assets/proxy-checker.ico"
         Title="Create new loader">
 	<DockPanel LastChildFill="True" Margin="5">
 		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">

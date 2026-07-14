@@ -9,7 +9,7 @@
         Width="700" Height="400"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/proxy-checker.ico"
         Title="Loaders">
   <DockPanel LastChildFill="True">
     <StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
