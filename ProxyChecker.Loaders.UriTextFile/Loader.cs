@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
@@ -31,36 +32,40 @@ namespace ProxyChecker.Loaders.UriTextFile
 		public async IAsyncEnumerable<Proxy> LoadAsync(
 		  [EnumeratorCancellation] CancellationToken cancellationToken)
 		{
-			var settings = _settings;
+			var sourceFilePath = _settings.FilePath;
 
-			if (string.IsNullOrEmpty(settings.FilePath) || !File.Exists(settings.FilePath))
+			if (string.IsNullOrEmpty(sourceFilePath) || !File.Exists(sourceFilePath))
 			{
-				var viewModel = new LoaderSettingsWindowViewModel
-				{
-					SettingsControl = GetSettingsControl(),
-				};
+				var topLevel = TopLevel.GetTopLevel(_desktopService.Desktop.MainWindow);
 
-				var dialog = new LoaderSettingsWindow(viewModel);
-
-				if (!(await dialog.ShowDialog<bool>(_desktopService.Desktop.MainWindow!)))
-				{
+        if (topLevel == null)
+        {
 					yield break;
-				}
+        }
 
-				settings = GetTypedSettingsFromControl(viewModel.SettingsControl);
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+          Title = "Open URI File",
+          AllowMultiple = false,
+        });
 
-				if (settings == null)
-				{
-					yield break;
-				}
+        if (files.Count > 0)
+        {
+          var path = files[0].TryGetLocalPath();
+
+          if (!string.IsNullOrWhiteSpace(path))
+          {
+            sourceFilePath = path;
+          }
+        }
 			}
 
-			if (string.IsNullOrEmpty(settings.FilePath) || !File.Exists(settings.FilePath))
+			if (string.IsNullOrEmpty(sourceFilePath) || !File.Exists(sourceFilePath))
 			{
 				yield break;
 			}
 
-			using var reader = File.OpenText(settings.FilePath);
+			using var reader = File.OpenText(sourceFilePath);
 
 			while (true)
 			{

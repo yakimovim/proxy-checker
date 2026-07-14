@@ -154,11 +154,13 @@ namespace ProxyChecker.ViewModels
       {
         settingsToken = loader.GetSettingsFromControl(settingsControl);
 
-        dbLoader.Name = loaderViewModel.Name;
+        dbLoader.Name = viewModel.Name;
 
         dbLoader.JsonSettings = settingsToken?.ToString(Formatting.None);
 
         _db.SaveChanges();
+
+        loaderViewModel.Name = viewModel.Name;
       }
     }
 
