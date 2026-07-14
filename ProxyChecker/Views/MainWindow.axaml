@@ -40,7 +40,7 @@
 		</Menu>
 		<DockPanel Grid.Row="1" LastChildFill="True">
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-				<SplitButton Classes="action-button" Command="{Binding LoadProxiesCommand}" Content="Load" MinWidth="100">
+				<SplitButton Classes="action-button" Command="{Binding LoadProxiesCommand}" Content="Load">
 					<SplitButton.Flyout>
 						<MenuFlyout Placement="Bottom" ItemsSource="{Binding Loaders}">
 							<MenuFlyout.ItemContainerTheme>
@@ -68,7 +68,24 @@
 		<GridSplitter Grid.Row="2" ResizeDirection="Rows"/>
 		<DockPanel Grid.Row="3" LastChildFill="True">
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-				<Button Classes="action-button" Command="{Binding CheckProxiesCommand}">Check</Button>
+				<SplitButton Classes="action-button" Command="{Binding CheckProxiesCommand}" Content="Check">
+					<SplitButton.Flyout>
+						<MenuFlyout Placement="Bottom" ItemsSource="{Binding Checkers}">
+							<MenuFlyout.ItemContainerTheme>
+								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+									x:DataType="vm:CheckerViewModel">
+
+									<Setter Property="Header" Value="{Binding Name}"/>
+									<Setter Property="ToggleType" Value="Radio"/>
+									<Setter Property="GroupName" Value="Checkers"/>
+									<Setter Property="IsChecked" Value="{Binding IsActive}"/>
+									<Setter Property="Command" Value="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).SetActiveCheckerCommand}"/>
+									<Setter Property="CommandParameter" Value="{Binding}"/>
+								</ControlTheme>
+							</MenuFlyout.ItemContainerTheme>
+						</MenuFlyout>
+					</SplitButton.Flyout>
+				</SplitButton>
 				<Button Classes="action-button" Command="{Binding CancelProxyCheckingCommand}">Cancel</Button>
 			</StackPanel>
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">

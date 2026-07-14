@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.5" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProxyChecker.Interfaces\ProxyChecker.Interfaces.csproj" />
+  </ItemGroup>
+
+	<Target Name="CopyBuildResults" AfterTargets="AfterBuild">
+		<ItemGroup>
+			<BuildResults Include="$(TargetDir)**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Checkers\OkResponse\%(RecursiveDir)" SkipUnchangedFiles="true" />
+	</Target>
+</Project>

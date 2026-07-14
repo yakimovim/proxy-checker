@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:ProxyChecker.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ProxyChecker.CheckersWindow"
+        x:DataType="vm:CheckersWindowViewModel"
+        Width="700" Height="400"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        Icon="/Assets/proxy-checker.ico"
+        Title="Checkers">
+	<DockPanel LastChildFill="True">
+		<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+			<Button Classes="action-button" Command="{Binding AddCommand}">Add</Button>
+		</StackPanel>
+		<ItemsControl ItemsSource="{Binding Checkers}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="5,10,5,5"
+									CornerRadius="5"
+									BorderBrush="Gray" BorderThickness="1"
+									Padding="5">
+						<DockPanel>
+							<TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0" />
+							<StackPanel Classes="buttons-panel" DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+								<Button
+									Classes="action-button"
+									Command="{Binding $parent[Window].((vm:CheckersWindowViewModel)DataContext).MakeActiveCommand}"
+									CommandParameter="{Binding}"
+                  IsVisible="{Binding !IsActive}">
+									Make active
+								</Button>
+								<Button
+									Classes="action-button"
+									Command="{Binding $parent[Window].((vm:CheckersWindowViewModel)DataContext).ShowSettingsCommand}"
+									CommandParameter="{Binding}">
+									Settings
+								</Button>
+								<Button
+                  Classes="action-button"
+									Command="{Binding $parent[Window].((vm:CheckersWindowViewModel)DataContext).DeleteCommand}"
+									CommandParameter="{Binding}">
+									Delete
+								</Button>
+							</StackPanel>
+						</DockPanel>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</DockPanel>
+</Window>

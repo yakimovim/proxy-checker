@@ -1,13 +1,7 @@
 ﻿namespace ProxyChecker.Interfaces.Loaders
 {
-  public interface ILoaderCreator
+  public interface ILoaderCreator : ICreator
   {
-    Guid Uid { get; }
-
-    string Name { get; }
-
-    string Description { get; }
-
     ILoader Create();
   }
 }

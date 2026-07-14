@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/Plugins/" />
+  <Folder Name="/Plugins/Checkers/">
+    <Project Path="ProxyChecker.Checkers.OkResponse/ProxyChecker.Checkers.OkResponse.csproj" Id="b71ae818-e2a7-41df-876f-addd29365cd3" />
+  </Folder>
   <Folder Name="/Plugins/Loaders/">
     <Project Path="ProxyChecker.Loaders.UriTextFile/ProxyChecker.Loaders.UriTextFile.csproj" Id="4082a546-6de4-4c63-b8ba-fd967a60c18d" />
   </Folder>

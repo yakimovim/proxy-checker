@@ -31,6 +31,12 @@
     <ProjectReference Include="..\ProxyChecker.Interfaces\ProxyChecker.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\CheckerSettingsWindow.axaml.cs">
+      <DependentUpon>CheckerSettingsWindow.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <Target Name="MakePluginsFolderAfterBuild" AfterTargets="Build">
 	  <MakeDir Directories="$(TargetDir)Plugins" />
 	  <MakeDir Directories="$(TargetDir)Plugins\Loaders" />

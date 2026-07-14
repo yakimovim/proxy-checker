@@ -4,49 +4,50 @@ using CommunityToolkit.Mvvm.Input;
 using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Models;
-using ProxyChecker.Services;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ProxyChecker.ViewModels
 {
   internal partial class CreateLoaderWindowViewModel : ViewModelBase, IRequireWindow
-	{
-		public CreateLoaderWindowViewModel()
-		{
-			SelectedLoaderCreator = LoaderCreators.FirstOrDefault();
-		}
+  {
+    public CreateLoaderWindowViewModel(IEnumerable<ILoaderCreator> loaderCreators)
+    {
+      LoaderCreators = loaderCreators;
 
-		public IEnumerable<ILoaderCreator> LoaderCreators => Plugins.LoaderCreators;
+      SelectedLoaderCreator = LoaderCreators.FirstOrDefault();
+    }
 
-		public Window Window { get; set; } = default!;
+    public IEnumerable<ILoaderCreator> LoaderCreators { get; }
+
+    public Window Window { get; set; } = default!;
 
     [ObservableProperty]
-		[NotifyCanExecuteChangedFor(nameof(OkCommand))]
-		private string _name = string.Empty;
+    [NotifyCanExecuteChangedFor(nameof(OkCommand))]
+    private string _name = string.Empty;
 
-		[ObservableProperty]
-		private ILoaderCreator? _selectedLoaderCreator;
+    [ObservableProperty]
+    private ILoaderCreator? _selectedLoaderCreator;
 
-		[RelayCommand(CanExecute = nameof(CanCreate))]
-		private void Ok()
-		{
-			Window.Close(
-			  new LoaderCreationModel
-			  {
-				  Name = Name,
-				  LoaderCreator = SelectedLoaderCreator!
-			  }
-			);
-		}
+    [RelayCommand(CanExecute = nameof(CanCreate))]
+    private void Ok()
+    {
+      Window.Close(
+        new LoaderCreationModel
+        {
+          Name = Name,
+          LoaderCreator = SelectedLoaderCreator!
+        }
+      );
+    }
 
-		private bool CanCreate()
-		  => !string.IsNullOrWhiteSpace(Name) && SelectedLoaderCreator is not null;
+    private bool CanCreate()
+      => !string.IsNullOrWhiteSpace(Name) && SelectedLoaderCreator is not null;
 
-		[RelayCommand]
-		private void Cancel()
-		{
-			Window.Close(null);
-		}
-	}
+    [RelayCommand]
+    private void Cancel()
+    {
+      Window.Close(null);
+    }
+  }
 }

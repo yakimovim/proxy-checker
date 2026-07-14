@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
-using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Services;
 using ProxyChecker.Storage;
 using ProxyChecker.ViewModels;
 using ProxyChecker.Views;
-using System;
 using System.Linq;
 
 namespace ProxyChecker
@@ -31,8 +29,6 @@ namespace ProxyChecker
 			new PluginsAssembler().AssemblePlugins(collection);
 
 			var serviceProvider = collection.BuildServiceProvider();
-
-			PreparePlugins(serviceProvider);
 
 			PrepareDatabase(serviceProvider);
 
@@ -77,15 +73,16 @@ namespace ProxyChecker
       collection.AddTransient<CreateLoaderWindow>();
       collection.AddTransient<CreateLoaderWindowViewModel>();
 
-			collection.AddSingleton<DesktopService>();
+      collection.AddTransient<CheckersWindow>();
+      collection.AddTransient<CheckersWindowViewModel>();
+
+      collection.AddTransient<CreateCheckerWindow>();
+      collection.AddTransient<CreateCheckerWindowViewModel>();
+
+      collection.AddSingleton<DesktopService>();
 			collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
 
       collection.AddTransient<ProxyCheckerService>();
-		}
-
-		private void PreparePlugins(ServiceProvider serviceProvider)
-		{
-			Plugins.LoaderCreators = serviceProvider.GetServices<ILoaderCreator>() ?? Array.Empty<ILoaderCreator>();
 		}
 	}
 }

@@ -39,7 +39,8 @@ namespace ProxyChecker.ViewModels
       _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
 
       Task.WaitAll(
-        ReloadExistingLoadersAsync(CancellationToken.None)
+        ReloadExistingLoadersAsync(CancellationToken.None),
+        ReloadExistingCheckersAsync(CancellationToken.None)
       );
     }
 
@@ -51,6 +52,9 @@ namespace ProxyChecker.ViewModels
 
     [ObservableProperty]
     private ObservableCollection<LoaderViewModel> _loaders = new();
+
+    [ObservableProperty]
+    private ObservableCollection<CheckerViewModel> _checkers = new();
 
     public Window Window { get; set; } = default!;
 
@@ -176,8 +180,14 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private void ShowCheckers()
-    { }
+    private async Task ShowCheckersAsync(CancellationToken cancellationToken)
+    {
+      var dialog = _windowFactory.CreateWindow<CheckersWindow>();
+
+      await dialog.ShowDialog(Window);
+
+      await ReloadExistingCheckersAsync(cancellationToken);
+    }
 
     [RelayCommand]
     private void ShowExporters()
@@ -211,6 +221,36 @@ namespace ProxyChecker.ViewModels
       await _db.SaveChangesAsync(cancellationToken);
 
       await ReloadExistingLoadersAsync(cancellationToken);
+    }
+
+    private async Task ReloadExistingCheckersAsync(CancellationToken cancellationToken)
+    {
+      var checkers = await _db.Checkers.AsNoTracking().ToListAsync(cancellationToken);
+
+      var settings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
+
+      Checkers.Clear();
+
+      checkers.ForEach(c => {
+        Checkers.Add(new CheckerViewModel(c)
+        {
+          IsActive = c.Id == settings.CheckerId
+        });
+      });
+    }
+
+    [RelayCommand]
+    private async Task SetActiveCheckerAsync(
+      CheckerViewModel checkerViewModel,
+      CancellationToken cancellationToken)
+    {
+      var appSettings = await _db.Settings.SingleAsync(cancellationToken);
+
+      appSettings.CheckerId = checkerViewModel.Id;
+
+      await _db.SaveChangesAsync(cancellationToken);
+
+      await ReloadExistingCheckersAsync(cancellationToken);
     }
   }
 }

@@ -3,34 +3,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ProxyChecker.ViewModels"
-        xmlns:intf="using:ProxyChecker.Interfaces.Loaders"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
-        x:DataType="vm:CreateLoaderWindowViewModel"
-        x:Class="ProxyChecker.CreateLoaderWindow"
+        xmlns:intf="using:ProxyChecker.Interfaces.Checkers"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ProxyChecker.CreateCheckerWindow"
+        x:DataType="vm:CreateCheckerWindowViewModel"
 				Width="400" Height="300" ShowInTaskbar="False" WindowStartupLocation="CenterScreen"
 				Icon="/Assets/proxy-checker.ico"
-        Title="Create new loader">
+        Title="Create new checker">
 	<DockPanel LastChildFill="True" Margin="5">
 		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
-      <Button Classes="action-button" Command="{Binding OkCommand}">Ok</Button>
-      <Button Classes="action-button" Command="{Binding CancelCommand}">Cancel</Button>
+			<Button Classes="action-button" Command="{Binding OkCommand}">Ok</Button>
+			<Button Classes="action-button" Command="{Binding CancelCommand}">Cancel</Button>
 		</StackPanel>
 		<Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto">
 			<TextBlock Grid.Row ="0" Grid.Column="0" Classes="form-label">Name</TextBlock>
 			<TextBox Grid.Row ="0" Grid.Column="1" Text="{Binding Name}" MaxLength="256" Classes="m5" />
 			<TextBlock Grid.Row ="1" Grid.Column="0" Classes="form-label">Creator</TextBlock>
-			<ComboBox Grid.Row ="1" Grid.Column="1" Classes="m5" HorizontalAlignment="Stretch" ItemsSource="{Binding LoaderCreators}"
-				SelectedItem="{Binding SelectedLoaderCreator}">
+			<ComboBox Grid.Row ="1" Grid.Column="1" Classes="m5" HorizontalAlignment="Stretch" ItemsSource="{Binding CheckerCreators}"
+				SelectedItem="{Binding SelectedCheckerCreator}">
 				<ComboBox.ItemTemplate>
-					<DataTemplate x:DataType="intf:ILoaderCreator">
+					<DataTemplate x:DataType="intf:ICheckerCreator">
 						<TextBlock Text="{Binding Name}" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<TextBlock Grid.Row ="2" Grid.Column="0" Grid.ColumnSpan="2" 
+			<TextBlock Grid.Row ="2" Grid.Column="0" Grid.ColumnSpan="2"
 				TextWrapping="Wrap"
 				Margin="5,10,5,5"
-				Text="{Binding SelectedLoaderCreator.Description}" />
+				Text="{Binding SelectedCheckerCreator.Description}" />
 		</Grid>
 	</DockPanel>
+
 </Window>
