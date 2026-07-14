@@ -172,6 +172,11 @@ namespace ProxyChecker.ViewModels
       settings.LoaderId = loaderViewModel.Id;
 
       await _db.SaveChangesAsync(cancellationToken);
+
+      foreach(var vm in Loaders)
+      {
+        vm.IsActive = vm.Id == loaderViewModel.Id;
+      }
     }
   }
 }

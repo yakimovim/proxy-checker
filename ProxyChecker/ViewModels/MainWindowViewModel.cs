@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
@@ -36,6 +37,10 @@ namespace ProxyChecker.ViewModels
       _db = db;
       _loaderCreators = loaderCreators;
       _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
+
+      Task.WaitAll(
+        ReloadExistingLoadersAsync(CancellationToken.None)
+      );
     }
 
     [ObservableProperty]
@@ -44,16 +49,19 @@ namespace ProxyChecker.ViewModels
     [ObservableProperty]
     private ObservableCollection<ProxyViewModel> _validProxies = new();
 
+    [ObservableProperty]
+    private ObservableCollection<LoaderViewModel> _loaders = new();
+
     public Window Window { get; set; } = default!;
 
     [RelayCommand]
     private async Task LoadProxiesAsync(CancellationToken cancellationToken)
     {
-      var appSettings = _db.Settings.Single();
+      var appSettings = await _db.Settings.SingleAsync();
 
       if (appSettings.LoaderId is null)
       {
-        ShowLoaders();
+        await ShowLoadersAsync(cancellationToken);
         
         return;
       }
@@ -158,11 +166,13 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private void ShowLoaders()
+    private async Task ShowLoadersAsync(CancellationToken cancellationToken)
     {
       var dialog = _windowFactory.CreateWindow<LoadersWindow>();
 
-      dialog.ShowDialog(Window);
+      await dialog.ShowDialog(Window);
+
+      await ReloadExistingLoadersAsync(cancellationToken);
     }
 
     [RelayCommand]
@@ -172,5 +182,35 @@ namespace ProxyChecker.ViewModels
     [RelayCommand]
     private void ShowExporters()
     { }
+
+    private async Task ReloadExistingLoadersAsync(CancellationToken cancellationToken) 
+    {
+      var loaders = await _db.Loaders.AsNoTracking().ToListAsync(cancellationToken);
+
+      var settings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
+
+      Loaders.Clear();
+
+      loaders.ForEach(l => {
+        Loaders.Add(new LoaderViewModel(l)
+        {
+          IsActive = l.Id == settings.LoaderId
+        });
+      });
+    }
+
+    [RelayCommand]
+    private async Task SetActiveLoaderAsync(
+      LoaderViewModel loaderViewModel,
+      CancellationToken cancellationToken)
+    {
+      var appSettings = await _db.Settings.SingleAsync(cancellationToken);
+
+      appSettings.LoaderId = loaderViewModel.Id;
+
+      await _db.SaveChangesAsync(cancellationToken);
+
+      await ReloadExistingLoadersAsync(cancellationToken);
+    }
   }
 }

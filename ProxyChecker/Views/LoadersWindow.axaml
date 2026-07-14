@@ -25,7 +25,14 @@
             <DockPanel>
               <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0" />
               <StackPanel Classes="buttons-panel" DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button
+								<Button
+									Classes="action-button"
+									Command="{Binding $parent[Window].((vm:LoadersWindowViewModel)DataContext).MakeActiveCommand}"
+									CommandParameter="{Binding}"
+                  IsVisible="{Binding !IsActive}">
+									Make active
+								</Button>
+								<Button
 									Classes="action-button"
 									Command="{Binding $parent[Window].((vm:LoadersWindowViewModel)DataContext).ShowSettingsCommand}"
 									CommandParameter="{Binding}">
