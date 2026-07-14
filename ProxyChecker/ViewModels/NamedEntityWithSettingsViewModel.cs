@@ -5,7 +5,7 @@ using ProxyChecker.Interfaces.ViewModels;
 
 namespace ProxyChecker.ViewModels
 {
-  internal partial class LoaderSettingsWindowViewModel : ViewModelBase, IRequireWindow
+  internal partial class NamedEntityWithSettingsViewModel : ViewModelBase, IRequireWindow
   {
     [ObservableProperty]
     private string _name = string.Empty;

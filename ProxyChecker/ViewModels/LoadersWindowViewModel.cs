@@ -142,7 +142,7 @@ namespace ProxyChecker.ViewModels
 
       var settingsControl = loader.GetSettingsControl();
 
-      var viewModel = new LoaderSettingsWindowViewModel
+      var viewModel = new NamedEntityWithSettingsViewModel
       {
         Name = loaderViewModel.Name,
         SettingsControl = settingsControl,

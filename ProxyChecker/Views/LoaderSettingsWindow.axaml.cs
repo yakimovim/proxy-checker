@@ -5,7 +5,7 @@ namespace ProxyChecker;
 
 internal partial class LoaderSettingsWindow : Window
 {
-  public LoaderSettingsWindow(LoaderSettingsWindowViewModel model)
+  public LoaderSettingsWindow(NamedEntityWithSettingsViewModel model)
   {
     DataContext = model;
 

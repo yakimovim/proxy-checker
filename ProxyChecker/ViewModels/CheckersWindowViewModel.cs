@@ -142,7 +142,7 @@ namespace ProxyChecker.ViewModels
 
       var settingsControl = checker.GetSettingsControl();
 
-      var viewModel = new CheckerSettingsWindowViewModel
+      var viewModel = new NamedEntityWithSettingsViewModel
       {
         Name = checkerViewModel.Name,
         SettingsControl = settingsControl,

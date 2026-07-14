@@ -5,7 +5,7 @@ namespace ProxyChecker;
 
 internal partial class CheckerSettingsWindow : Window
 {
-  public CheckerSettingsWindow(CheckerSettingsWindowViewModel viewModel)
+  public CheckerSettingsWindow(NamedEntityWithSettingsViewModel viewModel)
   {
     DataContext = viewModel;
 
