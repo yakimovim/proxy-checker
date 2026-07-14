@@ -6,6 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ProxyChecker.LoadersWindow"
         x:DataType="vm:LoadersWindowViewModel"
+        Width="700" Height="400"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Icon="/Assets/avalonia-logo.ico"
@@ -22,7 +23,7 @@
 									BorderBrush="Gray" BorderThickness="1"
 									Padding="5">
             <DockPanel>
-              <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0" />
               <StackPanel Classes="buttons-panel" DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button
 									Classes="action-button"

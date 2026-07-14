@@ -4,24 +4,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ProxyChecker.ViewModels"
         xmlns:intf="using:ProxyChecker.Interfaces.Loaders"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
         x:DataType="vm:CreateLoaderWindowViewModel"
         x:Class="ProxyChecker.CreateLoaderWindow"
-        Title="CreateLoaderWindow">
-	<DockPanel LastChildFill="True">
+				Width="400" Height="300" ShowInTaskbar="False" WindowStartupLocation="CenterScreen"
+				Icon="/Assets/avalonia-logo.ico"
+        Title="Create new loader">
+	<DockPanel LastChildFill="True" Margin="5">
 		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
       <Button Classes="action-button" Command="{Binding OkCommand}">Ok</Button>
       <Button Classes="action-button" Command="{Binding CancelCommand}">Cancel</Button>
 		</StackPanel>
 		<Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
-			<TextBlock Grid.Row ="0" Grid.Column="0">Name</TextBlock>
-			<TextBox Grid.Row ="0" Grid.Column="1" Text="{Binding Name}" />
-			<TextBlock Grid.Row ="1" Grid.Column="0">Creator</TextBlock>
-			<ComboBox Grid.Row ="1" Grid.Column="1" ItemsSource="{Binding LoaderCreators}"
+			<TextBlock Grid.Row ="0" Grid.Column="0" Classes="form-label">Name</TextBlock>
+			<TextBox Grid.Row ="0" Grid.Column="1" Text="{Binding Name}" MaxLength="256" Classes="m5" />
+			<TextBlock Grid.Row ="1" Grid.Column="0" Classes="form-label">Creator</TextBlock>
+			<ComboBox Grid.Row ="1" Grid.Column="1" Classes="m5" HorizontalAlignment="Stretch" ItemsSource="{Binding LoaderCreators}"
 				SelectedItem="{Binding SelectedLoaderCreator}">
 				<ComboBox.ItemTemplate>
 					<DataTemplate x:DataType="intf:ILoaderCreator">
-						<TextBlock Text="{Binding Name}"/>
+						<TextBlock Text="{Binding Name}" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>

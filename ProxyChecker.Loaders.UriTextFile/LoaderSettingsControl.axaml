@@ -8,9 +8,9 @@
              x:Class="ProxyChecker.Loaders.UriTextFile.LoaderSettingsControl">
 	<DockPanel>
 		<Grid ColumnDefinitions="Auto, *, Auto" RowDefinitions="Auto" ColumnSpacing="10">
-			<TextBlock Grid.Column="0">File path</TextBlock>
-			<TextBox Grid.Column="1" Text="{Binding FilePath}"></TextBox>
-      <Button  Grid.Column="2" Command="{Binding SelectFilePathCommand}">Select</Button>
+			<TextBlock Grid.Column="0" Classes="form-label">File path</TextBlock>
+			<TextBox Grid.Column="1" Text="{Binding FilePath}" Margin="0,5,0,5"></TextBox>
+      <Button  Grid.Column="2" Command="{Binding SelectFilePathCommand}" Classes="action-button">Select</Button>
 		</Grid>
 	</DockPanel>
 </UserControl>
