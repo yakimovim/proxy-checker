@@ -138,6 +138,15 @@
   <data name="ClearButtonText" xml:space="preserve">
     <value>Clear</value>
   </data>
+  <data name="CreateCheckerWindowTitle" xml:space="preserve">
+    <value>Create new checker</value>
+  </data>
+  <data name="CreateLoaderWindowTitle" xml:space="preserve">
+    <value>Create new loader</value>
+  </data>
+  <data name="CreatorLabel" xml:space="preserve">
+    <value>Creator</value>
+  </data>
   <data name="DeleteButtonText" xml:space="preserve">
     <value>Delete</value>
   </data>

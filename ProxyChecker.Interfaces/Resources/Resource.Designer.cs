@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProxyChecker.Assets {
+namespace ProxyChecker.Interfaces.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ProxyChecker.Assets {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ProxyChecker.Assets.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ProxyChecker.Interfaces.Resources.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -120,6 +120,33 @@ namespace ProxyChecker.Assets {
         public static string ClearButtonText {
             get {
                 return ResourceManager.GetString("ClearButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new checker.
+        /// </summary>
+        public static string CreateCheckerWindowTitle {
+            get {
+                return ResourceManager.GetString("CreateCheckerWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new loader.
+        /// </summary>
+        public static string CreateLoaderWindowTitle {
+            get {
+                return ResourceManager.GetString("CreateLoaderWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creator.
+        /// </summary>
+        public static string CreatorLabel {
+            get {
+                return ResourceManager.GetString("CreatorLabel", resourceCulture);
             }
         }
         
