@@ -58,16 +58,16 @@ namespace ProxyChecker.ViewModels
     {
       var dialog = _windowFactory.CreateWindow<CreateLoaderWindow>();
 
-      var result = await dialog.ShowDialog<LoaderCreationModel?>(Window);
+      var result = await dialog.ShowDialog<CreatorModel<ILoaderCreator>?>(Window);
 
       if (result is not null)
       {
-        var loader = result.LoaderCreator.Create();
+        var loader = result.Creator.Create();
 
         Loader dbLoader = new()
         {
           Name = result.Name,
-          CreatorUid = result.LoaderCreator.Uid,
+          CreatorUid = result.Creator.Uid,
           JsonSettings = loader.GetSettings()?.ToString(Formatting.None),
         };
 

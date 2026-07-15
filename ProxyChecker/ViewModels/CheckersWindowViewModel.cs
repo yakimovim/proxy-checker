@@ -58,16 +58,16 @@ namespace ProxyChecker.ViewModels
     {
       var dialog = _windowFactory.CreateWindow<CreateCheckerWindow>();
 
-      var result = await dialog.ShowDialog<CheckerCreationModel?>(Window);
+      var result = await dialog.ShowDialog<CreatorModel<ICheckerCreator>?>(Window);
 
       if (result is not null)
       {
-        var checker = result.CheckerCreator.Create();
+        var checker = result.Creator.Create();
 
         Checker dbChecker = new()
         {
           Name = result.Name,
-          CreatorUid = result.CheckerCreator.Uid,
+          CreatorUid = result.Creator.Uid,
           JsonSettings = checker.GetSettings()?.ToString(Formatting.None),
         };
 

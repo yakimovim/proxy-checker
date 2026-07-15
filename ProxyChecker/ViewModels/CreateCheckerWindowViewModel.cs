@@ -33,10 +33,10 @@ namespace ProxyChecker.ViewModels
 		private void Ok()
 		{
 			Window.Close(
-			  new CheckerCreationModel
+			  new CreatorModel<ICheckerCreator>
 			  {
 				  Name = Name,
-				  CheckerCreator = SelectedCheckerCreator!
+				  Creator = SelectedCheckerCreator!
 			  }
 			);
 		}

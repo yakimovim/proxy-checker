@@ -33,10 +33,10 @@ namespace ProxyChecker.ViewModels
     private void Ok()
     {
       Window.Close(
-        new LoaderCreationModel
+        new CreatorModel<ILoaderCreator>
         {
           Name = Name,
-          LoaderCreator = SelectedLoaderCreator!
+          Creator = SelectedLoaderCreator!
         }
       );
     }
