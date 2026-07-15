@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
+using ProxyChecker.Interfaces.Resources;
 using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Models;
 using ProxyChecker.Storage;
@@ -144,11 +145,13 @@ namespace ProxyChecker.ViewModels
 
       var viewModel = new NamedEntityWithSettingsViewModel
       {
+        WindowTitle = Resource.CheckerSettingsWindowTitle,
+        SettingsLabel = Resource.CheckerSettingsLabel,
         Name = checkerViewModel.Name,
         SettingsControl = settingsControl,
       };
 
-      var dialog = new CheckerSettingsWindow(viewModel);
+      var dialog = new SettingsWindow(viewModel);
 
       if(await dialog.ShowDialog<bool>(Window))
       {

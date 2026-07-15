@@ -13,6 +13,10 @@ namespace ProxyChecker.ViewModels
     [ObservableProperty]
     private Control? _settingsControl;
 
+    public string? WindowTitle { get; set; }
+
+    public string? SettingsLabel { get; set; }
+
     public Window Window { get; set; } = default!;
 
     [RelayCommand]
