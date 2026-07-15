@@ -1,12 +1,11 @@
 using Avalonia.Controls;
-using ProxyChecker.Interfaces.Checkers;
 using ProxyChecker.ViewModels;
 
 namespace ProxyChecker;
 
-internal partial class CreateCheckerWindow : Window
+internal partial class CreateWindow : Window
 {
-  public CreateCheckerWindow(CreateWindowViewModel<ICheckerCreator> viewModel)
+  public CreateWindow(CreateWindowViewModel viewModel)
   {
     DataContext = viewModel;
 

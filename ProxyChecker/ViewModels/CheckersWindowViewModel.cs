@@ -56,7 +56,9 @@ namespace ProxyChecker.ViewModels
     [RelayCommand]
     private async Task Add(CancellationToken cancellationToken)
     {
-      var dialog = _windowFactory.CreateWindow<CreateCheckerWindow>();
+      var dialog = _windowFactory.CreateCreateWindow<ICheckerCreator>();
+
+      dialog.Title = Resource.CreateCheckerWindowTitle;
 
       var result = await dialog.ShowDialog<CreatorModel<ICheckerCreator>?>(Window);
 

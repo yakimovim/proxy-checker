@@ -56,7 +56,9 @@ namespace ProxyChecker.ViewModels
     [RelayCommand]
     private async Task Add(CancellationToken cancellationToken)
     {
-      var dialog = _windowFactory.CreateWindow<CreateLoaderWindow>();
+      var dialog = _windowFactory.CreateCreateWindow<ILoaderCreator>();
+
+      dialog.Title = Resource.CreateLoaderWindowTitle;
 
       var result = await dialog.ShowDialog<CreatorModel<ILoaderCreator>?>(Window);
 
@@ -124,7 +126,7 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task ShowSettings(NamedEntityViewModel loaderViewModel, CancellationToken cancellationToken)
+    private async Task ShowSettingsAsync(NamedEntityViewModel loaderViewModel, CancellationToken cancellationToken)
     {
       var dbLoader = await _db.Loaders.FindAsync(loaderViewModel.Id, cancellationToken);
 

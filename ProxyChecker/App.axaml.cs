@@ -70,8 +70,6 @@ namespace ProxyChecker
 			collection.AddTransient<LoadersWindow>();
 			collection.AddTransient<LoadersWindowViewModel>();
 
-      collection.AddTransient<CreateLoaderWindow>();
-      collection.AddTransient<CreateCheckerWindow>();
       collection.AddTransient(typeof(CreateWindowViewModel<>));
 
       collection.AddTransient<CheckersWindow>();

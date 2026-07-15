@@ -9,46 +9,51 @@ using System.Linq;
 
 namespace ProxyChecker.ViewModels
 {
-  internal partial class CreateWindowViewModel<TCreator> : ViewModelBase, IRequireWindow
-		where TCreator : ICreator
+  internal abstract partial class CreateWindowViewModel : ViewModelBase, IRequireWindow
 	{
-		public CreateWindowViewModel(IEnumerable<TCreator> checkerCreators)
+		public IEnumerable<ICreator> Creators { get; protected set; } = default!;
+
+    public Window Window { get; set; } = default!;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OkCommand))]
+    private string _name = string.Empty;
+
+    [ObservableProperty]
+    private ICreator? _selectedCreator;
+
+		[RelayCommand(CanExecute = nameof(CanCreate))]
+		protected abstract void Ok();
+
+    private bool CanCreate()
+      => !string.IsNullOrWhiteSpace(Name) && SelectedCreator is not null;
+
+    [RelayCommand]
+    private void Cancel()
+    {
+      Window.Close(null);
+    }
+  }
+
+  internal partial class CreateWindowViewModel<TCreator> : CreateWindowViewModel
+    where TCreator : ICreator
+	{
+		public CreateWindowViewModel(IEnumerable<TCreator> creators)
 		{
-			Creators = checkerCreators;
+			Creators = creators.Cast<ICreator>();
 
 			SelectedCreator = Creators.FirstOrDefault();
 		}
 
-		public IEnumerable<TCreator> Creators { get; }
-
-		public Window Window { get; set; } = default!;
-
-    [ObservableProperty]
-		[NotifyCanExecuteChangedFor(nameof(OkCommand))]
-		private string _name = string.Empty;
-
-		[ObservableProperty]
-		private TCreator? _selectedCreator;
-
-		[RelayCommand(CanExecute = nameof(CanCreate))]
-		private void Ok()
-		{
-			Window.Close(
-			  new CreatorModel<TCreator>
-			  {
-				  Name = Name,
-				  Creator = SelectedCreator!
-			  }
-			);
-		}
-
-		private bool CanCreate()
-		  => !string.IsNullOrWhiteSpace(Name) && SelectedCreator is not null;
-
-		[RelayCommand]
-		private void Cancel()
-		{
-			Window.Close(null);
-		}
+    protected override void Ok()
+    {
+      Window.Close(
+        new CreatorModel<TCreator>
+        {
+          Name = Name,
+          Creator =(TCreator)SelectedCreator!
+        }
+      );
+    }
 	}
 }
