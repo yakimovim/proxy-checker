@@ -105,13 +105,18 @@ namespace ProxyChecker.ViewModels
 
         await _db.SaveChangesAsync(cancellationToken);
 
-        var settings = _db.Settings.Single();
+        var appSettings = _db.Settings.Single();
 
-        if (settings.LoaderId == loaderViewModel.Id)
+        if (appSettings.LoaderId == loaderViewModel.Id)
         {
-          settings.LoaderId = (await _db.Loaders.FirstOrDefaultAsync())?.Id;
+          appSettings.LoaderId = (await _db.Loaders.FirstOrDefaultAsync())?.Id;
 
           await _db.SaveChangesAsync(cancellationToken);
+
+          if (appSettings.LoaderId is not null)
+          {
+            Loaders.Single(l => l.Id == appSettings.LoaderId.Value).IsActive = true;
+          }
         }
 
         Loaders.Remove(loaderViewModel);

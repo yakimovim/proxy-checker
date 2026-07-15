@@ -71,13 +71,11 @@ namespace ProxyChecker
 			collection.AddTransient<LoadersWindowViewModel>();
 
       collection.AddTransient<CreateLoaderWindow>();
-      collection.AddTransient<CreateLoaderWindowViewModel>();
+      collection.AddTransient<CreateCheckerWindow>();
+      collection.AddTransient(typeof(CreateWindowViewModel<>));
 
       collection.AddTransient<CheckersWindow>();
       collection.AddTransient<CheckersWindowViewModel>();
-
-      collection.AddTransient<CreateCheckerWindow>();
-      collection.AddTransient<CreateCheckerWindowViewModel>();
 
       collection.AddSingleton<DesktopService>();
 			collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());

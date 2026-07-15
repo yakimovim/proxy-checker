@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ProxyChecker.Interfaces.Checkers;
+using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Models;
 using System.Collections.Generic;
@@ -9,16 +9,17 @@ using System.Linq;
 
 namespace ProxyChecker.ViewModels
 {
-  internal partial class CreateCheckerWindowViewModel : ViewModelBase, IRequireWindow
+  internal partial class CreateWindowViewModel<TCreator> : ViewModelBase, IRequireWindow
+		where TCreator : ICreator
 	{
-		public CreateCheckerWindowViewModel(IEnumerable<ICheckerCreator> checkerCreators)
+		public CreateWindowViewModel(IEnumerable<TCreator> checkerCreators)
 		{
-			CheckerCreators = checkerCreators;
+			Creators = checkerCreators;
 
-			SelectedCheckerCreator = CheckerCreators.FirstOrDefault();
+			SelectedCreator = Creators.FirstOrDefault();
 		}
 
-		public IEnumerable<ICheckerCreator> CheckerCreators { get; }
+		public IEnumerable<TCreator> Creators { get; }
 
 		public Window Window { get; set; } = default!;
 
@@ -27,22 +28,22 @@ namespace ProxyChecker.ViewModels
 		private string _name = string.Empty;
 
 		[ObservableProperty]
-		private ICheckerCreator? _selectedCheckerCreator;
+		private TCreator? _selectedCreator;
 
 		[RelayCommand(CanExecute = nameof(CanCreate))]
 		private void Ok()
 		{
 			Window.Close(
-			  new CreatorModel<ICheckerCreator>
+			  new CreatorModel<TCreator>
 			  {
 				  Name = Name,
-				  Creator = SelectedCheckerCreator!
+				  Creator = SelectedCreator!
 			  }
 			);
 		}
 
 		private bool CanCreate()
-		  => !string.IsNullOrWhiteSpace(Name) && SelectedCheckerCreator is not null;
+		  => !string.IsNullOrWhiteSpace(Name) && SelectedCreator is not null;
 
 		[RelayCommand]
 		private void Cancel()

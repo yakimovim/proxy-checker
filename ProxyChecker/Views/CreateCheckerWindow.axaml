@@ -4,10 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ProxyChecker.ViewModels"
         xmlns:asts="using:ProxyChecker.Interfaces.Resources"
-        xmlns:intf="using:ProxyChecker.Interfaces.Checkers"
+        xmlns:intf="using:ProxyChecker.Interfaces"
+        xmlns:cintf="using:ProxyChecker.Interfaces.Checkers"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ProxyChecker.CreateCheckerWindow"
-        x:DataType="vm:CreateCheckerWindowViewModel"
+        x:DataType="{x:Type vm:CreateWindowViewModel, x:TypeArguments=cintf:ICheckerCreator}"
 				Width="400" Height="300" ShowInTaskbar="False" WindowStartupLocation="CenterScreen"
 				Icon="/Assets/proxy-checker.ico"
         Title="{x:Static asts:Resource.CreateCheckerWindowTitle}">
@@ -20,10 +21,10 @@
 			<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static asts:Resource.NameLabel}" Classes="form-label" />
 			<TextBox Grid.Row ="0" Grid.Column="1" Text="{Binding Name}" MaxLength="256" Classes="m5" />
 			<TextBlock Grid.Row ="1" Grid.Column="0" Classes="form-label" Text="{x:Static asts:Resource.CreatorLabel}" />
-			<ComboBox Grid.Row ="1" Grid.Column="1" Classes="m5" HorizontalAlignment="Stretch" ItemsSource="{Binding CheckerCreators}"
-				SelectedItem="{Binding SelectedCheckerCreator}">
+			<ComboBox Grid.Row ="1" Grid.Column="1" Classes="m5" HorizontalAlignment="Stretch" ItemsSource="{Binding Creators}"
+				SelectedItem="{Binding SelectedCreator}">
 				<ComboBox.ItemTemplate>
-					<DataTemplate x:DataType="intf:ICheckerCreator">
+					<DataTemplate x:DataType="intf:ICreator">
 						<TextBlock Text="{Binding Name}" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
@@ -31,7 +32,7 @@
 			<TextBlock Grid.Row ="2" Grid.Column="0" Grid.ColumnSpan="2"
 				TextWrapping="Wrap"
 				Margin="5,10,5,5"
-				Text="{Binding SelectedCheckerCreator.Description}" />
+				Text="{Binding SelectedCreator.Description}" />
 		</Grid>
 	</DockPanel>
 

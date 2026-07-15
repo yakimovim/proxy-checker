@@ -112,6 +112,11 @@ namespace ProxyChecker.ViewModels
           appSettings.CheckerId = (await _db.Checkers.FirstOrDefaultAsync())?.Id;
 
           await _db.SaveChangesAsync(cancellationToken);
+
+          if (appSettings.CheckerId is not null)
+          {
+            Checkers.Single(c => c.Id == appSettings.CheckerId.Value).IsActive = true;
+          }
         }
 
         Checkers.Remove(checkerViewModel);
