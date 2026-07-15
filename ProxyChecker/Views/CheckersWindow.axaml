@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ProxyChecker.ViewModels"
+        xmlns:asts="using:ProxyChecker.Assets"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ProxyChecker.CheckersWindow"
         x:DataType="vm:CheckersWindowViewModel"
@@ -10,10 +11,10 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         Icon="/Assets/proxy-checker.ico"
-        Title="Checkers">
+        Title="{x:Static asts:Resource.CheckersWindowTitle}">
 	<DockPanel LastChildFill="True">
 		<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-			<Button Classes="action-button" Command="{Binding AddCommand}">Add</Button>
+			<Button Classes="action-button" Command="{Binding AddCommand}" Content="{x:Static asts:Resource.AddButtonText}"/>
 		</StackPanel>
 		<ItemsControl ItemsSource="{Binding Checkers}">
 			<ItemsControl.ItemTemplate>
@@ -29,21 +30,18 @@
 									Classes="action-button"
 									Command="{Binding $parent[Window].((vm:CheckersWindowViewModel)DataContext).MakeActiveCommand}"
 									CommandParameter="{Binding}"
-                  IsVisible="{Binding !IsActive}">
-									Make active
-								</Button>
+									Content="{x:Static asts:Resource.MakeActiveButtonText}"
+                  IsVisible="{Binding !IsActive}"/>
 								<Button
 									Classes="action-button"
 									Command="{Binding $parent[Window].((vm:CheckersWindowViewModel)DataContext).ShowSettingsCommand}"
-									CommandParameter="{Binding}">
-									Settings
-								</Button>
+									CommandParameter="{Binding}"
+									Content="{x:Static asts:Resource.SettingsButtonText}"/>
 								<Button
                   Classes="action-button"
 									Command="{Binding $parent[Window].((vm:CheckersWindowViewModel)DataContext).DeleteCommand}"
-									CommandParameter="{Binding}">
-									Delete
-								</Button>
+									CommandParameter="{Binding}"
+									Content="{x:Static asts:Resource.DeleteButtonText}"/>
 							</StackPanel>
 						</DockPanel>
 					</Border>

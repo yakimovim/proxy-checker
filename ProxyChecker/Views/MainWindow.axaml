@@ -32,22 +32,21 @@
     RowDefinitions="Auto, *, 4, *">
 		<Menu Grid.Row="0">
 			<MenuItem Header="_File">
-				<MenuItem Header="Loaders..." Command="{Binding ShowLoadersCommand}"/>
-				<MenuItem Header="Checkers..." Command="{Binding ShowCheckersCommand}"/>
-				<MenuItem Header="Exporters..." Command="{Binding ShowExportersCommand}"/>
+				<MenuItem Header="{x:Static asts:Resource.ShowLoadersMainMenuItemHeader}" Command="{Binding ShowLoadersCommand}"/>
+				<MenuItem Header="{x:Static asts:Resource.ShowCheckersMainMenuItemHeader}" Command="{Binding ShowCheckersCommand}"/>
+				<MenuItem Header="{x:Static asts:Resource.ShowExportersMainMenuItemHeader}" Command="{Binding ShowExportersCommand}"/>
 				<Separator />
-				<MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+				<MenuItem Header="{x:Static asts:Resource.ExitMainMenuItemHeader}" Command="{Binding ExitCommand}"/>
 			</MenuItem>
 		</Menu>
 		<DockPanel Grid.Row="1" LastChildFill="True">
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-				<SplitButton Classes="action-button" Command="{Binding LoadProxiesCommand}" Content="Load">
+				<SplitButton Classes="action-button" Command="{Binding LoadProxiesCommand}" Content="{x:Static asts:Resource.LoadButtonText}">
 					<SplitButton.Flyout>
 						<MenuFlyout Placement="Bottom" ItemsSource="{Binding Loaders}">
 							<MenuFlyout.ItemContainerTheme>
 								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
 									x:DataType="vm:LoaderViewModel">
-
 									<Setter Property="Header" Value="{Binding Name}"/>
 									<Setter Property="ToggleType" Value="Radio"/>
 									<Setter Property="GroupName" Value="Loaders"/>
@@ -59,7 +58,7 @@
 						</MenuFlyout>
 					</SplitButton.Flyout>
 				</SplitButton>
-				<Button Classes="action-button" Command="{Binding ClearProxiesCommand}">Clear</Button>
+				<Button Classes="action-button" Command="{Binding ClearProxiesCommand}" Content="{x:Static asts:Resource.ClearButtonText}" />
 			</StackPanel>
 			<ScrollViewer>
 				<ItemsControl ItemsSource="{Binding LoadedProxies}">
@@ -69,13 +68,12 @@
 		<GridSplitter Grid.Row="2" ResizeDirection="Rows"/>
 		<DockPanel Grid.Row="3" LastChildFill="True">
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-				<SplitButton Classes="action-button" Command="{Binding CheckProxiesCommand}" Content="Check">
+				<SplitButton Classes="action-button" Command="{Binding CheckProxiesCommand}" Content="{x:Static asts:Resource.CheckButtonText}">
 					<SplitButton.Flyout>
 						<MenuFlyout Placement="Bottom" ItemsSource="{Binding Checkers}">
 							<MenuFlyout.ItemContainerTheme>
 								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
 									x:DataType="vm:CheckerViewModel">
-
 									<Setter Property="Header" Value="{Binding Name}"/>
 									<Setter Property="ToggleType" Value="Radio"/>
 									<Setter Property="GroupName" Value="Checkers"/>
@@ -87,10 +85,10 @@
 						</MenuFlyout>
 					</SplitButton.Flyout>
 				</SplitButton>
-				<Button Classes="action-button" Command="{Binding CancelProxyCheckingCommand}">Cancel</Button>
+				<Button Classes="action-button" Command="{Binding CancelProxyCheckingCommand}" Content="{x:Static asts:Resource.CancelButtonText}" />
 			</StackPanel>
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
-				<Button Classes="action-button" Command="{Binding ExportProxiesCommand}">Export</Button>
+				<Button Classes="action-button" Command="{Binding ExportProxiesCommand}" Content="{x:Static asts:Resource.ExportButtonText}" />
 			</StackPanel>
 			<ItemsControl ItemsSource="{Binding ValidProxies}">
 			</ItemsControl>

@@ -61,11 +61,200 @@ namespace ProxyChecker.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AddButtonText {
+            get {
+                return ResourceManager.GetString("AddButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CancelButtonText {
+            get {
+                return ResourceManager.GetString("CancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check.
+        /// </summary>
+        public static string CheckButtonText {
+            get {
+                return ResourceManager.GetString("CheckButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checker settings:.
+        /// </summary>
+        public static string CheckerSettingsLabel {
+            get {
+                return ResourceManager.GetString("CheckerSettingsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checker settings.
+        /// </summary>
+        public static string CheckerSettingsWindowTitle {
+            get {
+                return ResourceManager.GetString("CheckerSettingsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checkers.
+        /// </summary>
+        public static string CheckersWindowTitle {
+            get {
+                return ResourceManager.GetString("CheckersWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string ClearButtonText {
+            get {
+                return ResourceManager.GetString("ClearButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DeleteButtonText {
+            get {
+                return ResourceManager.GetString("DeleteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string ExitMainMenuItemHeader {
+            get {
+                return ResourceManager.GetString("ExitMainMenuItemHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string ExportButtonText {
+            get {
+                return ResourceManager.GetString("ExportButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load.
+        /// </summary>
+        public static string LoadButtonText {
+            get {
+                return ResourceManager.GetString("LoadButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loader settings:.
+        /// </summary>
+        public static string LoaderSettingsLabel {
+            get {
+                return ResourceManager.GetString("LoaderSettingsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loader settings.
+        /// </summary>
+        public static string LoaderSettingsWindowTitle {
+            get {
+                return ResourceManager.GetString("LoaderSettingsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaders.
+        /// </summary>
+        public static string LoadersWindowTitle {
+            get {
+                return ResourceManager.GetString("LoadersWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proxy Checker.
         /// </summary>
         public static string MainWindowTitle {
             get {
                 return ResourceManager.GetString("MainWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make active.
+        /// </summary>
+        public static string MakeActiveButtonText {
+            get {
+                return ResourceManager.GetString("MakeActiveButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string NameLabel {
+            get {
+                return ResourceManager.GetString("NameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string OkButtonText {
+            get {
+                return ResourceManager.GetString("OkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string SettingsButtonText {
+            get {
+                return ResourceManager.GetString("SettingsButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checkers....
+        /// </summary>
+        public static string ShowCheckersMainMenuItemHeader {
+            get {
+                return ResourceManager.GetString("ShowCheckersMainMenuItemHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporters....
+        /// </summary>
+        public static string ShowExportersMainMenuItemHeader {
+            get {
+                return ResourceManager.GetString("ShowExportersMainMenuItemHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaders....
+        /// </summary>
+        public static string ShowLoadersMainMenuItemHeader {
+            get {
+                return ResourceManager.GetString("ShowLoadersMainMenuItemHeader", resourceCulture);
             }
         }
     }

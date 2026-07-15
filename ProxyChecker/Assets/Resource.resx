@@ -117,7 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CheckButtonText" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="CheckerSettingsLabel" xml:space="preserve">
+    <value>Checker settings:</value>
+  </data>
+  <data name="CheckerSettingsWindowTitle" xml:space="preserve">
+    <value>Checker settings</value>
+  </data>
+  <data name="CheckersWindowTitle" xml:space="preserve">
+    <value>Checkers</value>
+  </data>
+  <data name="ClearButtonText" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ExitMainMenuItemHeader" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="ExportButtonText" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="LoadButtonText" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="LoaderSettingsLabel" xml:space="preserve">
+    <value>Loader settings:</value>
+  </data>
+  <data name="LoaderSettingsWindowTitle" xml:space="preserve">
+    <value>Loader settings</value>
+  </data>
+  <data name="LoadersWindowTitle" xml:space="preserve">
+    <value>Loaders</value>
+  </data>
   <data name="MainWindowTitle" xml:space="preserve">
     <value>Proxy Checker</value>
+  </data>
+  <data name="MakeActiveButtonText" xml:space="preserve">
+    <value>Make active</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="OkButtonText" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="SettingsButtonText" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ShowCheckersMainMenuItemHeader" xml:space="preserve">
+    <value>Checkers...</value>
+  </data>
+  <data name="ShowExportersMainMenuItemHeader" xml:space="preserve">
+    <value>Exporters...</value>
+  </data>
+  <data name="ShowLoadersMainMenuItemHeader" xml:space="preserve">
+    <value>Loaders...</value>
   </data>
 </root>
