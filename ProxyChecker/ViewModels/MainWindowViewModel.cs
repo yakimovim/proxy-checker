@@ -4,9 +4,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Checkers;
 using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Interfaces.ViewModels;
-using ProxyChecker.Services;
 using ProxyChecker.Storage;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,21 +22,21 @@ namespace ProxyChecker.ViewModels
     private readonly IWindowFactory _windowFactory;
     private readonly AppDbContext _db;
     private readonly IEnumerable<ILoaderCreator> _loaderCreators;
-    private readonly ProxyCheckerService _proxyCheckerService;
+    private readonly IEnumerable<ICheckerCreator> _checkerCreators;
 
     public MainWindowViewModel(
       IDesktopService desktopService,
       IWindowFactory windowFactory,
       AppDbContext db,
       IEnumerable<ILoaderCreator> loaderCreators,
-      ProxyCheckerService proxyCheckerService
+      IEnumerable<ICheckerCreator> checkerCreators
       )
     {
       _desktopService = desktopService;
       _windowFactory = windowFactory ?? throw new System.ArgumentNullException(nameof(windowFactory));
-      _db = db;
-      _loaderCreators = loaderCreators;
-      _proxyCheckerService = proxyCheckerService ?? throw new System.ArgumentNullException(nameof(proxyCheckerService));
+      _db = db ?? throw new System.ArgumentNullException(nameof(db));
+      _loaderCreators = loaderCreators ?? throw new System.ArgumentNullException(nameof(loaderCreators));
+      _checkerCreators = checkerCreators ?? throw new System.ArgumentNullException(nameof(checkerCreators));
 
       Task.WaitAll(
         ReloadExistingLoadersAsync(CancellationToken.None),
@@ -117,6 +117,32 @@ namespace ProxyChecker.ViewModels
     [RelayCommand(CanExecute = nameof(CanCheckProxies))]
     private async Task CheckProxiesAsync(CancellationToken cancellationToken)
     {
+      var appSettings = await _db.Settings.SingleAsync(cancellationToken);
+
+      if (appSettings.CheckerId is null)
+      {
+        await ShowCheckersAsync(cancellationToken);
+        return;
+      }
+
+      var dbChecker = await _db.Checkers.FindAsync(appSettings.CheckerId.Value, cancellationToken);
+
+      if (dbChecker is null) 
+      {
+        return;
+      }
+
+      var checkerCreator = _checkerCreators.SingleOrDefault(c => c.Uid == dbChecker.CreatorUid);
+
+      if (checkerCreator is null)
+      {
+        return;
+      }
+
+      var checker = checkerCreator.Create();
+
+      checker.SetSettings(dbChecker.JsonSettings is null ? null : JToken.Parse(dbChecker.JsonSettings));
+
       ValidProxies.Clear();
 
       try
@@ -128,12 +154,41 @@ namespace ProxyChecker.ViewModels
 
         CancelProxyCheckingCommand.NotifyCanExecuteChanged();
 
-        await foreach (var proxy in _proxyCheckerService.CheckAsync(LoadedProxies.Select(pvm => pvm.ToProxy()), _proxyCheckingCancellationTokenSource.Token))
+        var loadedProxies = LoadedProxies.Select(pvm => pvm.ToProxy());
+
+        if (checker.SupportsParallelChecking)
         {
-          ValidProxies.Add(
-            new ProxyViewModel(proxy)
+          await Parallel.ForEachAsync(
+            loadedProxies,
+            _proxyCheckingCancellationTokenSource.Token,
+            async (proxy, ct) => {
+              if (await checker.CheckAsync(proxy, ct))
+              {
+                ValidProxies.Add(
+                  new ProxyViewModel(proxy)
+                );
+              }
+            }
           );
         }
+        else 
+        {
+          foreach (var proxy in loadedProxies)
+          {
+            if (_proxyCheckingCancellationTokenSource.Token.IsCancellationRequested)
+            {
+              break;
+            }
+
+            if (await checker.CheckAsync(proxy, cancellationToken))
+            {
+              ValidProxies.Add(
+                new ProxyViewModel(proxy)
+              );
+            }
+          }
+        }
+
       }
       finally
       {

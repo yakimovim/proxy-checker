@@ -81,8 +81,6 @@ namespace ProxyChecker
 
       collection.AddSingleton<DesktopService>();
 			collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
-
-      collection.AddTransient<ProxyCheckerService>();
 		}
 	}
 }
