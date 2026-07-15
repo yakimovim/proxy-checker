@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProxyChecker.Storage
 {
-  internal class Loader
+  internal class Loader : INamedEntity
   {
     [Key]
     public int Id { get; set; }

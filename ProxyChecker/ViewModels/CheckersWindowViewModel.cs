@@ -25,7 +25,7 @@ namespace ProxyChecker.ViewModels
     private readonly AppDbContext _db;
 
     [ObservableProperty]
-    private ObservableCollection<CheckerViewModel> _checkers = new();
+    private ObservableCollection<NamedEntityViewModel> _checkers = new();
 
     public Window Window { get; set; } = default!;
 
@@ -45,7 +45,7 @@ namespace ProxyChecker.ViewModels
       foreach (var checker in storedCheckers)
       {
         Checkers.Add(
-          new CheckerViewModel(checker)
+          new NamedEntityViewModel(checker)
           {
             IsActive = (checker.Id == appSettings.LoaderId),
           }
@@ -75,7 +75,7 @@ namespace ProxyChecker.ViewModels
 
         await _db.SaveChangesAsync(cancellationToken);
 
-        CheckerViewModel checkerViewModel = new(dbChecker);
+        NamedEntityViewModel checkerViewModel = new(dbChecker);
 
         Checkers.Add(
           checkerViewModel
@@ -95,7 +95,7 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task DeleteAsync(CheckerViewModel checkerViewModel, CancellationToken cancellationToken)
+    private async Task DeleteAsync(NamedEntityViewModel checkerViewModel, CancellationToken cancellationToken)
     {
       Checker? checker = await _db.Checkers.FindAsync(checkerViewModel.Id);
 
@@ -119,7 +119,7 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task ShowSettings(CheckerViewModel checkerViewModel, CancellationToken cancellationToken)
+    private async Task ShowSettings(NamedEntityViewModel checkerViewModel, CancellationToken cancellationToken)
     {
       var dbChecker = await _db.Checkers.FindAsync(checkerViewModel.Id, cancellationToken);
 
@@ -168,11 +168,11 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task MakeActiveAsync(CheckerViewModel checkerViewModel, CancellationToken cancellationToken)
+    private async Task MakeActiveAsync(NamedEntityViewModel checkerViewModel, CancellationToken cancellationToken)
     {
       var appSettings = await _db.Settings.SingleAsync(cancellationToken);
 
-      appSettings.LoaderId = checkerViewModel.Id;
+      appSettings.CheckerId = checkerViewModel.Id;
 
       await _db.SaveChangesAsync(cancellationToken);
 

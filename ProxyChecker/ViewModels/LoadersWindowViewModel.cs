@@ -25,7 +25,7 @@ namespace ProxyChecker.ViewModels
     private readonly AppDbContext _db;
 
     [ObservableProperty]
-    private ObservableCollection<LoaderViewModel> _loaders = new();
+    private ObservableCollection<NamedEntityViewModel> _loaders = new();
 
     public Window Window { get; set; } = default!;
 
@@ -45,7 +45,7 @@ namespace ProxyChecker.ViewModels
       foreach (var loader in storedLoaders)
       {
         Loaders.Add(
-          new LoaderViewModel(loader)
+          new NamedEntityViewModel(loader)
           {
             IsActive = (loader.Id == settings.LoaderId),
           }
@@ -75,7 +75,7 @@ namespace ProxyChecker.ViewModels
 
         await _db.SaveChangesAsync(cancellationToken);
 
-        LoaderViewModel loaderViewModel = new(dbLoader);
+        NamedEntityViewModel loaderViewModel = new(dbLoader);
 
         Loaders.Add(
           loaderViewModel
@@ -95,7 +95,7 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task DeleteAsync(LoaderViewModel loaderViewModel, CancellationToken cancellationToken)
+    private async Task DeleteAsync(NamedEntityViewModel loaderViewModel, CancellationToken cancellationToken)
     {
       Loader? loader = await _db.Loaders.FindAsync(loaderViewModel.Id);
 
@@ -119,7 +119,7 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task ShowSettings(LoaderViewModel loaderViewModel, CancellationToken cancellationToken)
+    private async Task ShowSettings(NamedEntityViewModel loaderViewModel, CancellationToken cancellationToken)
     {
       var dbLoader = await _db.Loaders.FindAsync(loaderViewModel.Id, cancellationToken);
 
@@ -168,7 +168,7 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private async Task MakeActiveAsync(LoaderViewModel loaderViewModel, CancellationToken cancellationToken)
+    private async Task MakeActiveAsync(NamedEntityViewModel loaderViewModel, CancellationToken cancellationToken)
     {
       var settings = _db.Settings.Single();
 

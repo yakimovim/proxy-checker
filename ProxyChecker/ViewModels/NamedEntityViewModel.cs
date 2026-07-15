@@ -3,7 +3,7 @@ using ProxyChecker.Storage;
 
 namespace ProxyChecker.ViewModels
 {
-  internal partial class LoaderViewModel : ViewModelBase
+  internal partial class NamedEntityViewModel : ViewModelBase
   {
     [ObservableProperty]
     private int _id;
@@ -14,10 +14,10 @@ namespace ProxyChecker.ViewModels
     [ObservableProperty]
     private bool _isActive = false;
 
-    public LoaderViewModel(Loader loader)
+    public NamedEntityViewModel(INamedEntity namedEntity)
     {
-      Id = loader.Id;
-      Name = loader.Name;
+      Id = namedEntity.Id;
+      Name = namedEntity.Name;
     }
   }
 }

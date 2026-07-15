@@ -51,10 +51,10 @@ namespace ProxyChecker.ViewModels
     private ObservableCollection<ProxyViewModel> _validProxies = new();
 
     [ObservableProperty]
-    private ObservableCollection<LoaderViewModel> _loaders = new();
+    private ObservableCollection<NamedEntityViewModel> _loaders = new();
 
     [ObservableProperty]
-    private ObservableCollection<CheckerViewModel> _checkers = new();
+    private ObservableCollection<NamedEntityViewModel> _checkers = new();
 
     public Window Window { get; set; } = default!;
 
@@ -257,7 +257,7 @@ namespace ProxyChecker.ViewModels
       Loaders.Clear();
 
       loaders.ForEach(l => {
-        Loaders.Add(new LoaderViewModel(l)
+        Loaders.Add(new NamedEntityViewModel(l)
         {
           IsActive = l.Id == settings.LoaderId
         });
@@ -266,7 +266,7 @@ namespace ProxyChecker.ViewModels
 
     [RelayCommand]
     private async Task SetActiveLoaderAsync(
-      LoaderViewModel loaderViewModel,
+      NamedEntityViewModel loaderViewModel,
       CancellationToken cancellationToken)
     {
       var appSettings = await _db.Settings.SingleAsync(cancellationToken);
@@ -287,7 +287,7 @@ namespace ProxyChecker.ViewModels
       Checkers.Clear();
 
       checkers.ForEach(c => {
-        Checkers.Add(new CheckerViewModel(c)
+        Checkers.Add(new NamedEntityViewModel(c)
         {
           IsActive = c.Id == settings.CheckerId
         });
@@ -296,7 +296,7 @@ namespace ProxyChecker.ViewModels
 
     [RelayCommand]
     private async Task SetActiveCheckerAsync(
-      CheckerViewModel checkerViewModel,
+      NamedEntityViewModel checkerViewModel,
       CancellationToken cancellationToken)
     {
       var appSettings = await _db.Settings.SingleAsync(cancellationToken);

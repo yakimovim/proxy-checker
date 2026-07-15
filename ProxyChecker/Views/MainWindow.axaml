@@ -46,7 +46,7 @@
 						<MenuFlyout Placement="Bottom" ItemsSource="{Binding Loaders}">
 							<MenuFlyout.ItemContainerTheme>
 								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
-									x:DataType="vm:LoaderViewModel">
+									x:DataType="vm:NamedEntityViewModel">
 									<Setter Property="Header" Value="{Binding Name}"/>
 									<Setter Property="ToggleType" Value="Radio"/>
 									<Setter Property="GroupName" Value="Loaders"/>
@@ -73,7 +73,7 @@
 						<MenuFlyout Placement="Bottom" ItemsSource="{Binding Checkers}">
 							<MenuFlyout.ItemContainerTheme>
 								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
-									x:DataType="vm:CheckerViewModel">
+									x:DataType="vm:NamedEntityViewModel">
 									<Setter Property="Header" Value="{Binding Name}"/>
 									<Setter Property="ToggleType" Value="Radio"/>
 									<Setter Property="GroupName" Value="Checkers"/>

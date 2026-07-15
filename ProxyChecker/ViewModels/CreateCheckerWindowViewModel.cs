@@ -18,7 +18,7 @@ namespace ProxyChecker.ViewModels
 			SelectedCheckerCreator = CheckerCreators.FirstOrDefault();
 		}
 
-		public IEnumerable<ICheckerCreator> CheckerCreators { get;  }
+		public IEnumerable<ICheckerCreator> CheckerCreators { get; }
 
 		public Window Window { get; set; } = default!;
 
