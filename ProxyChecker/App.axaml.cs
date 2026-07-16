@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
@@ -9,66 +10,90 @@ using ProxyChecker.Services;
 using ProxyChecker.Storage;
 using ProxyChecker.ViewModels;
 using ProxyChecker.Views;
+using Serilog;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace ProxyChecker
 {
-	public partial class App : Application
-	{
-		public override void Initialize()
-		{
-			AvaloniaXamlLoader.Load(this);
-		}
+  public partial class App : Application
+  {
+    public override void Initialize()
+    {
+      AvaloniaXamlLoader.Load(this);
+    }
 
-		public override void OnFrameworkInitializationCompleted()
-		{
-			var collection = new ServiceCollection();
+    public override void OnFrameworkInitializationCompleted()
+    {
+      var configuration = ReadConfiguration();
 
-			RegisterApplicationServices(collection);
+      var collection = new ServiceCollection();
 
-			new PluginsAssembler().AssemblePlugins(collection);
+      RegisterApplicationServices(collection, configuration);
 
-			var serviceProvider = collection.BuildServiceProvider();
+      new PluginsAssembler().AssemblePlugins(collection);
 
-			PrepareDatabase(serviceProvider);
+      var serviceProvider = collection.BuildServiceProvider();
 
-			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-			{
-				serviceProvider.GetRequiredService<DesktopService>().Desktop = desktop;
+      PrepareDatabase(serviceProvider);
 
-				desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
-			}
+      if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+      {
+        serviceProvider.GetRequiredService<DesktopService>().Desktop = desktop;
 
-			base.OnFrameworkInitializationCompleted();
-		}
+        desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
+      }
+
+      base.OnFrameworkInitializationCompleted();
+    }
+
+    private IConfigurationRoot ReadConfiguration()
+    {
+      return new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
+        .Build();
+    }
 
     private void PrepareDatabase(ServiceProvider serviceProvider)
     {
       var db = serviceProvider.GetRequiredService<AppDbContext>();
       db.Database.EnsureCreated();
 
-			if (!db.Settings.Any())
-			{
-				db.Settings.Add(new Settings());
+      if (!db.Settings.Any())
+      {
+        db.Settings.Add(new Settings());
 
-				db.SaveChanges();
-			}
+        db.SaveChanges();
+      }
     }
 
-    private void RegisterApplicationServices(ServiceCollection collection)
-		{
-			collection.AddDbContext<AppDbContext>(options =>
-			{
-				options.UseSqlite("Data Source=app.db");
-			});
+    private void RegisterApplicationServices(ServiceCollection collection, IConfigurationRoot configuration)
+    {
+      collection.AddLogging(loggingBuilder =>
+      {
+        loggingBuilder.AddSerilog(
+          new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .WriteTo.File("app.log")
+            .CreateLogger()
+        );
+      });
 
-			collection.AddTransient<IWindowFactory, WindowFactory>();
+      collection.AddDbContext<AppDbContext>(options =>
+      {
+        options.UseSqlite("Data Source=app.db");
+      });
 
-			collection.AddTransient<MainWindow>();
-			collection.AddTransient<MainWindowViewModel>();
+      collection.AddTransient<IWindowFactory, WindowFactory>();
 
-			collection.AddTransient<LoadersWindow>();
-			collection.AddTransient<LoadersWindowViewModel>();
+      collection.AddTransient<MainWindow>();
+      collection.AddTransient<MainWindowViewModel>();
+
+      collection.AddTransient<LoadersWindow>();
+      collection.AddTransient<LoadersWindowViewModel>();
 
       collection.AddTransient(typeof(CreateWindowViewModel<>));
 
@@ -76,7 +101,7 @@ namespace ProxyChecker
       collection.AddTransient<CheckersWindowViewModel>();
 
       collection.AddSingleton<DesktopService>();
-			collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
-		}
-	}
+      collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
+    }
+  }
 }

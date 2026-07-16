@@ -90,8 +90,10 @@
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
 				<Button Classes="action-button" Command="{Binding ExportProxiesCommand}" Content="{x:Static asts:Resource.ExportButtonText}" />
 			</StackPanel>
-			<ItemsControl ItemsSource="{Binding ValidProxies}">
-			</ItemsControl>
+			<ScrollViewer>
+				<ItemsControl ItemsSource="{Binding ValidProxies}">
+				</ItemsControl>
+			</ScrollViewer>
 		</DockPanel>
 	</Grid>
 

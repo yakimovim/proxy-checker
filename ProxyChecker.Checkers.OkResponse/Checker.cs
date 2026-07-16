@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
@@ -11,12 +12,14 @@ namespace ProxyChecker.Checkers.OkResponse
   {
     private static readonly Random _rnd = new Random((int)DateTime.Now.Ticks);
     private readonly IDesktopService _desktopService;
+    private readonly ILogger<Checker> _logger;
     private CheckerSettings _settings = new CheckerSettings();
     private CheckerSettings? _currentSettings = null;
 
-    public Checker(IDesktopService desktopService)
+    public Checker(IDesktopService desktopService, ILogger<Checker> logger)
     {
       _desktopService = desktopService ?? throw new ArgumentNullException(nameof(desktopService));
+      _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public bool SupportsParallelChecking => true;
@@ -85,9 +88,11 @@ namespace ProxyChecker.Checkers.OkResponse
         return false;
       }
 
+      var proxyUri = GetProxyUri(proxy);
+
       var webProxy = new WebProxy
       {
-        Address = GetProxyUri(proxy)
+        Address = proxyUri
       };
 
       using var handler = new HttpClientHandler
@@ -106,8 +111,16 @@ namespace ProxyChecker.Checkers.OkResponse
 
         return response.StatusCode == HttpStatusCode.OK;
       }
-      catch (Exception)
+      catch (Exception ex)
       {
+        if(_logger.IsEnabled(LogLevel.Debug))
+        {
+          _logger.LogError(ex, $"Error while checking proxy {proxyUri}");
+        }
+        else
+        {
+          _logger.LogError($"Error while checking proxy {proxyUri}: {ex.Message}");
+        }
         return false;
       }
     }
