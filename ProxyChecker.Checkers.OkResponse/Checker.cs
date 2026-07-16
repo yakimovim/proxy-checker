@@ -151,6 +151,10 @@ namespace ProxyChecker.Checkers.OkResponse
         {
           _currentSettings = GetTypedSettingsFromControl(viewModel.SettingsControl);
         }
+        else
+        {
+          return false;
+        }
       }
 
       if (_currentSettings is null || _currentSettings?.TargetUris.Length == 0)

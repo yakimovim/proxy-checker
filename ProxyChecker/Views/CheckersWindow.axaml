@@ -10,7 +10,7 @@
         Width="700" Height="400"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
-        Icon="/Assets/proxy-checker.ico"
+        Icon="avares://ProxyChecker.Interfaces/Resources/proxy-checker.ico"
         Title="{x:Static asts:Resource.CheckersWindowTitle}">
 	<DockPanel LastChildFill="True">
 		<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
