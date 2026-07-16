@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Storage;
 
 namespace ProxyChecker.ViewModels

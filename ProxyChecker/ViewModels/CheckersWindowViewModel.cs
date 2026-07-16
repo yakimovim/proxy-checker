@@ -47,7 +47,7 @@ namespace ProxyChecker.ViewModels
         Checkers.Add(
           new NamedEntityViewModel(checker)
           {
-            IsActive = (checker.Id == appSettings.LoaderId),
+            IsActive = (checker.Id == appSettings.CheckerId),
           }
         );
       }

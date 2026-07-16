@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using ProxyChecker.ViewModels;
+using ProxyChecker.Interfaces.ViewModels;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
+using ProxyChecker.Interfaces.ViewModels;
 using System.Net;
 
 namespace ProxyChecker.Checkers.OkResponse
@@ -9,8 +10,14 @@ namespace ProxyChecker.Checkers.OkResponse
   internal class Checker : IChecker
   {
     private static readonly Random _rnd = new Random((int)DateTime.Now.Ticks);
-
+    private readonly IDesktopService _desktopService;
     private CheckerSettings _settings = new CheckerSettings();
+    private CheckerSettings? _currentSettings = null;
+
+    public Checker(IDesktopService desktopService)
+    {
+      _desktopService = desktopService ?? throw new ArgumentNullException(nameof(desktopService));
+    }
 
     public bool SupportsParallelChecking => true;
 
@@ -73,6 +80,11 @@ namespace ProxyChecker.Checkers.OkResponse
 
     public async Task<bool> CheckAsync(Proxy proxy, CancellationToken cancellationToken)
     {
+      if (_currentSettings is null)
+      {
+        return false;
+      }
+
       var webProxy = new WebProxy
       {
         Address = GetProxyUri(proxy)
@@ -85,12 +97,12 @@ namespace ProxyChecker.Checkers.OkResponse
 
       using var client = new HttpClient(handler)
       {
-        Timeout = _settings.Timeout,
+        Timeout = _currentSettings.Timeout,
       };
 
       try
       {
-        using var response = await client.GetAsync(GetRandomTargetUri(_settings.TargetUris), cancellationToken);
+        using var response = await client.GetAsync(GetRandomTargetUri(_currentSettings.TargetUris), cancellationToken);
 
         return response.StatusCode == HttpStatusCode.OK;
       }
@@ -115,6 +127,42 @@ namespace ProxyChecker.Checkers.OkResponse
       };
 
       return builder.Uri;
+    }
+
+    public async Task<bool> IsReadyAsync(CancellationToken cancellationToken)
+    {
+      _currentSettings = _settings;
+
+      if (_currentSettings.TargetUris.Length == 0)
+      {
+        var control = GetSettingsControl();
+
+        var viewModel = new PluginSettingsWindowViewModel
+        {
+          SettingsControl = control,
+        };
+
+        var dialog = new PluginSettingsWindow(viewModel)
+        {
+          Title = Resource.PluginSettingsWindowTitle,
+        };
+
+        if (await dialog.ShowDialog<bool>(_desktopService.Desktop.MainWindow!))
+        {
+          _currentSettings = GetTypedSettingsFromControl(viewModel.SettingsControl);
+        }
+      }
+
+      if (_currentSettings is null || _currentSettings?.TargetUris.Length == 0)
+      {
+        var dialog = new MessageWindow(Resource.NoTargetUriMessage);
+
+        await dialog.ShowDialog(_desktopService.Desktop.MainWindow!);
+
+        return false;
+      }
+
+      return true;
     }
   }
 }

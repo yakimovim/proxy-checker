@@ -66,7 +66,7 @@ namespace ProxyChecker.ViewModels
       if (appSettings.LoaderId is null)
       {
         await ShowLoadersAsync(cancellationToken);
-        
+
         return;
       }
 
@@ -88,7 +88,7 @@ namespace ProxyChecker.ViewModels
 
       loader.SetSettings(dbLoader.JsonSettings is null ? null : JToken.Parse(dbLoader.JsonSettings));
 
-      await foreach(var proxy in loader.LoadAsync(cancellationToken))
+      await foreach (var proxy in loader.LoadAsync(cancellationToken))
       {
         LoadedProxies.Add(
           new ProxyViewModel(
@@ -127,7 +127,7 @@ namespace ProxyChecker.ViewModels
 
       var dbChecker = await _db.Checkers.FindAsync(appSettings.CheckerId.Value, cancellationToken);
 
-      if (dbChecker is null) 
+      if (dbChecker is null)
       {
         return;
       }
@@ -145,10 +145,16 @@ namespace ProxyChecker.ViewModels
 
       ValidProxies.Clear();
 
+      if (!(await checker.IsReadyAsync(cancellationToken)))
+      {
+        return;
+      }
+
       try
       {
         _proxyCheckingCancellationTokenSource = new CancellationTokenSource();
-        cancellationToken.Register(() => {
+        cancellationToken.Register(() =>
+        {
           _proxyCheckingCancellationTokenSource?.Cancel();
         });
 
@@ -161,7 +167,8 @@ namespace ProxyChecker.ViewModels
           await Parallel.ForEachAsync(
             loadedProxies,
             _proxyCheckingCancellationTokenSource.Token,
-            async (proxy, ct) => {
+            async (proxy, ct) =>
+            {
               if (await checker.CheckAsync(proxy, ct))
               {
                 ValidProxies.Add(
@@ -171,7 +178,7 @@ namespace ProxyChecker.ViewModels
             }
           );
         }
-        else 
+        else
         {
           foreach (var proxy in loadedProxies)
           {
@@ -248,7 +255,7 @@ namespace ProxyChecker.ViewModels
     private void ShowExporters()
     { }
 
-    private async Task ReloadExistingLoadersAsync(CancellationToken cancellationToken) 
+    private async Task ReloadExistingLoadersAsync(CancellationToken cancellationToken)
     {
       var loaders = await _db.Loaders.AsNoTracking().ToListAsync(cancellationToken);
 
@@ -256,7 +263,8 @@ namespace ProxyChecker.ViewModels
 
       Loaders.Clear();
 
-      loaders.ForEach(l => {
+      loaders.ForEach(l =>
+      {
         Loaders.Add(new NamedEntityViewModel(l)
         {
           IsActive = l.Id == settings.LoaderId
@@ -286,7 +294,8 @@ namespace ProxyChecker.ViewModels
 
       Checkers.Clear();
 
-      checkers.ForEach(c => {
+      checkers.ForEach(c =>
+      {
         Checkers.Add(new NamedEntityViewModel(c)
         {
           IsActive = c.Id == settings.CheckerId
