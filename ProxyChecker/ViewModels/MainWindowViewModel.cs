@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
+using ProxyChecker.Interfaces.Exporters;
 using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Interfaces.ViewModels;
 using ProxyChecker.Storage;
@@ -23,13 +24,15 @@ namespace ProxyChecker.ViewModels
     private readonly AppDbContext _db;
     private readonly IEnumerable<ILoaderCreator> _loaderCreators;
     private readonly IEnumerable<ICheckerCreator> _checkerCreators;
+    private readonly IEnumerable<IExporterCreator> _exporterCreators;
 
     public MainWindowViewModel(
       IDesktopService desktopService,
       IWindowFactory windowFactory,
       AppDbContext db,
       IEnumerable<ILoaderCreator> loaderCreators,
-      IEnumerable<ICheckerCreator> checkerCreators
+      IEnumerable<ICheckerCreator> checkerCreators,
+      IEnumerable<IExporterCreator> exporterCreators
       )
     {
       _desktopService = desktopService;
@@ -37,10 +40,12 @@ namespace ProxyChecker.ViewModels
       _db = db ?? throw new System.ArgumentNullException(nameof(db));
       _loaderCreators = loaderCreators ?? throw new System.ArgumentNullException(nameof(loaderCreators));
       _checkerCreators = checkerCreators ?? throw new System.ArgumentNullException(nameof(checkerCreators));
+      _exporterCreators = exporterCreators ?? throw new System.ArgumentNullException(nameof(exporterCreators));
 
       Task.WaitAll(
         ReloadExistingLoadersAsync(CancellationToken.None),
-        ReloadExistingCheckersAsync(CancellationToken.None)
+        ReloadExistingCheckersAsync(CancellationToken.None),
+        ReloadExistingExportersAsync(CancellationToken.None)
       );
     }
 
@@ -55,6 +60,9 @@ namespace ProxyChecker.ViewModels
 
     [ObservableProperty]
     private ObservableCollection<NamedEntityViewModel> _checkers = new();
+
+    [ObservableProperty]
+    private ObservableCollection<NamedEntityViewModel> _exporters = new();
 
     public Window Window { get; set; } = default!;
 
@@ -219,8 +227,35 @@ namespace ProxyChecker.ViewModels
     private bool CanCheckProxies() => LoadedProxies.Any();
 
     [RelayCommand(CanExecute = nameof(CanExportProxies))]
-    private void ExportProxies()
+    private async Task ExportProxiesAsync(CancellationToken cancellationToken)
     {
+      var appSettings = await _db.Settings.SingleAsync(cancellationToken);
+
+      if (appSettings.ExporterId is null)
+      {
+        await ShowExportersAsync(cancellationToken);
+        return;
+      }
+
+      var dbExporter = await _db.Exporters.FindAsync(appSettings.ExporterId.Value, cancellationToken);
+
+      if (dbExporter is null)
+      {
+        return;
+      }
+
+      var exporterCreator = _exporterCreators.SingleOrDefault(c => c.Uid == dbExporter.CreatorUid);
+
+      if (exporterCreator is null)
+      {
+        return;
+      }
+
+      var exporter = exporterCreator.Create();
+
+      exporter.SetSettings(dbExporter.JsonSettings is null ? null : JToken.Parse(dbExporter.JsonSettings));
+
+      await exporter.ExportAsync(ValidProxies.Select(vm => vm.ToProxy()), cancellationToken);
     }
 
     private bool CanExportProxies() => ValidProxies.Any();
@@ -252,8 +287,14 @@ namespace ProxyChecker.ViewModels
     }
 
     [RelayCommand]
-    private void ShowExporters()
-    { }
+    private async Task ShowExportersAsync(CancellationToken cancellationToken)
+    {
+      var dialog = _windowFactory.CreateWindow<ExportersWindow>();
+
+      await dialog.ShowDialog(Window);
+
+      await ReloadExistingExportersAsync(cancellationToken);
+    }
 
     private async Task ReloadExistingLoadersAsync(CancellationToken cancellationToken)
     {
@@ -315,6 +356,37 @@ namespace ProxyChecker.ViewModels
       await _db.SaveChangesAsync(cancellationToken);
 
       await ReloadExistingCheckersAsync(cancellationToken);
+    }
+
+    private async Task ReloadExistingExportersAsync(CancellationToken cancellationToken)
+    {
+      var exporters = await _db.Exporters.AsNoTracking().ToListAsync(cancellationToken);
+
+      var settings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
+
+      Exporters.Clear();
+
+      exporters.ForEach(e =>
+      {
+        Exporters.Add(new NamedEntityViewModel(e)
+        {
+          IsActive = e.Id == settings.ExporterId
+        });
+      });
+    }
+
+    [RelayCommand]
+    private async Task SetActiveExporterAsync(
+      NamedEntityViewModel exporterViewModel,
+      CancellationToken cancellationToken)
+    {
+      var appSettings = await _db.Settings.SingleAsync(cancellationToken);
+
+      appSettings.ExporterId = exporterViewModel.Id;
+
+      await _db.SaveChangesAsync(cancellationToken);
+
+      await ReloadExistingExportersAsync(cancellationToken);
     }
   }
 }

@@ -69,7 +69,7 @@ namespace ProxyChecker.Exporters.UriTextFile
     {
       var sourceFilePath = _settings.FilePath;
 
-      if (string.IsNullOrEmpty(sourceFilePath) || !File.Exists(sourceFilePath))
+      if (string.IsNullOrEmpty(sourceFilePath))
       {
         var topLevel = TopLevel.GetTopLevel(_desktopService.Desktop.MainWindow);
 
@@ -95,7 +95,7 @@ namespace ProxyChecker.Exporters.UriTextFile
         }
       }
 
-      if (string.IsNullOrEmpty(sourceFilePath) || !File.Exists(sourceFilePath))
+      if (string.IsNullOrEmpty(sourceFilePath))
       {
 				return;
       }

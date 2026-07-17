@@ -100,6 +100,9 @@ namespace ProxyChecker
       collection.AddTransient<CheckersWindow>();
       collection.AddTransient<CheckersWindowViewModel>();
 
+      collection.AddTransient<ExportersWindow>();
+      collection.AddTransient<ExportersWindowViewModel>();
+
       collection.AddSingleton<DesktopService>();
       collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
     }

@@ -3,9 +3,9 @@ using ProxyChecker.ViewModels;
 
 namespace ProxyChecker;
 
-internal partial class LoaderSettingsWindow : Window
+internal partial class ExportersWindow : Window
 {
-  public LoaderSettingsWindow(NamedEntityWithSettingsViewModel model)
+  public ExportersWindow(ExportersWindowViewModel model)
   {
     DataContext = model;
 

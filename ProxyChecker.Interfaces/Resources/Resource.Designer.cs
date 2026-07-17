@@ -205,6 +205,15 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exporters.
+        /// </summary>
+        public static string ExportersWindowTitle {
+            get {
+                return ResourceManager.GetString("ExportersWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load.
         /// </summary>
         public static string LoadButtonText {

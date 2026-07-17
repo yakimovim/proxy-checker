@@ -165,6 +165,9 @@
   <data name="ExporterSettingsWindowTitle" xml:space="preserve">
     <value>Exporter settings</value>
   </data>
+  <data name="ExportersWindowTitle" xml:space="preserve">
+    <value>Exporters</value>
+  </data>
   <data name="LoadButtonText" xml:space="preserve">
     <value>Load</value>
   </data>
