@@ -1,18 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ProxyChecker.Storage
+namespace ProxyChecker.Storage;
+
+internal class AppDbContext : DbContext
 {
-  internal class AppDbContext : DbContext
+  // The DI container passes configurations through this constructor
+  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
   {
-    // The DI container passes configurations through this constructor
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
-
-    public DbSet<Loader> Loaders { get; set; }
-    
-    public DbSet<Checker> Checkers { get; set; }
-
-    public DbSet<Settings> Settings { get; set; }
   }
+
+  public DbSet<Loader> Loaders { get; set; }
+  
+  public DbSet<Checker> Checkers { get; set; }
+  
+  public DbSet<Exporter> Exporters { get; set; }
+
+  public DbSet<Settings> Settings { get; set; }
 }

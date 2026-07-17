@@ -133,6 +133,15 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new exporter.
+        /// </summary>
+        public static string CreateExporterWindowTitle {
+            get {
+                return ResourceManager.GetString("CreateExporterWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create new loader.
         /// </summary>
         public static string CreateLoaderWindowTitle {
@@ -174,6 +183,24 @@ namespace ProxyChecker.Interfaces.Resources {
         public static string ExportButtonText {
             get {
                 return ResourceManager.GetString("ExportButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporter settings:.
+        /// </summary>
+        public static string ExporterSettingsLabel {
+            get {
+                return ResourceManager.GetString("ExporterSettingsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporter settings.
+        /// </summary>
+        public static string ExporterSettingsWindowTitle {
+            get {
+                return ResourceManager.GetString("ExporterSettingsWindowTitle", resourceCulture);
             }
         }
         

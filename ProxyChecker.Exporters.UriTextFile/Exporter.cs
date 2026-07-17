@@ -3,8 +3,6 @@ using Avalonia.Platform.Storage;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Exporters;
-using ProxyChecker.Interfaces.Loaders;
-using System.Runtime.CompilerServices;
 
 namespace ProxyChecker.Exporters.UriTextFile
 {

@@ -141,6 +141,9 @@
   <data name="CreateCheckerWindowTitle" xml:space="preserve">
     <value>Create new checker</value>
   </data>
+  <data name="CreateExporterWindowTitle" xml:space="preserve">
+    <value>Create new exporter</value>
+  </data>
   <data name="CreateLoaderWindowTitle" xml:space="preserve">
     <value>Create new loader</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="ExportButtonText" xml:space="preserve">
     <value>Export</value>
+  </data>
+  <data name="ExporterSettingsLabel" xml:space="preserve">
+    <value>Exporter settings:</value>
+  </data>
+  <data name="ExporterSettingsWindowTitle" xml:space="preserve">
+    <value>Exporter settings</value>
   </data>
   <data name="LoadButtonText" xml:space="preserve">
     <value>Load</value>
