@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-		<PackageReference Include="Avalonia" />
-		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>
