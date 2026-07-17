@@ -3,8 +3,14 @@
   <Folder Name="/Plugins/Checkers/">
     <Project Path="ProxyChecker.Checkers.OkResponse/ProxyChecker.Checkers.OkResponse.csproj" Id="b71ae818-e2a7-41df-876f-addd29365cd3" />
   </Folder>
+  <Folder Name="/Plugins/Exporters/">
+    <Project Path="ProxyChecker.Exporters.UriTextFile/ProxyChecker.Exporters.UriTextFile.csproj" Id="f638a3bc-d1d9-41c7-9eb6-9548813282e9" />
+  </Folder>
   <Folder Name="/Plugins/Loaders/">
     <Project Path="ProxyChecker.Loaders.UriTextFile/ProxyChecker.Loaders.UriTextFile.csproj" Id="4082a546-6de4-4c63-b8ba-fd967a60c18d" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
   </Folder>
   <Project Path="ProxyChecker.Interfaces/ProxyChecker.Interfaces.csproj" Id="edf93d75-8833-4b26-833d-291a402f2e83" />
   <Project Path="ProxyChecker/ProxyChecker.csproj" />
