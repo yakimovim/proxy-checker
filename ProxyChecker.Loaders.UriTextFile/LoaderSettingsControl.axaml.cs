@@ -4,12 +4,12 @@ namespace ProxyChecker.Loaders.UriTextFile;
 
 internal partial class LoaderSettingsControl : UserControl
 {
-    public LoaderSettingsControl(LoaderSettingsControlViewModel viewModel)
-    {
-        DataContext = viewModel;
+  public LoaderSettingsControl(LoaderSettingsControlViewModel viewModel)
+  {
+    DataContext = viewModel;
 
-        viewModel.Control = this;
+    viewModel.Control = this;
 
-        InitializeComponent();
-    }
+    InitializeComponent();
+  }
 }

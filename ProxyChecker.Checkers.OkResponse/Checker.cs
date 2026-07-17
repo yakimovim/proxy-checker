@@ -88,7 +88,7 @@ namespace ProxyChecker.Checkers.OkResponse
         return false;
       }
 
-      var proxyUri = GetProxyUri(proxy);
+      var proxyUri = proxy.GetUri();
 
       var webProxy = new WebProxy
       {
@@ -128,18 +128,6 @@ namespace ProxyChecker.Checkers.OkResponse
     private Uri GetRandomTargetUri(Uri[] targetUris)
     {
       return targetUris[_rnd.Next(targetUris.Length)];
-    }
-
-    private Uri GetProxyUri(Proxy proxy)
-    {
-      var builder = new UriBuilder
-      {
-        Scheme = proxy.Scheme,
-        Host = proxy.Host,
-        Port = proxy.Port,
-      };
-
-      return builder.Uri;
     }
 
     public async Task<bool> IsReadyAsync(CancellationToken cancellationToken)
