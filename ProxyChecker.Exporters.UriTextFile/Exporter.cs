@@ -78,15 +78,15 @@ namespace ProxyChecker.Exporters.UriTextFile
 					return;
         }
 
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-          Title = "Choose URI File",
-          AllowMultiple = false,
+          Title = Resource.SaveFilePickerTitle,
+					ShowOverwritePrompt = true,
         });
 
-        if (files.Count > 0)
+        if (file is not null)
         {
-          var path = files[0].TryGetLocalPath();
+          var path = file.TryGetLocalPath();
 
           if (!string.IsNullOrWhiteSpace(path))
           {

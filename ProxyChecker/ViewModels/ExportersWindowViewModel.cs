@@ -47,7 +47,7 @@ namespace ProxyChecker.ViewModels
         Exporters.Add(
           new NamedEntityViewModel(exporter)
           {
-            IsActive = (exporter.Id == settings.LoaderId),
+            IsActive = (exporter.Id == settings.ExporterId),
           }
         );
       }

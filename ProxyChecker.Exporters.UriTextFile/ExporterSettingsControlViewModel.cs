@@ -6,41 +6,41 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProxyChecker.Exporters.UriTextFile
 {
-	internal partial class ExporterSettingsControlViewModel
-	  : ObservableValidator
-	{
-		[ObservableProperty]
-		[NotifyDataErrorInfo]
+  internal partial class ExporterSettingsControlViewModel
+    : ObservableValidator
+  {
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     private string? _filePath;
 
-		public Control Control { get; set; } = default!;
+    public Control Control { get; set; } = default!;
 
-		[RelayCommand]
-		private async Task SelectFilePathAsync(CancellationToken cancellationToken)
-		{
-			var topLevel = TopLevel.GetTopLevel(Control);
+    [RelayCommand]
+    private async Task SelectFilePathAsync(CancellationToken cancellationToken)
+    {
+      var topLevel = TopLevel.GetTopLevel(Control);
 
-			if (topLevel == null) 
-			{
-				return;
-			}
+      if (topLevel == null)
+      {
+        return;
+      }
 
-			var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-			{
-				Title = "Choose URI File",
-				AllowMultiple = false,
-			});
+      var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+      {
+        Title = Resource.SaveFilePickerTitle,
+        ShowOverwritePrompt = true,
+      });
 
-			if (files.Count > 0)
-			{
-				var path = files[0].TryGetLocalPath();
+      if (file is not null)
+      {
+        var path = file.TryGetLocalPath();
 
-				if (!string.IsNullOrWhiteSpace(path)) 
-				{
-					FilePath = path;
-				}
-			}
-		}
-	}
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+          FilePath = path;
+        }
+      }
+    }
+  }
 }

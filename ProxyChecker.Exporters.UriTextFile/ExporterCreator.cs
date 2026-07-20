@@ -14,9 +14,9 @@ namespace ProxyChecker.Exporters.UriTextFile
 
     public Guid Uid => new Guid("BCF1B10B-6C55-4D78-9E29-8DE1C725FA76");
 
-    public string Name => "URI to Text file";
+    public string Name => Resource.CreatorName;
 
-    public string Description => "Exports URIs of proxies into a text file, one URI per line.";
+    public string Description => Resource.CreatorDescription;
 
     public IExporter Create()
       => new Exporter(_desktopService);
