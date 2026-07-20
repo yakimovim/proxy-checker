@@ -3,17 +3,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:ProxyChecker.Checkers.OkResponse"
+             xmlns:asts="using:ProxyChecker.Interfaces.Resources"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:CheckerSettingsControlViewModel"
              x:Class="ProxyChecker.Checkers.OkResponse.CheckerSettingsControl">
 	<DockPanel LastChildFill="True" Margin="5">
 		<Grid DockPanel.Dock="Top" ColumnDefinitions="Auto, *, Auto">
-			<TextBlock Grid.Column="0" Classes="form-label" Text="Target URI" />
+			<TextBlock Grid.Column="0" Classes="form-label" Text="{x:Static vm:Resource.TargetUriLabel}" />
 			<TextBox Grid.Column="1" Classes="m5" Text="{Binding TargetUriCandidate}"/>
-			<Button Grid.Column="2" Classes="action-button" Command="{Binding AddTargetUriCommand}">Add</Button>
+			<Button Grid.Column="2" Classes="action-button" Command="{Binding AddTargetUriCommand}" Content="{x:Static asts:Resource.AddButtonText}" />
     </Grid>
 		<Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto, *">
-			<TextBlock Grid.Column="0" Classes="form-label" Text="Timeout (seconds)" />
+			<TextBlock Grid.Column="0" Classes="form-label" Text="{x:Static vm:Resource.TimeoutLabel}" />
 			<NumericUpDown Grid.Column="1" Classes="m5" Value="{Binding TimeoutInSeconds}"
 				Minimum="1" Maximum="600"
 				ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>

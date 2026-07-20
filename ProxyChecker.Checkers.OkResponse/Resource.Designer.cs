@@ -22,7 +22,7 @@ namespace ProxyChecker.Checkers.OkResponse {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ProxyChecker.Checkers.OkResponse {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ProxyChecker.Checkers.OkResponse.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace ProxyChecker.Checkers.OkResponse {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,27 @@ namespace ProxyChecker.Checkers.OkResponse {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This checker considers proxy as valid, if call to a site through this proxy returns OK response..
+        /// </summary>
+        public static string CreatorDescription {
+            get {
+                return ResourceManager.GetString("CreatorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK response.
+        /// </summary>
+        public static string CreatorName {
+            get {
+                return ResourceManager.GetString("CreatorName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, specify at least one target URI in the settings of the checker..
         /// </summary>
-        internal static string NoTargetUriMessage {
+        public static string NoTargetUriMessage {
             get {
                 return ResourceManager.GetString("NoTargetUriMessage", resourceCulture);
             }
@@ -72,9 +90,27 @@ namespace ProxyChecker.Checkers.OkResponse {
         /// <summary>
         ///   Looks up a localized string similar to Checker settings.
         /// </summary>
-        internal static string PluginSettingsWindowTitle {
+        public static string PluginSettingsWindowTitle {
             get {
                 return ResourceManager.GetString("PluginSettingsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target URI.
+        /// </summary>
+        public static string TargetUriLabel {
+            get {
+                return ResourceManager.GetString("TargetUriLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout (seconds).
+        /// </summary>
+        public static string TimeoutLabel {
+            get {
+                return ResourceManager.GetString("TimeoutLabel", resourceCulture);
             }
         }
     }

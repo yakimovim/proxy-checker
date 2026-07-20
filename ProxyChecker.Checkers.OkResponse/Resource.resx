@@ -117,10 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CreatorDescription" xml:space="preserve">
+    <value>This checker considers proxy as valid, if call to a site through this proxy returns OK response.</value>
+  </data>
+  <data name="CreatorName" xml:space="preserve">
+    <value>OK response</value>
+  </data>
   <data name="NoTargetUriMessage" xml:space="preserve">
     <value>Please, specify at least one target URI in the settings of the checker.</value>
   </data>
   <data name="PluginSettingsWindowTitle" xml:space="preserve">
     <value>Checker settings</value>
+  </data>
+  <data name="TargetUriLabel" xml:space="preserve">
+    <value>Target URI</value>
+  </data>
+  <data name="TimeoutLabel" xml:space="preserve">
+    <value>Timeout (seconds)</value>
   </data>
 </root>
