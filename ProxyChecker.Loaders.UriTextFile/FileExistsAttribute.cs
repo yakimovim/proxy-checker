@@ -18,10 +18,13 @@ namespace ProxyChecker.Loaders.UriTextFile
 			}
 
 			if (!File.Exists(strValue))
-				return new ValidationResult(
-					ErrorMessage ?? $"File '{strValue}' does not exist");
+			{
+        return new ValidationResult(
+          ErrorMessage ?? string.Format(Resource.FileNotFoundFormat, strValue)
+        );
+      }
 
-			return ValidationResult.Success;
+      return ValidationResult.Success;
 		}
 	}
 }

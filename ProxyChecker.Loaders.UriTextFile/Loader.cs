@@ -45,7 +45,7 @@ namespace ProxyChecker.Loaders.UriTextFile
 
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-          Title = "Open URI File",
+          Title = Resource.OpenFilePickerTitle,
           AllowMultiple = false,
         });
 
