@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Plugins/" />
   <Folder Name="/Plugins/Checkers/">
+    <Project Path="ProxyChecker.Checkers.Anonymity/ProxyChecker.Checkers.Anonymity.csproj" Id="f0fb06fe-33c6-4720-9329-95bb5c800189" />
     <Project Path="ProxyChecker.Checkers.OkResponse/ProxyChecker.Checkers.OkResponse.csproj" Id="b71ae818-e2a7-41df-876f-addd29365cd3" />
   </Folder>
   <Folder Name="/Plugins/Exporters/">

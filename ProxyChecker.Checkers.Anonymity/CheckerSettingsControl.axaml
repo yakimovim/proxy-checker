@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:ProxyChecker.Checkers.Anonymity"
+             xmlns:asts="using:ProxyChecker.Interfaces.Resources"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:CheckerSettingsControlViewModel"
+             x:Class="ProxyChecker.Checkers.Anonymity.CheckerSettingsControl">
+	<DockPanel LastChildFill="True" Margin="5">
+		<Grid DockPanel.Dock="Top" ColumnDefinitions="Auto, *">
+			<TextBlock Grid.Column="0" Classes="form-label" Text="{x:Static vm:Resource.TimeoutLabel}" />
+			<NumericUpDown Grid.Column="1" Classes="m5" Value="{Binding TimeoutInSeconds}"
+				Minimum="1" Maximum="600"
+				ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>
+		</Grid>
+	</DockPanel>
+</UserControl>
