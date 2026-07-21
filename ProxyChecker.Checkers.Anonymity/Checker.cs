@@ -100,7 +100,9 @@ namespace ProxyChecker.Checkers.Anonymity
 
         var responseText = await response.Content.ReadAsStringAsync();
 
-        return responseText == proxy.Host;
+        var proxyAddresses = await GetProxyIps(proxy.Host);
+
+        return proxyAddresses.Any(ip => responseText == ip.ToString());
       }
       catch (Exception ex)
       {
@@ -114,6 +116,16 @@ namespace ProxyChecker.Checkers.Anonymity
         }
         return false;
       }
+    }
+
+    private async Task<IPAddress[]> GetProxyIps(string host)
+    {
+      if (IPAddress.TryParse(host, out var ip))
+      {
+        return [ip];
+      }
+
+      return await Dns.GetHostAddressesAsync(host);
     }
 
     public Task<bool> IsReadyAsync(CancellationToken cancellationToken) => Task.FromResult(true);
