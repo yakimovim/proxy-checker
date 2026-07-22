@@ -1,0 +1,190 @@
+﻿using Avalonia.Controls;
+using Newtonsoft.Json.Linq;
+using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Loaders;
+using System.Net;
+using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
+using System.Web;
+
+namespace ProxyChecker.Loaders.GeonodeApi
+{
+  internal class Loader : ILoader
+  {
+    private LoaderSettings _settings = new LoaderSettings();
+
+    public string Name { get; set; } = string.Empty;
+
+    public JToken GetSettings()
+    {
+      return JToken.FromObject(_settings);
+    }
+
+    public void SetSettings(JToken? settings)
+    {
+      _settings = settings?.ToObject<LoaderSettings>()!;
+    }
+
+    public async IAsyncEnumerable<Proxy> LoadAsync(
+      [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+      var response = await GetApiResponse(cancellationToken);
+
+      if (response is null || response.Data is null)
+      {
+        yield break;
+      }
+
+      foreach (var proxyModel in response.Data)
+      {
+        if (proxyModel is null)
+        {
+          continue;
+        }
+
+        foreach (var protocol in proxyModel.Protocols)
+        {
+          if (protocol is null)
+          {
+            continue;
+          }
+
+          var line = $"{protocol}://{proxyModel.Ip}:{proxyModel.Port}";
+
+          if (Uri.TryCreate(line, UriKind.Absolute, out var uri))
+          {
+            yield return new Proxy(
+              uri.Scheme,
+              uri.Host,
+              uri.Port
+            );
+          }
+        }
+      }
+    }
+
+    private async Task<ResponseModel?> GetApiResponse(CancellationToken cancellationToken)
+    {
+      using var handler = new HttpClientHandler();
+
+      if (_settings.ProxyUri is not null)
+      {
+        handler.Proxy = new WebProxy
+        {
+          Address = _settings.ProxyUri,
+        };
+      }
+
+      using var client = new HttpClient(handler)
+      {
+        Timeout = _settings.Timeout,
+      };
+
+      try
+      {
+        using var response = await client.GetAsync(GetFlashProxyApiUri(), cancellationToken);
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+          return null;
+        }
+
+        return await response.Content.ReadFromJsonAsync<ResponseModel>(cancellationToken);
+      }
+      catch (Exception ex)
+      {
+        return null;
+      }
+    }
+
+    private Uri GetFlashProxyApiUri()
+    {
+      var uriBuilder = new UriBuilder("https://proxylist.geonode.com/api/proxy-list");
+
+      var query = HttpUtility.ParseQueryString(string.Empty);
+      if (!string.IsNullOrEmpty(_settings.Anonymity))
+      {
+        query["anonymityLevel"] = _settings.Anonymity;
+      }
+      if (_settings.Port.HasValue)
+      {
+        query["filterPort"] = _settings.Port.ToString();
+      }
+      if (!string.IsNullOrEmpty(_settings.Protocol))
+      {
+        query["protocols"] = _settings.Protocol;
+      }
+      if (_settings.Uptime.HasValue)
+      {
+        query["filterUpTime"] = _settings.Uptime.ToString();
+      }
+      if (_settings.LastChecked.HasValue)
+      {
+        query["filterLastChecked"] = _settings.LastChecked.ToString();
+      }
+      if (!string.IsNullOrEmpty(_settings.Speed))
+      {
+        query["speed"] = _settings.Speed;
+      }
+      query["limit"] = _settings.Limit.ToString();
+      query["page"] = "1";
+
+      uriBuilder.Query = query.ToString();
+
+      return uriBuilder.Uri;
+    }
+
+    public Control GetSettingsControl()
+    {
+      var viewModel = new LoaderSettingsControlViewModel
+      {
+        Uptime = _settings.Uptime,
+        LastChecked = _settings.LastChecked,
+        Port = _settings.Port,
+        Protocol = _settings.Protocol,
+        Speed = _settings.Speed,
+        Anonymity = _settings.Anonymity,
+        Limit = _settings.Limit,
+        ProxyUri = _settings.ProxyUri,
+        Timeout = _settings.Timeout,
+      };
+
+      return new LoaderSettingsControl(viewModel);
+    }
+
+    private LoaderSettings? GetTypedSettingsFromControl(Control? control)
+    {
+      if (control is not LoaderSettingsControl loaderSettingsControl)
+      {
+        return null;
+      }
+
+      if (loaderSettingsControl.DataContext is not LoaderSettingsControlViewModel viewModel)
+      {
+        return null;
+      }
+
+      var settings = new LoaderSettings
+      {
+        Uptime = viewModel.Uptime,
+        LastChecked = viewModel.LastChecked,
+        Port = viewModel.Port,
+        Protocol = viewModel.Protocol,
+        Speed = viewModel.Speed,
+        Anonymity = viewModel.Anonymity,
+        Limit = viewModel.Limit,
+        ProxyUri = viewModel.ProxyUri,
+        Timeout = viewModel.Timeout,
+      };
+
+      return settings;
+    }
+
+    public JToken? GetSettingsFromControl(Control? control)
+    {
+      var settings = GetTypedSettingsFromControl(control);
+
+      return settings is null ? null : JToken.FromObject(settings);
+    }
+  }
+}

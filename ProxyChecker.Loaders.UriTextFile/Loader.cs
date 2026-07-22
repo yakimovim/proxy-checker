@@ -73,7 +73,7 @@ namespace ProxyChecker.Loaders.UriTextFile
 
 				if (line is null)
 				{
-					break;
+					continue;
 				}
 
 				if (Uri.TryCreate(line, UriKind.Absolute, out var uri))
