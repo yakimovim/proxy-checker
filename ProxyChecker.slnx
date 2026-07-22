@@ -8,6 +8,7 @@
     <Project Path="ProxyChecker.Exporters.UriTextFile/ProxyChecker.Exporters.UriTextFile.csproj" Id="f638a3bc-d1d9-41c7-9eb6-9548813282e9" />
   </Folder>
   <Folder Name="/Plugins/Loaders/">
+    <Project Path="ProxyChecker.Loaders.FlashProxyApi/ProxyChecker.Loaders.FlashProxyApi.csproj" Id="efe340e8-1925-4739-8ded-392bb2e484d1" />
     <Project Path="ProxyChecker.Loaders.UriTextFile/ProxyChecker.Loaders.UriTextFile.csproj" Id="4082a546-6de4-4c63-b8ba-fd967a60c18d" />
   </Folder>
   <Folder Name="/Solution Items/">
