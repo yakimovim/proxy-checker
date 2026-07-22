@@ -54,7 +54,7 @@ namespace ProxyChecker.Loaders.FlashProxyApi
 
     private async Task<string?> GetFlashProxyApiResponseText(CancellationToken cancellationToken)
     {
-      using var handler = new SocketsHttpHandler();
+      using var handler = new HttpClientHandler();
 
       if (_settings.ProxyUri is not null)
       {
