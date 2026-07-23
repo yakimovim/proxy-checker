@@ -5,7 +5,7 @@ internal class LoaderSettings
   public int? Uptime { get; set; }
   public int? LastChecked { get; set; }
   public int? Port { get; set; }
-  public string? Protocol { get; set; }
+  public string? Protocol { get; set; } = string.Empty;
   public string? Anonymity { get; set; }
   public string? Speed { get; set; }
   public int Limit { get; set; } = 10;

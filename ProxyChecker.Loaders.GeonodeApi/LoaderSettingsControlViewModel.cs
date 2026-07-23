@@ -5,6 +5,28 @@ namespace ProxyChecker.Loaders.GeonodeApi;
 internal partial class LoaderSettingsControlViewModel
   : ObservableValidator
 {
+  public CodeWithName[] Protocols { get; } = [
+      new("", Resource.AnyOption),
+      new("http", "HTTP"),
+      new("https", "HTTPS"),
+      new("socks4", "SOCKS4"),
+      new("socks5", "SOCKS5"),
+  ];
+
+  public CodeWithName[] AnonymityLevels { get; } = [
+      new("", Resource.AnyOption),
+      new("elite", "Elite"),
+      new("anonymous", "Anonymous"),
+      new("transparent", "Transparent"),
+  ];
+
+  public CodeWithName[] Speeds { get; } = [
+      new("", Resource.AnyOption),
+      new("fast", Resource.FastSpeedOption),
+      new("medium", Resource.MediumSpeedOption),
+      new("slow", Resource.SlowSpeedOption),
+  ];
+
   [ObservableProperty]
   private int? _uptime;
 
@@ -47,8 +69,11 @@ internal partial class LoaderSettingsControlViewModel
     get => ProxyUri?.ToString();
     set
     {
-      ProxyUri = string.IsNullOrWhiteSpace(value) ? null : new Uri(value);
-      OnPropertyChanged(nameof(ProxyUriString));
+      if (string.IsNullOrEmpty(value) || Uri.TryCreate(value, UriKind.Absolute, out _))
+      {
+        ProxyUri = string.IsNullOrWhiteSpace(value) ? null : new Uri(value);
+        OnPropertyChanged(nameof(ProxyUriString));
+      }
     }
   }
 }

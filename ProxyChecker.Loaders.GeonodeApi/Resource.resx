@@ -117,10 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnonymityLabel" xml:space="preserve">
+    <value>Anonymity</value>
+  </data>
+  <data name="AnyOption" xml:space="preserve">
+    <value>Any</value>
+  </data>
   <data name="CreatorDescription" xml:space="preserve">
     <value>This plugin takes list of proxies from Geonode Free Proxy List API.</value>
   </data>
   <data name="CreatorName" xml:space="preserve">
     <value>Geonode Free Proxy List API</value>
+  </data>
+  <data name="FastSpeedOption" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="LastCheckedLabel" xml:space="preserve">
+    <value>Last Checked, minutes</value>
+  </data>
+  <data name="LimitLabel" xml:space="preserve">
+    <value>Limit</value>
+  </data>
+  <data name="MediumSpeedOption" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="PortLabel" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="ProtocolLabel" xml:space="preserve">
+    <value>Protocol</value>
+  </data>
+  <data name="ProxyUriLabel" xml:space="preserve">
+    <value>Proxy URL</value>
+  </data>
+  <data name="SlowSpeedOption" xml:space="preserve">
+    <value>Slow</value>
+  </data>
+  <data name="SpeedLabel" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="UptimeLabel" xml:space="preserve">
+    <value>Uptime, %</value>
   </data>
 </root>

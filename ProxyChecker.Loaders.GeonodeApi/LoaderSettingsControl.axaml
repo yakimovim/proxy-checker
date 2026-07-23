@@ -2,7 +2,49 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:ProxyChecker.Loaders.GeonodeApi"
+						 xmlns:sys="clr-namespace:System;assembly=netstandard"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:LoaderSettingsControlViewModel"
              x:Class="ProxyChecker.Loaders.GeonodeApi.LoaderSettingsControl">
-  Welcome to Avalonia!
+	<Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+		<TextBlock Grid.Column="0" Grid.Row="0" Classes="form-label" Text="{x:Static vm:Resource.UptimeLabel}" />
+		<NumericUpDown Grid.Column="1" Grid.Row="0" Classes="m5" Value="{Binding Uptime}"
+			Minimum="1" Maximum="100"
+			ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>
+		<TextBlock Grid.Column="0" Grid.Row="1" Classes="form-label" Text="{x:Static vm:Resource.LastCheckedLabel}" />
+		<NumericUpDown Grid.Column="1" Grid.Row="1" Classes="m5" Value="{Binding LastChecked}"
+			Minimum="1" Maximum="60"
+			ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>
+		<TextBlock Grid.Column="0" Grid.Row="2" Classes="form-label" Text="{x:Static vm:Resource.PortLabel}" />
+		<NumericUpDown Grid.Column="1" Grid.Row="2" Classes="m5" Value="{Binding Port}"
+			Minimum="1" ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>
+		<TextBlock Grid.Column="0" Grid.Row="3" Classes="form-label" Text="{x:Static vm:Resource.ProtocolLabel}" />
+		<ComboBox  Grid.Column="1" Grid.Row="3" Classes="m5" HorizontalAlignment="Stretch"
+			ItemsSource="{Binding Protocols}"
+			SelectedValue="{Binding Protocol}"
+			SelectedValueBinding="{Binding Code, DataType={x:Type vm:CodeWithName}}"
+			DisplayMemberBinding="{Binding Name, DataType={x:Type vm:CodeWithName}}">
+		</ComboBox>
+		<TextBlock Grid.Column="0" Grid.Row="4" Classes="form-label" Text="{x:Static vm:Resource.AnonymityLabel}" />
+		<ComboBox  Grid.Column="1" Grid.Row="4" Classes="m5" HorizontalAlignment="Stretch"
+			ItemsSource="{Binding AnonymityLevels}"
+			SelectedValue="{Binding Anonymity}"
+			SelectedValueBinding="{Binding Code, DataType={x:Type vm:CodeWithName}}"
+			DisplayMemberBinding="{Binding Name, DataType={x:Type vm:CodeWithName}}">
+		</ComboBox>
+		<TextBlock Grid.Column="0" Grid.Row="5" Classes="form-label" Text="{x:Static vm:Resource.SpeedLabel}" />
+		<ComboBox  Grid.Column="1" Grid.Row="5" Classes="m5" HorizontalAlignment="Stretch"
+			ItemsSource="{Binding Speeds}"
+			SelectedValue="{Binding Speed}"
+			SelectedValueBinding="{Binding Code, DataType={x:Type vm:CodeWithName}}"
+			DisplayMemberBinding="{Binding Name, DataType={x:Type vm:CodeWithName}}">
+		</ComboBox>
+		<TextBlock Grid.Column="0" Grid.Row="6" Classes="form-label" Text="{x:Static vm:Resource.LimitLabel}" />
+		<NumericUpDown Grid.Column="1" Grid.Row="6" Classes="m5" Value="{Binding Limit}"
+			Minimum="1" Maximum="500"
+			ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>
+		<TextBlock Grid.Column="0" Grid.Row="7" Classes="form-label" Text="{x:Static vm:Resource.ProxyUriLabel}" />
+		<TextBox Grid.Column="1" Grid.Row="7" Classes="m5" Text="{Binding ProxyUriString}" />
+	</Grid>
 </UserControl>

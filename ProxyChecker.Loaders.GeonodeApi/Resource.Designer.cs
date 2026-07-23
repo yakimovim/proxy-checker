@@ -61,6 +61,24 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anonymity.
+        /// </summary>
+        public static string AnonymityLabel {
+            get {
+                return ResourceManager.GetString("AnonymityLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        public static string AnyOption {
+            get {
+                return ResourceManager.GetString("AnyOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This plugin takes list of proxies from Geonode Free Proxy List API..
         /// </summary>
         public static string CreatorDescription {
@@ -75,6 +93,96 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         public static string CreatorName {
             get {
                 return ResourceManager.GetString("CreatorName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fast.
+        /// </summary>
+        public static string FastSpeedOption {
+            get {
+                return ResourceManager.GetString("FastSpeedOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Checked, minutes.
+        /// </summary>
+        public static string LastCheckedLabel {
+            get {
+                return ResourceManager.GetString("LastCheckedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit.
+        /// </summary>
+        public static string LimitLabel {
+            get {
+                return ResourceManager.GetString("LimitLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Medium.
+        /// </summary>
+        public static string MediumSpeedOption {
+            get {
+                return ResourceManager.GetString("MediumSpeedOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port.
+        /// </summary>
+        public static string PortLabel {
+            get {
+                return ResourceManager.GetString("PortLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protocol.
+        /// </summary>
+        public static string ProtocolLabel {
+            get {
+                return ResourceManager.GetString("ProtocolLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proxy URL.
+        /// </summary>
+        public static string ProxyUriLabel {
+            get {
+                return ResourceManager.GetString("ProxyUriLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slow.
+        /// </summary>
+        public static string SlowSpeedOption {
+            get {
+                return ResourceManager.GetString("SlowSpeedOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed.
+        /// </summary>
+        public static string SpeedLabel {
+            get {
+                return ResourceManager.GetString("SpeedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uptime, %.
+        /// </summary>
+        public static string UptimeLabel {
+            get {
+                return ResourceManager.GetString("UptimeLabel", resourceCulture);
             }
         }
     }
