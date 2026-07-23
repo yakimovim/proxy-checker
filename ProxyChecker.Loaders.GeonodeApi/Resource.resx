@@ -132,6 +132,12 @@
   <data name="FastSpeedOption" xml:space="preserve">
     <value>Fast</value>
   </data>
+  <data name="GreaterErrorMessage" xml:space="preserve">
+    <value>The value must be greater than {1}</value>
+  </data>
+  <data name="IsUriErrorMessage" xml:space="preserve">
+    <value>Here should be absolute URI</value>
+  </data>
   <data name="LastCheckedLabel" xml:space="preserve">
     <value>Last Checked, minutes</value>
   </data>
@@ -150,11 +156,20 @@
   <data name="ProxyUriLabel" xml:space="preserve">
     <value>Proxy URL</value>
   </data>
+  <data name="RangeErrorMessage" xml:space="preserve">
+    <value>The value must be between {1} and {2}</value>
+  </data>
+  <data name="RequiredErrorMessage" xml:space="preserve">
+    <value>This field can't be empty</value>
+  </data>
   <data name="SlowSpeedOption" xml:space="preserve">
     <value>Slow</value>
   </data>
   <data name="SpeedLabel" xml:space="preserve">
     <value>Speed</value>
+  </data>
+  <data name="TimeoutLabel" xml:space="preserve">
+    <value>Timeout, seconds</value>
   </data>
   <data name="UptimeLabel" xml:space="preserve">
     <value>Uptime, %</value>

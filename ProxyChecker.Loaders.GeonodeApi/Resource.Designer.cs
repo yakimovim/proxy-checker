@@ -106,6 +106,24 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be greater than {1}.
+        /// </summary>
+        public static string GreaterErrorMessage {
+            get {
+                return ResourceManager.GetString("GreaterErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Here should be absolute URI.
+        /// </summary>
+        public static string IsUriErrorMessage {
+            get {
+                return ResourceManager.GetString("IsUriErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last Checked, minutes.
         /// </summary>
         public static string LastCheckedLabel {
@@ -160,6 +178,24 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be between {1} and {2}.
+        /// </summary>
+        public static string RangeErrorMessage {
+            get {
+                return ResourceManager.GetString("RangeErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This field can&apos;t be empty.
+        /// </summary>
+        public static string RequiredErrorMessage {
+            get {
+                return ResourceManager.GetString("RequiredErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Slow.
         /// </summary>
         public static string SlowSpeedOption {
@@ -174,6 +210,15 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         public static string SpeedLabel {
             get {
                 return ResourceManager.GetString("SpeedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout, seconds.
+        /// </summary>
+        public static string TimeoutLabel {
+            get {
+                return ResourceManager.GetString("TimeoutLabel", resourceCulture);
             }
         }
         

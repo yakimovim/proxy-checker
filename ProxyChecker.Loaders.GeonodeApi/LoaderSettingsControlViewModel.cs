@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProxyChecker.Loaders.GeonodeApi;
 
@@ -28,12 +29,18 @@ internal partial class LoaderSettingsControlViewModel
   ];
 
   [ObservableProperty]
+  [NotifyDataErrorInfo]
+  [Range(1, 100, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.RangeErrorMessage))]
   private int? _uptime;
 
   [ObservableProperty]
+  [NotifyDataErrorInfo]
+  [Range(1, 60, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.RangeErrorMessage))]
   private int? _lastChecked;
 
   [ObservableProperty]
+  [NotifyDataErrorInfo]
+  [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.GreaterErrorMessage))]
   private int? _port;
 
   [ObservableProperty]
@@ -46,16 +53,22 @@ internal partial class LoaderSettingsControlViewModel
   private string? _speed;
 
   [ObservableProperty]
+  [NotifyDataErrorInfo]
+  [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.RequiredErrorMessage))]
+  [Range(1, 500, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.RangeErrorMessage))]
   private int _limit;
 
   [ObservableProperty]
   private TimeSpan _timeout;
 
+  [Range(1, 600, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.RangeErrorMessage))]
   public int TimeoutInSeconds
   {
     get => (int)Math.Floor(Timeout.TotalSeconds);
     set
     {
+      ValidateProperty(value, nameof(TimeoutInSeconds));
+
       Timeout = TimeSpan.FromSeconds(value);
       OnPropertyChanged(nameof(TimeoutInSeconds));
     }
@@ -64,11 +77,14 @@ internal partial class LoaderSettingsControlViewModel
   [ObservableProperty]
   private Uri? _proxyUri;
 
+  [IsUri]
   public string? ProxyUriString
   {
     get => ProxyUri?.ToString();
     set
     {
+      ValidateProperty(value, nameof(ProxyUriString));
+
       if (string.IsNullOrEmpty(value) || Uri.TryCreate(value, UriKind.Absolute, out _))
       {
         ProxyUri = string.IsNullOrWhiteSpace(value) ? null : new Uri(value);
