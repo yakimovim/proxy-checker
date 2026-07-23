@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
@@ -12,6 +13,12 @@ namespace ProxyChecker.Loaders.GeonodeApi
   internal class Loader : ILoader
   {
     private LoaderSettings _settings = new LoaderSettings();
+    private readonly ILogger<Loader> _logger;
+
+    public Loader(ILogger<Loader> logger)
+    {
+      _logger = logger;
+    }
 
     public string Name { get; set; } = string.Empty;
 
@@ -93,6 +100,15 @@ namespace ProxyChecker.Loaders.GeonodeApi
       }
       catch (Exception ex)
       {
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+          _logger.LogError(ex, "Error while loading list of proxies");
+        }
+        else
+        {
+          _logger.LogError($"Error while loading list of proxies: {ex.Message}");
+        }
+
         return null;
       }
     }
