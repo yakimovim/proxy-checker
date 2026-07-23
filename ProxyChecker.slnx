@@ -10,6 +10,7 @@
   <Folder Name="/Plugins/Loaders/">
     <Project Path="ProxyChecker.Loaders.FlashProxyApi/ProxyChecker.Loaders.FlashProxyApi.csproj" Id="efe340e8-1925-4739-8ded-392bb2e484d1" />
     <Project Path="ProxyChecker.Loaders.GeonodeApi/ProxyChecker.Loaders.GeonodeApi.csproj" Id="5355bb83-8a27-40dd-9d21-30100723df07" />
+    <Project Path="ProxyChecker.Loaders.GithubIpLocate/ProxyChecker.Loaders.GithubIpLocate.csproj" Id="49ddd773-ebd6-47b6-8c31-5035eee5e690" />
     <Project Path="ProxyChecker.Loaders.UriTextFile/ProxyChecker.Loaders.UriTextFile.csproj" Id="4082a546-6de4-4c63-b8ba-fd967a60c18d" />
   </Folder>
   <Folder Name="/Solution Items/">

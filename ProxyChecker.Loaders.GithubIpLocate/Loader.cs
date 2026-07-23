@@ -4,11 +4,9 @@ using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
 using System.Net;
-using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
-using System.Web;
 
-namespace ProxyChecker.Loaders.GeonodeApi
+namespace ProxyChecker.Loaders.GithubIpLocate
 {
   internal class Loader : ILoader
   {
@@ -37,40 +35,42 @@ namespace ProxyChecker.Loaders.GeonodeApi
     {
       var response = await GetApiResponse(cancellationToken);
 
-      if (response is null || response.Data is null)
+      if (response is null)
       {
         yield break;
       }
 
-      foreach (var proxyModel in response.Data)
+      foreach(var line in response.Split([ '\n', '\r' ], StringSplitOptions.RemoveEmptyEntries))
       {
-        if (proxyModel is null)
+        if (line is null)
         {
           continue;
         }
 
-        foreach (var protocol in proxyModel.Protocols)
+        if (Uri.TryCreate(line, UriKind.Absolute, out var uri))
         {
-          if (protocol is null)
+          var proxy = new Proxy(
+            uri.Scheme,
+            uri.Host,
+            uri.Port
+          );
+
+          if (!string.IsNullOrEmpty(_settings.Protocol))
           {
-            continue;
+            if (string.Equals(_settings.Protocol, proxy.Scheme, StringComparison.InvariantCultureIgnoreCase))
+            {
+              yield return proxy;
+            }
           }
-
-          var line = $"{protocol}://{proxyModel.Ip}:{proxyModel.Port}";
-
-          if (Uri.TryCreate(line, UriKind.Absolute, out var uri))
+          else
           {
-            yield return new Proxy(
-              uri.Scheme,
-              uri.Host,
-              uri.Port
-            );
+            yield return proxy;
           }
         }
       }
     }
 
-    private async Task<ResponseModel?> GetApiResponse(CancellationToken cancellationToken)
+    private async Task<string?> GetApiResponse(CancellationToken cancellationToken)
     {
       using var handler = new HttpClientHandler();
 
@@ -89,14 +89,14 @@ namespace ProxyChecker.Loaders.GeonodeApi
 
       try
       {
-        using var response = await client.GetAsync(GetGeonodeApiUri(), cancellationToken);
+        using var response = await client.GetAsync(GetGithubUri(), cancellationToken);
 
         if (response.StatusCode != HttpStatusCode.OK)
         {
           return null;
         }
 
-        return await response.Content.ReadFromJsonAsync<ResponseModel>(cancellationToken);
+        return await response.Content.ReadAsStringAsync(cancellationToken);
       }
       catch (Exception ex)
       {
@@ -113,8 +113,10 @@ namespace ProxyChecker.Loaders.GeonodeApi
       }
     }
 
-    private Uri GetGeonodeApiUri()
+    private Uri GetGithubUri()
     {
+      return new Uri(@"https://raw.githubusercontent.com/iplocate/free-proxy-list/refs/heads/main/countries/US/proxies.txt");
+      /*
       var uriBuilder = new UriBuilder("https://proxylist.geonode.com/api/proxy-list");
 
       var query = HttpUtility.ParseQueryString(string.Empty);
@@ -148,19 +150,15 @@ namespace ProxyChecker.Loaders.GeonodeApi
       uriBuilder.Query = query.ToString();
 
       return uriBuilder.Uri;
+      */
     }
 
     public Control GetSettingsControl()
     {
       var viewModel = new LoaderSettingsControlViewModel
       {
-        Uptime = _settings.Uptime,
-        LastChecked = _settings.LastChecked,
-        Port = _settings.Port,
+        Country = _settings.Country,
         Protocol = _settings.Protocol ?? string.Empty,
-        Speed = _settings.Speed ?? string.Empty,
-        Anonymity = _settings.Anonymity ?? string.Empty,
-        Limit = _settings.Limit,
         ProxyUri = _settings.ProxyUri,
         Timeout = _settings.Timeout,
       };
@@ -182,13 +180,8 @@ namespace ProxyChecker.Loaders.GeonodeApi
 
       var settings = new LoaderSettings
       {
-        Uptime = viewModel.Uptime,
-        LastChecked = viewModel.LastChecked,
-        Port = viewModel.Port,
+        Country = viewModel.Country,
         Protocol = viewModel.Protocol,
-        Speed = viewModel.Speed,
-        Anonymity = viewModel.Anonymity,
-        Limit = viewModel.Limit,
         ProxyUri = viewModel.ProxyUri,
         Timeout = viewModel.Timeout,
       };
