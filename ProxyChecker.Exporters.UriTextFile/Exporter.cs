@@ -1,113 +1,91 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Exporters;
 
-namespace ProxyChecker.Exporters.UriTextFile
+namespace ProxyChecker.Exporters.UriTextFile;
+
+internal class Exporter : ExporterBase<ExporterSettings>
 {
-	internal class Exporter : IExporter
-	{
-		private readonly IDesktopService _desktopService;
-		private ExporterSettings _settings = new();
+  private readonly IDesktopService _desktopService;
 
-		public Exporter(IDesktopService desktopService)
-		{
-			_desktopService = desktopService;
-		}
+  public Exporter(IDesktopService desktopService)
+  {
+    _desktopService = desktopService;
+  }
 
-		public string Name { get; set; } = string.Empty;
-
-		public JToken GetSettings()
-		{
-			return JToken.FromObject(_settings);
-		}
-
-		public void SetSettings(JToken? settings)
-		{
-			_settings = settings?.ToObject<ExporterSettings>()!;
-		}
-
-		public Control GetSettingsControl()
-		{
-			var viewModel = new ExporterSettingsControlViewModel
-			{
-				FilePath = _settings.FilePath
-			};
-
-			return new ExporterSettingsControl(viewModel);
-		}
-
-		private ExporterSettings? GetTypedSettingsFromControl(Control? control)
-		{
-			if (control is not ExporterSettingsControl settingsControl)
-			{
-				return null;
-			}
-
-			if (settingsControl.DataContext is not ExporterSettingsControlViewModel viewModel)
-			{
-				return null;
-			}
-
-			var settings = new ExporterSettings
-      {
-				FilePath = viewModel.FilePath
-			};
-
-			return settings;
-		}
-
-		public JToken? GetSettingsFromControl(Control? control)
-		{
-			var settings = GetTypedSettingsFromControl(control);
-
-			return settings is null ? null : JToken.FromObject(settings);
-		}
-
-    public async Task ExportAsync(IEnumerable<Proxy> proxies, CancellationToken cancellationToken)
+  public override Control GetSettingsControl()
+  {
+    var viewModel = new ExporterSettingsControlViewModel
     {
-      var sourceFilePath = _settings.FilePath;
+      FilePath = _settings.FilePath
+    };
 
-      if (string.IsNullOrEmpty(sourceFilePath))
+    return new ExporterSettingsControl(viewModel);
+  }
+
+  protected override ExporterSettings? GetTypedSettingsFromControl(Control? control)
+  {
+    if (control is not ExporterSettingsControl settingsControl)
+    {
+      return null;
+    }
+
+    if (settingsControl.DataContext is not ExporterSettingsControlViewModel viewModel)
+    {
+      return null;
+    }
+
+    var settings = new ExporterSettings
+    {
+      FilePath = viewModel.FilePath
+    };
+
+    return settings;
+  }
+
+  public override async Task ExportAsync(IEnumerable<Proxy> proxies, CancellationToken cancellationToken)
+  {
+    var sourceFilePath = _settings.FilePath;
+
+    if (string.IsNullOrEmpty(sourceFilePath))
+    {
+      var topLevel = TopLevel.GetTopLevel(_desktopService.Desktop.MainWindow);
+
+      if (topLevel == null)
       {
-        var topLevel = TopLevel.GetTopLevel(_desktopService.Desktop.MainWindow);
-
-        if (topLevel == null)
-        {
-					return;
-        }
-
-        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-          Title = Resource.SaveFilePickerTitle,
-					ShowOverwritePrompt = true,
-        });
-
-        if (file is not null)
-        {
-          var path = file.TryGetLocalPath();
-
-          if (!string.IsNullOrWhiteSpace(path))
-          {
-            sourceFilePath = path;
-          }
-        }
+        return;
       }
 
-      if (string.IsNullOrEmpty(sourceFilePath))
+      var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
       {
-				return;
+        Title = Resource.SaveFilePickerTitle,
+        ShowOverwritePrompt = true,
+      });
+
+      if (file is not null)
+      {
+        var path = file.TryGetLocalPath();
+
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+          sourceFilePath = path;
+        }
       }
+    }
 
-      using var stream = File.OpenWrite(sourceFilePath);
+    if (string.IsNullOrEmpty(sourceFilePath))
+    {
+      return;
+    }
 
-			using var writer = new StreamWriter(stream);
+    using var stream = File.OpenWrite(sourceFilePath);
 
-			foreach (var proxy in proxies)
-			{
-				await writer.WriteLineAsync(proxy.GetUri().ToString());
-			}
+    using var writer = new StreamWriter(stream);
+
+    foreach (var proxy in proxies)
+    {
+      await writer.WriteLineAsync(proxy.GetUri().ToString());
     }
   }
 }
