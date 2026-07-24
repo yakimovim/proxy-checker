@@ -30,7 +30,7 @@ internal partial class LoaderSettingsControlViewModel
         .OrderBy(region => region!.NativeName);
 
     _countries = new CodeWithName[] { new("", Resource.AnyOption) }
-      .Concat(countryList.Select(r => new CodeWithName(r!.TwoLetterISORegionName.ToUpper(), r.NativeName)))
+      .Concat(countryList.Select(r => new CodeWithName(r!.TwoLetterISORegionName.ToUpper(), $"{r.NativeName} ({r!.TwoLetterISORegionName.ToUpper()})")))
       .ToArray();
   }
 
