@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
 using System.Net;
@@ -8,9 +7,8 @@ using System.Runtime.CompilerServices;
 
 namespace ProxyChecker.Loaders.GithubIpLocate;
 
-internal class Loader : ILoader
+internal class Loader : LoaderBase<LoaderSettings>
 {
-  private LoaderSettings _settings = new();
   private readonly ILogger<Loader> _logger;
 
   public Loader(ILogger<Loader> logger)
@@ -18,19 +16,7 @@ internal class Loader : ILoader
     _logger = logger;
   }
 
-  public string Name { get; set; } = string.Empty;
-
-  public JToken GetSettings()
-  {
-    return JToken.FromObject(_settings);
-  }
-
-  public void SetSettings(JToken? settings)
-  {
-    _settings = settings?.ToObject<LoaderSettings>()!;
-  }
-
-  public async IAsyncEnumerable<Proxy> LoadAsync(
+  public override async IAsyncEnumerable<Proxy> LoadAsync(
     [EnumeratorCancellation] CancellationToken cancellationToken)
   {
     var response = await GetApiResponse(cancellationToken);
@@ -138,7 +124,7 @@ internal class Loader : ILoader
     }
   }
 
-  public Control GetSettingsControl()
+  public override Control GetSettingsControl()
   {
     var viewModel = new LoaderSettingsControlViewModel
     {
@@ -151,7 +137,7 @@ internal class Loader : ILoader
     return new LoaderSettingsControl(viewModel);
   }
 
-  private LoaderSettings? GetTypedSettingsFromControl(Control? control)
+  protected override LoaderSettings? GetTypedSettingsFromControl(Control? control)
   {
     if (control is not LoaderSettingsControl loaderSettingsControl)
     {
@@ -172,12 +158,5 @@ internal class Loader : ILoader
     };
 
     return settings;
-  }
-
-  public JToken? GetSettingsFromControl(Control? control)
-  {
-    var settings = GetTypedSettingsFromControl(control);
-
-    return settings is null ? null : JToken.FromObject(settings);
   }
 }

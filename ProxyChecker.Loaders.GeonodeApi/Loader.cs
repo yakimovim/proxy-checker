@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
 using System.Net;
@@ -8,199 +7,178 @@ using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Web;
 
-namespace ProxyChecker.Loaders.GeonodeApi
+namespace ProxyChecker.Loaders.GeonodeApi;
+
+internal class Loader : LoaderBase<LoaderSettings>
 {
-  internal class Loader : ILoader
+  private readonly ILogger<Loader> _logger;
+
+  public Loader(ILogger<Loader> logger)
   {
-    private LoaderSettings _settings = new LoaderSettings();
-    private readonly ILogger<Loader> _logger;
+    _logger = logger;
+  }
 
-    public Loader(ILogger<Loader> logger)
+  public override async IAsyncEnumerable<Proxy> LoadAsync(
+    [EnumeratorCancellation] CancellationToken cancellationToken)
+  {
+    var response = await GetApiResponse(cancellationToken);
+
+    if (response is null || response.Data is null)
     {
-      _logger = logger;
+      yield break;
     }
 
-    public string Name { get; set; } = string.Empty;
-
-    public JToken GetSettings()
+    foreach (var proxyModel in response.Data)
     {
-      return JToken.FromObject(_settings);
-    }
-
-    public void SetSettings(JToken? settings)
-    {
-      _settings = settings?.ToObject<LoaderSettings>()!;
-    }
-
-    public async IAsyncEnumerable<Proxy> LoadAsync(
-      [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-      var response = await GetApiResponse(cancellationToken);
-
-      if (response is null || response.Data is null)
+      if (proxyModel is null)
       {
-        yield break;
+        continue;
       }
 
-      foreach (var proxyModel in response.Data)
+      foreach (var protocol in proxyModel.Protocols)
       {
-        if (proxyModel is null)
+        if (protocol is null)
         {
           continue;
         }
 
-        foreach (var protocol in proxyModel.Protocols)
+        var line = $"{protocol}://{proxyModel.Ip}:{proxyModel.Port}";
+
+        if (Uri.TryCreate(line, UriKind.Absolute, out var uri))
         {
-          if (protocol is null)
-          {
-            continue;
-          }
-
-          var line = $"{protocol}://{proxyModel.Ip}:{proxyModel.Port}";
-
-          if (Uri.TryCreate(line, UriKind.Absolute, out var uri))
-          {
-            yield return new Proxy(
-              uri.Scheme,
-              uri.Host,
-              uri.Port
-            );
-          }
+          yield return new Proxy(
+            uri.Scheme,
+            uri.Host,
+            uri.Port
+          );
         }
       }
     }
+  }
 
-    private async Task<ResponseModel?> GetApiResponse(CancellationToken cancellationToken)
+  private async Task<ResponseModel?> GetApiResponse(CancellationToken cancellationToken)
+  {
+    using var handler = new HttpClientHandler();
+
+    if (_settings.ProxyUri is not null)
     {
-      using var handler = new HttpClientHandler();
-
-      if (_settings.ProxyUri is not null)
+      handler.Proxy = new WebProxy
       {
-        handler.Proxy = new WebProxy
-        {
-          Address = _settings.ProxyUri,
-        };
-      }
-
-      using var client = new HttpClient(handler)
-      {
-        Timeout = _settings.Timeout,
+        Address = _settings.ProxyUri,
       };
-
-      try
-      {
-        using var response = await client.GetAsync(GetGeonodeApiUri(), cancellationToken);
-
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-          return null;
-        }
-
-        return await response.Content.ReadFromJsonAsync<ResponseModel>(cancellationToken);
-      }
-      catch (Exception ex)
-      {
-        if (_logger.IsEnabled(LogLevel.Debug))
-        {
-          _logger.LogError(ex, "Error while loading list of proxies");
-        }
-        else
-        {
-          _logger.LogError($"Error while loading list of proxies: {ex.Message}");
-        }
-
-        return null;
-      }
     }
 
-    private Uri GetGeonodeApiUri()
+    using var client = new HttpClient(handler)
     {
-      var uriBuilder = new UriBuilder("https://proxylist.geonode.com/api/proxy-list");
+      Timeout = _settings.Timeout,
+    };
 
-      var query = HttpUtility.ParseQueryString(string.Empty);
-      if (!string.IsNullOrEmpty(_settings.Anonymity))
-      {
-        query["anonymityLevel"] = _settings.Anonymity;
-      }
-      if (_settings.Port.HasValue)
-      {
-        query["filterPort"] = _settings.Port.ToString();
-      }
-      if (!string.IsNullOrEmpty(_settings.Protocol))
-      {
-        query["protocols"] = _settings.Protocol;
-      }
-      if (_settings.Uptime.HasValue)
-      {
-        query["filterUpTime"] = _settings.Uptime.ToString();
-      }
-      if (_settings.LastChecked.HasValue)
-      {
-        query["filterLastChecked"] = _settings.LastChecked.ToString();
-      }
-      if (!string.IsNullOrEmpty(_settings.Speed))
-      {
-        query["speed"] = _settings.Speed;
-      }
-      query["limit"] = _settings.Limit.ToString();
-      query["page"] = "1";
-
-      uriBuilder.Query = query.ToString();
-
-      return uriBuilder.Uri;
-    }
-
-    public Control GetSettingsControl()
+    try
     {
-      var viewModel = new LoaderSettingsControlViewModel
-      {
-        Uptime = _settings.Uptime,
-        LastChecked = _settings.LastChecked,
-        Port = _settings.Port,
-        Protocol = _settings.Protocol ?? string.Empty,
-        Speed = _settings.Speed ?? string.Empty,
-        Anonymity = _settings.Anonymity ?? string.Empty,
-        Limit = _settings.Limit,
-        ProxyUri = _settings.ProxyUri,
-        Timeout = _settings.Timeout,
-      };
+      using var response = await client.GetAsync(GetGeonodeApiUri(), cancellationToken);
 
-      return new LoaderSettingsControl(viewModel);
-    }
-
-    private LoaderSettings? GetTypedSettingsFromControl(Control? control)
-    {
-      if (control is not LoaderSettingsControl loaderSettingsControl)
+      if (response.StatusCode != HttpStatusCode.OK)
       {
         return null;
       }
 
-      if (loaderSettingsControl.DataContext is not LoaderSettingsControlViewModel viewModel)
+      return await response.Content.ReadFromJsonAsync<ResponseModel>(cancellationToken);
+    }
+    catch (Exception ex)
+    {
+      if (_logger.IsEnabled(LogLevel.Debug))
       {
-        return null;
+        _logger.LogError(ex, "Error while loading list of proxies");
+      }
+      else
+      {
+        _logger.LogError($"Error while loading list of proxies: {ex.Message}");
       }
 
-      var settings = new LoaderSettings
-      {
-        Uptime = viewModel.Uptime,
-        LastChecked = viewModel.LastChecked,
-        Port = viewModel.Port,
-        Protocol = viewModel.Protocol,
-        Speed = viewModel.Speed,
-        Anonymity = viewModel.Anonymity,
-        Limit = viewModel.Limit,
-        ProxyUri = viewModel.ProxyUri,
-        Timeout = viewModel.Timeout,
-      };
-
-      return settings;
+      return null;
     }
+  }
 
-    public JToken? GetSettingsFromControl(Control? control)
+  private Uri GetGeonodeApiUri()
+  {
+    var uriBuilder = new UriBuilder("https://proxylist.geonode.com/api/proxy-list");
+
+    var query = HttpUtility.ParseQueryString(string.Empty);
+    if (!string.IsNullOrEmpty(_settings.Anonymity))
     {
-      var settings = GetTypedSettingsFromControl(control);
-
-      return settings is null ? null : JToken.FromObject(settings);
+      query["anonymityLevel"] = _settings.Anonymity;
     }
+    if (_settings.Port.HasValue)
+    {
+      query["filterPort"] = _settings.Port.ToString();
+    }
+    if (!string.IsNullOrEmpty(_settings.Protocol))
+    {
+      query["protocols"] = _settings.Protocol;
+    }
+    if (_settings.Uptime.HasValue)
+    {
+      query["filterUpTime"] = _settings.Uptime.ToString();
+    }
+    if (_settings.LastChecked.HasValue)
+    {
+      query["filterLastChecked"] = _settings.LastChecked.ToString();
+    }
+    if (!string.IsNullOrEmpty(_settings.Speed))
+    {
+      query["speed"] = _settings.Speed;
+    }
+    query["limit"] = _settings.Limit.ToString();
+    query["page"] = "1";
+
+    uriBuilder.Query = query.ToString();
+
+    return uriBuilder.Uri;
+  }
+
+  public override Control GetSettingsControl()
+  {
+    var viewModel = new LoaderSettingsControlViewModel
+    {
+      Uptime = _settings.Uptime,
+      LastChecked = _settings.LastChecked,
+      Port = _settings.Port,
+      Protocol = _settings.Protocol ?? string.Empty,
+      Speed = _settings.Speed ?? string.Empty,
+      Anonymity = _settings.Anonymity ?? string.Empty,
+      Limit = _settings.Limit,
+      ProxyUri = _settings.ProxyUri,
+      Timeout = _settings.Timeout,
+    };
+
+    return new LoaderSettingsControl(viewModel);
+  }
+
+  protected override LoaderSettings? GetTypedSettingsFromControl(Control? control)
+  {
+    if (control is not LoaderSettingsControl loaderSettingsControl)
+    {
+      return null;
+    }
+
+    if (loaderSettingsControl.DataContext is not LoaderSettingsControlViewModel viewModel)
+    {
+      return null;
+    }
+
+    var settings = new LoaderSettings
+    {
+      Uptime = viewModel.Uptime,
+      LastChecked = viewModel.LastChecked,
+      Port = viewModel.Port,
+      Protocol = viewModel.Protocol,
+      Speed = viewModel.Speed,
+      Anonymity = viewModel.Anonymity,
+      Limit = viewModel.Limit,
+      ProxyUri = viewModel.ProxyUri,
+      Timeout = viewModel.Timeout,
+    };
+
+    return settings;
   }
 }
