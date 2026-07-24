@@ -1,6 +1,6 @@
 ﻿namespace ProxyChecker.Interfaces.Checkers
 {
-  public interface IChecker : INamedEntityWithSettings
+  public interface IChecker : IEntityWithSettings
   {
     bool SupportsParallelChecking { get; }
 

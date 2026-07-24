@@ -3,10 +3,8 @@ using Newtonsoft.Json.Linq;
 
 namespace ProxyChecker.Interfaces
 {
-  public interface INamedEntityWithSettings
+  public interface IEntityWithSettings
   {
-    string Name { get; set; }
-
     JToken? GetSettings();
 
     Control? GetSettingsControl();

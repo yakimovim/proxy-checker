@@ -1,133 +1,108 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
 using System.Net;
 
-namespace ProxyChecker.Checkers.Anonymity
+namespace ProxyChecker.Checkers.Anonymity;
+
+internal class Checker : CheckerBase<CheckerSettings>
 {
-  internal class Checker : IChecker
+  private readonly ILogger<Checker> _logger;
+
+  public Checker(ILogger<Checker> logger)
   {
-    private readonly ILogger<Checker> _logger;
-    private CheckerSettings _settings = new CheckerSettings();
+    _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    SupportsParallelChecking = true;
+  }
 
-    public Checker(ILogger<Checker> logger)
+  public override Control? GetSettingsControl()
+  {
+    var viewModel = new CheckerSettingsControlViewModel
     {
-      _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+      Timeout = _settings.Timeout,
+    };
+
+    return new CheckerSettingsControl(viewModel);
+  }
+
+  protected override CheckerSettings? GetTypedSettingsFromControl(Control? control)
+  {
+    if (control is not CheckerSettingsControl checkerSettingsControl)
+    {
+      return null;
     }
 
-    public bool SupportsParallelChecking => true;
-
-    public string Name { get; set; } = default!;
-
-    public JToken? GetSettings()
+    if (checkerSettingsControl.DataContext is not CheckerSettingsControlViewModel viewModel)
     {
-      return JToken.FromObject(_settings);
+      return null;
     }
 
-    public Control? GetSettingsControl()
+    var settings = new CheckerSettings
     {
-      var viewModel = new CheckerSettingsControlViewModel
-      {
-        Timeout = _settings.Timeout,
-      };
+      Timeout = viewModel.Timeout,
+    };
 
-      return new CheckerSettingsControl(viewModel);
-    }
+    return settings;
+  }
 
-    public JToken? GetSettingsFromControl(Control? control)
+  public override async Task<bool> CheckAsync(Proxy proxy, CancellationToken cancellationToken)
+  {
+    var proxyUri = proxy.GetUri();
+
+    var webProxy = new WebProxy
     {
-      var settings = GetTypedSettingsFromControl(control);
+      Address = proxyUri
+    };
 
-      return settings is null ? null : JToken.FromObject(settings);
-    }
-
-    private CheckerSettings? GetTypedSettingsFromControl(Control? control)
+    using var handler = new HttpClientHandler
     {
-      if (control is not CheckerSettingsControl checkerSettingsControl)
-      {
-        return null;
-      }
+      Proxy = webProxy,
+    };
 
-      if (checkerSettingsControl.DataContext is not CheckerSettingsControlViewModel viewModel)
-      {
-        return null;
-      }
-
-      var settings = new CheckerSettings
-      {
-        Timeout = viewModel.Timeout,
-      };
-
-      return settings;
-    }
-
-    public void SetSettings(JToken? settings)
+    using var client = new HttpClient(handler)
     {
-      _settings = settings is null
-        ? new CheckerSettings()
-        : settings.ToObject<CheckerSettings>()!;
-    }
+      Timeout = _settings.Timeout,
+    };
 
-    public async Task<bool> CheckAsync(Proxy proxy, CancellationToken cancellationToken)
+    try
     {
-      var proxyUri = proxy.GetUri();
+      using var response = await client.GetAsync(@"https://ipinfo.io/ip", cancellationToken);
 
-      var webProxy = new WebProxy
+      if (response.StatusCode != HttpStatusCode.OK)
       {
-        Address = proxyUri
-      };
-
-      using var handler = new HttpClientHandler
-      {
-        Proxy = webProxy,
-      };
-
-      using var client = new HttpClient(handler)
-      {
-        Timeout = _settings.Timeout,
-      };
-
-      try
-      {
-        using var response = await client.GetAsync(@"https://ipinfo.io/ip", cancellationToken);
-
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-          return false;
-        }
-
-        var responseText = await response.Content.ReadAsStringAsync();
-
-        var proxyAddresses = await GetProxyIps(proxy.Host);
-
-        return proxyAddresses.Any(ip => responseText == ip.ToString());
-      }
-      catch (Exception ex)
-      {
-        if (_logger.IsEnabled(LogLevel.Debug))
-        {
-          _logger.LogError(ex, $"Error while checking proxy {proxyUri}");
-        }
-        else
-        {
-          _logger.LogError($"Error while checking proxy {proxyUri}: {ex.Message}");
-        }
         return false;
       }
-    }
 
-    private async Task<IPAddress[]> GetProxyIps(string host)
+      var responseText = await response.Content.ReadAsStringAsync();
+
+      var proxyAddresses = await GetProxyIps(proxy.Host);
+
+      return proxyAddresses.Any(ip => responseText == ip.ToString());
+    }
+    catch (Exception ex)
     {
-      if (IPAddress.TryParse(host, out var ip))
+      if (_logger.IsEnabled(LogLevel.Debug))
       {
-        return [ip];
+        _logger.LogError(ex, $"Error while checking proxy {proxyUri}");
       }
+      else
+      {
+        _logger.LogError($"Error while checking proxy {proxyUri}: {ex.Message}");
+      }
+      return false;
+    }
+  }
 
-      return await Dns.GetHostAddressesAsync(host);
+  private async Task<IPAddress[]> GetProxyIps(string host)
+  {
+    if (IPAddress.TryParse(host, out var ip))
+    {
+      return [ip];
     }
 
-    public Task<bool> IsReadyAsync(CancellationToken cancellationToken) => Task.FromResult(true);
+    return await Dns.GetHostAddressesAsync(host);
   }
+
+  public override Task<bool> IsReadyAsync(CancellationToken cancellationToken) => Task.FromResult(true);
 }

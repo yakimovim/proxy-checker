@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
 using ProxyChecker.Interfaces.ViewModels;
@@ -8,30 +7,21 @@ using System.Net;
 
 namespace ProxyChecker.Checkers.OkResponse;
 
-internal class Checker : IChecker
+internal class Checker : CheckerBase<CheckerSettings>
 {
   private static readonly Random _rnd = new Random((int)DateTime.Now.Ticks);
   private readonly IDesktopService _desktopService;
   private readonly ILogger<Checker> _logger;
-  private CheckerSettings _settings = new CheckerSettings();
   private CheckerSettings? _currentSettings = null;
 
   public Checker(IDesktopService desktopService, ILogger<Checker> logger)
   {
     _desktopService = desktopService ?? throw new ArgumentNullException(nameof(desktopService));
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    SupportsParallelChecking = true;
   }
 
-  public bool SupportsParallelChecking => true;
-
-  public string Name { get; set; } = default!;
-
-  public JToken? GetSettings()
-  {
-    return JToken.FromObject(_settings);
-  }
-
-  public Control? GetSettingsControl()
+  public override Control? GetSettingsControl()
   {
     var viewModel = new CheckerSettingsControlViewModel
     {
@@ -46,14 +36,7 @@ internal class Checker : IChecker
     return new CheckerSettingsControl(viewModel);
   }
 
-  public JToken? GetSettingsFromControl(Control? control)
-  {
-    var settings = GetTypedSettingsFromControl(control);
-
-    return settings is null ? null : JToken.FromObject(settings);
-  }
-
-  private CheckerSettings? GetTypedSettingsFromControl(Control? control)
+  protected override CheckerSettings? GetTypedSettingsFromControl(Control? control)
   {
     if (control is not CheckerSettingsControl checkerSettingsControl)
     {
@@ -74,14 +57,7 @@ internal class Checker : IChecker
     return settings;
   }
 
-  public void SetSettings(JToken? settings)
-  {
-    _settings =  settings is null 
-      ? new CheckerSettings() 
-      : settings.ToObject<CheckerSettings>()!;
-  }
-
-  public async Task<bool> CheckAsync(Proxy proxy, CancellationToken cancellationToken)
+  public override async Task<bool> CheckAsync(Proxy proxy, CancellationToken cancellationToken)
   {
     if (_currentSettings is null)
     {
@@ -130,7 +106,7 @@ internal class Checker : IChecker
     return targetUris[_rnd.Next(targetUris.Length)];
   }
 
-  public async Task<bool> IsReadyAsync(CancellationToken cancellationToken)
+  public override async Task<bool> IsReadyAsync(CancellationToken cancellationToken)
   {
     _currentSettings = _settings;
 
