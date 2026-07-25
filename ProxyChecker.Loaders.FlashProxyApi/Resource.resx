@@ -117,10 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnonymityLabel" xml:space="preserve">
+    <value>Anonymity</value>
+  </data>
+  <data name="AnyOption" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="CountryLabel" xml:space="preserve">
+    <value>Country</value>
+  </data>
   <data name="CreatorDescription" xml:space="preserve">
     <value>This plugin takes list of proxies from FlashProxy API.</value>
   </data>
   <data name="CreatorName" xml:space="preserve">
     <value>Proxies from FlashProxy API</value>
+  </data>
+  <data name="IsUriErrorMessage" xml:space="preserve">
+    <value>Here should be absolute URI</value>
+  </data>
+  <data name="LimitLabel" xml:space="preserve">
+    <value>Limit</value>
+  </data>
+  <data name="MaximumResponseTimeLabel" xml:space="preserve">
+    <value>Max response time, ms</value>
+  </data>
+  <data name="ProtocolLabel" xml:space="preserve">
+    <value>Protocol</value>
+  </data>
+  <data name="ProxyUriLabel" xml:space="preserve">
+    <value>Proxy URL</value>
+  </data>
+  <data name="RangeErrorMessage" xml:space="preserve">
+    <value>The value must be between {1} and {2}</value>
+  </data>
+  <data name="RequiredErrorMessage" xml:space="preserve">
+    <value>This field can't be empty</value>
+  </data>
+  <data name="TimeoutLabel" xml:space="preserve">
+    <value>Timeout, seconds</value>
   </data>
 </root>

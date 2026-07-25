@@ -13,7 +13,7 @@ internal class Loader : LoaderBase<LoaderSettings>
 
   public Loader(ILogger<Loader> logger)
   {
-    _logger = logger;
+    _logger = logger ?? throw new ArgumentNullException(nameof(logger));
   }
 
   public override async IAsyncEnumerable<Proxy> LoadAsync(

@@ -61,6 +61,33 @@ namespace ProxyChecker.Loaders.FlashProxyApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anonymity.
+        /// </summary>
+        public static string AnonymityLabel {
+            get {
+                return ResourceManager.GetString("AnonymityLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        public static string AnyOption {
+            get {
+                return ResourceManager.GetString("AnyOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string CountryLabel {
+            get {
+                return ResourceManager.GetString("CountryLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This plugin takes list of proxies from FlashProxy API..
         /// </summary>
         public static string CreatorDescription {
@@ -75,6 +102,78 @@ namespace ProxyChecker.Loaders.FlashProxyApi {
         public static string CreatorName {
             get {
                 return ResourceManager.GetString("CreatorName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Here should be absolute URI.
+        /// </summary>
+        public static string IsUriErrorMessage {
+            get {
+                return ResourceManager.GetString("IsUriErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit.
+        /// </summary>
+        public static string LimitLabel {
+            get {
+                return ResourceManager.GetString("LimitLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max response time, ms.
+        /// </summary>
+        public static string MaximumResponseTimeLabel {
+            get {
+                return ResourceManager.GetString("MaximumResponseTimeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protocol.
+        /// </summary>
+        public static string ProtocolLabel {
+            get {
+                return ResourceManager.GetString("ProtocolLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proxy URL.
+        /// </summary>
+        public static string ProxyUriLabel {
+            get {
+                return ResourceManager.GetString("ProxyUriLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value must be between {1} and {2}.
+        /// </summary>
+        public static string RangeErrorMessage {
+            get {
+                return ResourceManager.GetString("RangeErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This field can&apos;t be empty.
+        /// </summary>
+        public static string RequiredErrorMessage {
+            get {
+                return ResourceManager.GetString("RequiredErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout, seconds.
+        /// </summary>
+        public static string TimeoutLabel {
+            get {
+                return ResourceManager.GetString("TimeoutLabel", resourceCulture);
             }
         }
     }
