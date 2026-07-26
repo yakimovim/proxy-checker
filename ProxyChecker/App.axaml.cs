@@ -53,6 +53,8 @@ namespace ProxyChecker
 
 			StorageConfigurator.ConfigureStorage(collection);
 
+			collection.AddTransient<CurrentEntityProvider>();
+
 			collection.AddTransient<IWindowFactory, WindowFactory>();
 
 			collection.AddTransient<MainWindow>();
