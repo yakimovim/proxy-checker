@@ -8,6 +8,7 @@ using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
 using ProxyChecker.Interfaces.Exporters;
 using ProxyChecker.Interfaces.Loaders;
+using ProxyChecker.Interfaces.Resources;
 using ProxyChecker.Interfaces.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -363,5 +364,30 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 	private async Task ExportSettingsAsync(CancellationToken cancellationToken)
 	{
 		var loader = await _currentEntityProvider.GetCurrentLoaderWithSettingsAsync(cancellationToken);
+
+		if (loader is null)
+		{
+			var messageDialog = new MessageWindow(Resource.NoLoadersMessage);
+			await messageDialog.ShowDialog(Window);
+			return;	
+		}
+
+		var checker = await _currentEntityProvider.GetCurrentCheckerWithSettingsAsync(cancellationToken);
+
+		if (checker is null)
+		{
+			var messageDialog = new MessageWindow(Resource.NoCheckersMessage);
+			await messageDialog.ShowDialog(Window);
+			return;
+		}
+
+		var exporter = await _currentEntityProvider.GetCurrentExporterWithSettingsAsync(cancellationToken);
+
+		if (exporter is null)
+		{
+			var messageDialog = new MessageWindow(Resource.NoExportersMessage);
+			await messageDialog.ShowDialog(Window);
+			return;
+		}
 	}
 }

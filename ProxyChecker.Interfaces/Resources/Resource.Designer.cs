@@ -295,6 +295,33 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, specify active checker..
+        /// </summary>
+        public static string NoCheckersMessage {
+            get {
+                return ResourceManager.GetString("NoCheckersMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please, specify active exporter..
+        /// </summary>
+        public static string NoExportersMessage {
+            get {
+                return ResourceManager.GetString("NoExportersMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please, specify active loader..
+        /// </summary>
+        public static string NoLoadersMessage {
+            get {
+                return ResourceManager.GetString("NoLoadersMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string OkButtonText {
