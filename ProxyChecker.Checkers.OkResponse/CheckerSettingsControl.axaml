@@ -18,7 +18,8 @@
 			<NumericUpDown Grid.Column="1" Classes="m5" Value="{Binding TimeoutInSeconds}"
 				Minimum="1" Maximum="600"
 				ParsingNumberStyle="Integer" FormatString="N0" ShowButtonSpinner="False"/>
-		</Grid>		<ScrollViewer>
+		</Grid>		
+		<ScrollViewer>
 			<ItemsControl ItemsSource="{Binding TargetUris}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
@@ -26,9 +27,15 @@
 										CornerRadius="5"
 										BorderBrush="Gray" BorderThickness="1"
 										Padding="5">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Margin="5 0" FontWeight="Bold" Text="{Binding}" />
-							</StackPanel>
+							<DockPanel>
+								<TextBlock VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold" Text="{Binding}" />
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                  <Button Classes="action-button"
+										Command="{Binding $parent[vm:CheckerSettingsControl].((vm:CheckerSettingsControlViewModel)DataContext).DeleteTargetUriCommand}"
+										CommandParameter="{Binding}"
+										Content="{x:Static asts:Resource.DeleteButtonText}" />
+                </StackPanel>
+							</DockPanel>
 						</Border>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
