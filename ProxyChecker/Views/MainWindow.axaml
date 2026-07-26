@@ -36,8 +36,10 @@
 				<MenuItem Header="{x:Static asts:Resource.ShowCheckersMainMenuItemHeader}" Command="{Binding ShowCheckersCommand}"/>
 				<MenuItem Header="{x:Static asts:Resource.ShowExportersMainMenuItemHeader}" Command="{Binding ShowExportersCommand}"/>
 				<Separator />
-				<MenuItem Header="{x:Static asts:Resource.ExitMainMenuItemHeader}" Command="{Binding ExitCommand}"/>
-			</MenuItem>
+				<MenuItem Header="{x:Static asts:Resource.ExportSettingsMainMenuItemHeader}" Command="{Binding ExportSettingsCommand}"/>
+        <Separator />
+        <MenuItem Header="{x:Static asts:Resource.ExitMainMenuItemHeader}" Command="{Binding ExitCommand}"/>
+      </MenuItem>
 		</Menu>
 		<DockPanel Grid.Row="1" LastChildFill="True">
 			<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">

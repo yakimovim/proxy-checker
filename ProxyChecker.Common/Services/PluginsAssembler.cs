@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProxyChecker.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.IO;
 
-namespace ProxyChecker.Services
+namespace ProxyChecker.Common.Services
 {
-  internal class PluginsAssembler
+  public class PluginsAssembler
   {
     private readonly string _pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
 

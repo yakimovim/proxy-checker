@@ -17,6 +17,7 @@
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="ProxyChecker.Common/ProxyChecker.Common.csproj" Id="5446c9d2-3767-47f0-8dc8-86dfe4252e3d" />
   <Project Path="ProxyChecker.Interfaces/ProxyChecker.Interfaces.csproj" Id="edf93d75-8833-4b26-833d-291a402f2e83" />
   <Project Path="ProxyChecker/ProxyChecker.csproj" />
 </Solution>

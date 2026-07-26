@@ -1,110 +1,76 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProxyChecker.Common.Configuration;
+using ProxyChecker.Common.Logging;
+using ProxyChecker.Common.Services;
+using ProxyChecker.Common.Storage;
 using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Services;
-using ProxyChecker.Storage;
 using ProxyChecker.ViewModels;
 using ProxyChecker.Views;
-using Serilog;
-using System;
-using System.IO;
 using System.Linq;
 
 namespace ProxyChecker
 {
-  public partial class App : Application
-  {
-    public override void Initialize()
-    {
-      AvaloniaXamlLoader.Load(this);
-    }
+	public partial class App : Application
+	{
+		public override void Initialize()
+		{
+			AvaloniaXamlLoader.Load(this);
+		}
 
-    public override void OnFrameworkInitializationCompleted()
-    {
-      var configuration = ReadConfiguration();
+		public override void OnFrameworkInitializationCompleted()
+		{
+			var configuration = ConfigurationLoader.LoadConfiguration();
 
-      var collection = new ServiceCollection();
+			var collection = new ServiceCollection();
 
-      RegisterApplicationServices(collection, configuration);
+			RegisterApplicationServices(collection, configuration);
 
-      new PluginsAssembler().AssemblePlugins(collection);
+			new PluginsAssembler().AssemblePlugins(collection);
 
-      var serviceProvider = collection.BuildServiceProvider();
+			var serviceProvider = collection.BuildServiceProvider();
 
-      PrepareDatabase(serviceProvider);
+			StoragePreparer.PrepareStorage(serviceProvider);
 
-      if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-      {
-        serviceProvider.GetRequiredService<DesktopService>().Desktop = desktop;
+			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+			{
+				serviceProvider.GetRequiredService<DesktopService>().Desktop = desktop;
 
-        desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
-      }
+				desktop.MainWindow = serviceProvider.GetRequiredService<MainWindow>();
+			}
 
-      base.OnFrameworkInitializationCompleted();
-    }
+			base.OnFrameworkInitializationCompleted();
+		}
 
-    private IConfigurationRoot ReadConfiguration()
-    {
-      return new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
-        .Build();
-    }
+		private static void RegisterApplicationServices(ServiceCollection collection, IConfigurationRoot configuration)
+		{
+			LogConfigurator.ConfigureLogging(collection, configuration);
 
-    private void PrepareDatabase(ServiceProvider serviceProvider)
-    {
-      var db = serviceProvider.GetRequiredService<AppDbContext>();
-      db.Database.EnsureCreated();
+			StorageConfigurator.ConfigureStorage(collection);
 
-      if (!db.Settings.Any())
-      {
-        db.Settings.Add(new Settings());
+			collection.AddTransient<IWindowFactory, WindowFactory>();
 
-        db.SaveChanges();
-      }
-    }
+			collection.AddTransient<MainWindow>();
+			collection.AddTransient<MainWindowViewModel>();
 
-    private void RegisterApplicationServices(ServiceCollection collection, IConfigurationRoot configuration)
-    {
-      collection.AddLogging(loggingBuilder =>
-      {
-        loggingBuilder.AddSerilog(
-          new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .WriteTo.File("app.log")
-            .CreateLogger()
-        );
-      });
+			collection.AddTransient<LoadersWindow>();
+			collection.AddTransient<LoadersWindowViewModel>();
 
-      collection.AddDbContext<AppDbContext>(options =>
-      {
-        options.UseSqlite("Data Source=app.db");
-      });
+			collection.AddTransient(typeof(CreateWindowViewModel<>));
 
-      collection.AddTransient<IWindowFactory, WindowFactory>();
+			collection.AddTransient<CheckersWindow>();
+			collection.AddTransient<CheckersWindowViewModel>();
 
-      collection.AddTransient<MainWindow>();
-      collection.AddTransient<MainWindowViewModel>();
+			collection.AddTransient<ExportersWindow>();
+			collection.AddTransient<ExportersWindowViewModel>();
 
-      collection.AddTransient<LoadersWindow>();
-      collection.AddTransient<LoadersWindowViewModel>();
-
-      collection.AddTransient(typeof(CreateWindowViewModel<>));
-
-      collection.AddTransient<CheckersWindow>();
-      collection.AddTransient<CheckersWindowViewModel>();
-
-      collection.AddTransient<ExportersWindow>();
-      collection.AddTransient<ExportersWindowViewModel>();
-
-      collection.AddSingleton<DesktopService>();
-      collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
-    }
-  }
+			collection.AddSingleton<DesktopService>();
+			collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
+		}
+	}
 }
