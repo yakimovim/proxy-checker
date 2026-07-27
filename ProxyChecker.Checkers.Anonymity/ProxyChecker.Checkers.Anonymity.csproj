@@ -11,6 +11,7 @@
 			<BuildResults Include="$(TargetDir)**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Checkers\Anonymity\%(RecursiveDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker.Cli\$(OutDir)Plugins\Checkers\Anonymity\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 
 	<ItemGroup>

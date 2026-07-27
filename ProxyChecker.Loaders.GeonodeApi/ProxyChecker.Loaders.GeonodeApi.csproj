@@ -30,6 +30,7 @@
 			<BuildResults Include="$(TargetDir)**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Loaders\GeonodeApi\%(RecursiveDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker.Cli\$(OutDir)Plugins\Loaders\GeonodeApi\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 
 </Project>

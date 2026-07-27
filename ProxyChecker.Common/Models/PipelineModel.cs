@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 
-namespace ProxyChecker.Models;
+namespace ProxyChecker.Common.Models;
 
-internal class PipelineModel
+public class PipelineModel
 {
   public Guid LoaderCreatorUid { get; set; }
 

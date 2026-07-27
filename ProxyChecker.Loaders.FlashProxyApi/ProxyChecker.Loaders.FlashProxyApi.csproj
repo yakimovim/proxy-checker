@@ -30,5 +30,6 @@
 			<BuildResults Include="$(TargetDir)**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Loaders\FlashProxyApi\%(RecursiveDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker.Cli\$(OutDir)Plugins\Loaders\FlashProxyApi\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 </Project>

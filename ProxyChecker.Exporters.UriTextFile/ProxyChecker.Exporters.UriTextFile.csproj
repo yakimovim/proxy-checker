@@ -30,5 +30,6 @@
 			<BuildResults Include="$(TargetDir)**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker\$(OutDir)Plugins\Exporters\UriTextFile\%(RecursiveDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(BuildResults)" DestinationFolder="$(SolutionDir)ProxyChecker.Cli\$(OutDir)Plugins\Exporters\UriTextFile\%(RecursiveDir)" SkipUnchangedFiles="true" />
 	</Target>
 </Project>

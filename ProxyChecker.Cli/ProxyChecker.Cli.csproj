@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProxyChecker.Common\ProxyChecker.Common.csproj" />
+    <ProjectReference Include="..\ProxyChecker.Interfaces\ProxyChecker.Interfaces.csproj" />
+  </ItemGroup>
+
+	<Target Name="MakePluginsFolderAfterBuild" AfterTargets="Build">
+		<MakeDir Directories="$(TargetDir)Plugins" />
+		<MakeDir Directories="$(TargetDir)Plugins\Loaders" />
+		<MakeDir Directories="$(TargetDir)Plugins\Checkers" />
+		<MakeDir Directories="$(TargetDir)Plugins\Exporters" />
+	</Target>
+</Project>
