@@ -102,4 +102,9 @@ internal class Loader : LoaderBase<LoaderSettings>
 
 		return settings;
 	}
+
+  public override bool CheckSettingsAreReadyForCli()
+  {
+    return !string.IsNullOrWhiteSpace(_settings.FilePath);
+  }
 }

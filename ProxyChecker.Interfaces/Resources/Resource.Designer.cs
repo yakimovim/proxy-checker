@@ -331,6 +331,33 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current checker does not have settings ready for CLI. Please, fill all required values..
+        /// </summary>
+        public static string NotReadyCheckerSettingsMessage {
+            get {
+                return ResourceManager.GetString("NotReadyCheckerSettingsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current exporter does not have settings ready for CLI. Please, fill all required values..
+        /// </summary>
+        public static string NotReadyExporterSettingsMessage {
+            get {
+                return ResourceManager.GetString("NotReadyExporterSettingsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current loader does not have settings ready for CLI. Please, fill all required values..
+        /// </summary>
+        public static string NotReadyLoaderSettingsMessage {
+            get {
+                return ResourceManager.GetString("NotReadyLoaderSettingsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string OkButtonText {

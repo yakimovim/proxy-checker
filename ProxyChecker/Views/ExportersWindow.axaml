@@ -16,37 +16,39 @@
 		<StackPanel Classes="buttons-panel" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
 			<Button Classes="action-button" Command="{Binding AddCommand}" Content="{x:Static asts:Resource.AddButtonText}"/>
 		</StackPanel>
-		<ItemsControl ItemsSource="{Binding Exporters}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Border Margin="5,10,5,5"
-									CornerRadius="5"
-									BorderBrush="Gray" BorderThickness="1"
-									Padding="5">
-						<DockPanel>
-							<TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0" />
-							<StackPanel Classes="buttons-panel" DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-								<Button
-									Classes="action-button"
-									Command="{Binding $parent[Window].((vm:ExportersWindowViewModel)DataContext).MakeActiveCommand}"
-									CommandParameter="{Binding}"
-                  Content="{x:Static asts:Resource.MakeActiveButtonText}"
-                  IsVisible="{Binding !IsActive}"/>
-								<Button
-									Classes="action-button"
-									Command="{Binding $parent[Window].((vm:ExportersWindowViewModel)DataContext).ShowSettingsCommand}"
-									CommandParameter="{Binding}"
-                  Content="{x:Static asts:Resource.SettingsButtonText}"/>
-								<Button
-                  Classes="action-button"
-									Command="{Binding $parent[Window].((vm:ExportersWindowViewModel)DataContext).DeleteCommand}"
-									CommandParameter="{Binding}"
-                  Content="{x:Static asts:Resource.DeleteButtonText}"/>
-							</StackPanel>
-						</DockPanel>
-					</Border>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+		<ScrollViewer>
+			<ItemsControl ItemsSource="{Binding Exporters}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border Margin="5,10,5,5"
+										CornerRadius="5"
+										BorderBrush="Gray" BorderThickness="1"
+										Padding="5">
+							<DockPanel>
+								<TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0" />
+								<StackPanel Classes="buttons-panel" DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+									<Button
+										Classes="action-button"
+										Command="{Binding $parent[Window].((vm:ExportersWindowViewModel)DataContext).MakeActiveCommand}"
+										CommandParameter="{Binding}"
+										Content="{x:Static asts:Resource.MakeActiveButtonText}"
+										IsVisible="{Binding !IsActive}"/>
+									<Button
+										Classes="action-button"
+										Command="{Binding $parent[Window].((vm:ExportersWindowViewModel)DataContext).ShowSettingsCommand}"
+										CommandParameter="{Binding}"
+										Content="{x:Static asts:Resource.SettingsButtonText}"/>
+									<Button
+										Classes="action-button"
+										Command="{Binding $parent[Window].((vm:ExportersWindowViewModel)DataContext).DeleteCommand}"
+										CommandParameter="{Binding}"
+										Content="{x:Static asts:Resource.DeleteButtonText}"/>
+								</StackPanel>
+							</DockPanel>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
 	</DockPanel>
 </Window>

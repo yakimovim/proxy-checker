@@ -88,4 +88,9 @@ internal class Exporter : ExporterBase<ExporterSettings>
       await writer.WriteLineAsync(proxy.GetUri().ToString());
     }
   }
+
+  public override bool CheckSettingsAreReadyForCli()
+  {
+    return !string.IsNullOrWhiteSpace(_settings.FilePath);
+  }
 }

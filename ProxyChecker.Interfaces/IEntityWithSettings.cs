@@ -1,16 +1,18 @@
 ﻿using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 
-namespace ProxyChecker.Interfaces
+namespace ProxyChecker.Interfaces;
+
+public interface IEntityWithSettings
 {
-  public interface IEntityWithSettings
-  {
-    JToken? GetSettings();
+  JToken? GetSettings();
 
-    Control? GetSettingsControl();
+  Control? GetSettingsControl();
 
-    void SetSettings(JToken? settings);
+  bool CheckSettingsAreReadyForCli();
 
-    JToken? GetSettingsFromControl(Control? control);
-  }
+  void SetSettings(JToken? settings);
+
+  JToken? GetSettingsFromControl(Control? control);
+
 }

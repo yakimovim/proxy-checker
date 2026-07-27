@@ -28,4 +28,6 @@ public abstract class EntityWithSettings<TSettings> : IEntityWithSettings
   {
     _settings = settings?.ToObject<TSettings>() ?? new TSettings();
   }
+
+  public abstract bool CheckSettingsAreReadyForCli();
 }

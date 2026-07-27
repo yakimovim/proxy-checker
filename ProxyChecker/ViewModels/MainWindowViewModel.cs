@@ -378,7 +378,14 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 			return;
 		}
 
-		pipelineModel.LoaderCreatorUid = (await _currentEntityProvider.GetCurrentLoaderInfoAsync(cancellationToken))!.CreatorUid;
+		if (!loader.CheckSettingsAreReadyForCli())
+		{
+      var messageDialog = new MessageWindow(Resource.NotReadyLoaderSettingsMessage);
+      await messageDialog.ShowDialog(Window);
+      return;
+    }
+
+    pipelineModel.LoaderCreatorUid = (await _currentEntityProvider.GetCurrentLoaderInfoAsync(cancellationToken))!.CreatorUid;
 		pipelineModel.LoaderSettings = loader.GetSettings();
 
 		var checker = await _currentEntityProvider.GetCurrentCheckerWithSettingsAsync(cancellationToken);
@@ -389,6 +396,13 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 			await messageDialog.ShowDialog(Window);
 			return;
 		}
+
+    if (!checker.CheckSettingsAreReadyForCli())
+    {
+      var messageDialog = new MessageWindow(Resource.NotReadyCheckerSettingsMessage);
+      await messageDialog.ShowDialog(Window);
+      return;
+    }
 
     pipelineModel.CheckerCreatorUid = (await _currentEntityProvider.GetCurrentCheckerInfoAsync(cancellationToken))!.CreatorUid;
     pipelineModel.CheckerSettings = checker.GetSettings();
@@ -401,6 +415,13 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 			await messageDialog.ShowDialog(Window);
 			return;
 		}
+
+    if (!exporter.CheckSettingsAreReadyForCli())
+    {
+      var messageDialog = new MessageWindow(Resource.NotReadyExporterSettingsMessage);
+      await messageDialog.ShowDialog(Window);
+      return;
+    }
 
     pipelineModel.ExporterCreatorUid = (await _currentEntityProvider.GetCurrentExporterInfoAsync(cancellationToken))!.CreatorUid;
     pipelineModel.ExporterSettings = exporter.GetSettings();

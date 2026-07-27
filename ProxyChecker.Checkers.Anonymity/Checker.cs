@@ -105,4 +105,6 @@ internal class Checker : CheckerBase<CheckerSettings>
   }
 
   public override Task<bool> IsReadyAsync(CancellationToken cancellationToken) => Task.FromResult(true);
+
+  public override bool CheckSettingsAreReadyForCli() => true;
 }

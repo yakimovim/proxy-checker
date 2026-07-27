@@ -207,6 +207,15 @@
   <data name="NoLoadersMessage" xml:space="preserve">
     <value>Please, specify active loader.</value>
   </data>
+  <data name="NotReadyCheckerSettingsMessage" xml:space="preserve">
+    <value>Current checker does not have settings ready for CLI. Please, fill all required values.</value>
+  </data>
+  <data name="NotReadyExporterSettingsMessage" xml:space="preserve">
+    <value>Current exporter does not have settings ready for CLI. Please, fill all required values.</value>
+  </data>
+  <data name="NotReadyLoaderSettingsMessage" xml:space="preserve">
+    <value>Current loader does not have settings ready for CLI. Please, fill all required values.</value>
+  </data>
   <data name="OkButtonText" xml:space="preserve">
     <value>Ok</value>
   </data>

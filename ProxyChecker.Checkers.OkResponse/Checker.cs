@@ -145,4 +145,9 @@ internal class Checker : CheckerBase<CheckerSettings>
 
     return true;
   }
+
+  public override bool CheckSettingsAreReadyForCli()
+  {
+    return _settings.TargetUris.Length > 0;
+  }
 }

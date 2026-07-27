@@ -26,7 +26,7 @@ internal class Loader : LoaderBase<LoaderSettings>
       yield break;
     }
 
-    foreach(var line in response.Split([ '\n', '\r' ], StringSplitOptions.RemoveEmptyEntries))
+    foreach (var line in response.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries))
     {
       if (line is null)
       {
@@ -159,4 +159,6 @@ internal class Loader : LoaderBase<LoaderSettings>
 
     return settings;
   }
+
+  public override bool CheckSettingsAreReadyForCli() => true;
 }
