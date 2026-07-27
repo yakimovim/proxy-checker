@@ -210,6 +210,9 @@
   <data name="OkButtonText" xml:space="preserve">
     <value>Ok</value>
   </data>
+  <data name="SavePipelineSettingsTitle" xml:space="preserve">
+    <value>Save pipeline settings</value>
+  </data>
   <data name="SettingsButtonText" xml:space="preserve">
     <value>Settings</value>
   </data>

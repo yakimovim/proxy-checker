@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ProxyChecker.Common.Services;
 using ProxyChecker.Common.Storage;
 using ProxyChecker.Interfaces;
@@ -10,9 +12,11 @@ using ProxyChecker.Interfaces.Exporters;
 using ProxyChecker.Interfaces.Loaders;
 using ProxyChecker.Interfaces.Resources;
 using ProxyChecker.Interfaces.ViewModels;
+using ProxyChecker.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,12 +44,12 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 	  )
 	{
 		_desktopService = desktopService;
-		_windowFactory = windowFactory ?? throw new System.ArgumentNullException(nameof(windowFactory));
-		_db = db ?? throw new System.ArgumentNullException(nameof(db));
+    _windowFactory = windowFactory ?? throw new ArgumentNullException(nameof(windowFactory));
+		_db = db ?? throw new ArgumentNullException(nameof(db));
 		_currentEntityProvider = currentEntityProvider ?? throw new ArgumentNullException(nameof(currentEntityProvider));
-		_loaderCreators = loaderCreators ?? throw new System.ArgumentNullException(nameof(loaderCreators));
-		_checkerCreators = checkerCreators ?? throw new System.ArgumentNullException(nameof(checkerCreators));
-		_exporterCreators = exporterCreators ?? throw new System.ArgumentNullException(nameof(exporterCreators));
+		_loaderCreators = loaderCreators ?? throw new ArgumentNullException(nameof(loaderCreators));
+		_checkerCreators = checkerCreators ?? throw new ArgumentNullException(nameof(checkerCreators));
+		_exporterCreators = exporterCreators ?? throw new ArgumentNullException(nameof(exporterCreators));
 
 		Task.WaitAll(
 		  ReloadExistingLoadersAsync(CancellationToken.None),
@@ -363,14 +367,19 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 	[RelayCommand]
 	private async Task ExportSettingsAsync(CancellationToken cancellationToken)
 	{
+		var pipelineModel = new PipelineModel();
+
 		var loader = await _currentEntityProvider.GetCurrentLoaderWithSettingsAsync(cancellationToken);
 
 		if (loader is null)
 		{
 			var messageDialog = new MessageWindow(Resource.NoLoadersMessage);
 			await messageDialog.ShowDialog(Window);
-			return;	
+			return;
 		}
+
+		pipelineModel.LoaderCreatorUid = (await _currentEntityProvider.GetCurrentLoaderInfoAsync(cancellationToken))!.CreatorUid;
+		pipelineModel.LoaderSettings = loader.GetSettings();
 
 		var checker = await _currentEntityProvider.GetCurrentCheckerWithSettingsAsync(cancellationToken);
 
@@ -381,7 +390,10 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 			return;
 		}
 
-		var exporter = await _currentEntityProvider.GetCurrentExporterWithSettingsAsync(cancellationToken);
+    pipelineModel.CheckerCreatorUid = (await _currentEntityProvider.GetCurrentCheckerInfoAsync(cancellationToken))!.CreatorUid;
+    pipelineModel.CheckerSettings = checker.GetSettings();
+
+    var exporter = await _currentEntityProvider.GetCurrentExporterWithSettingsAsync(cancellationToken);
 
 		if (exporter is null)
 		{
@@ -389,5 +401,35 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 			await messageDialog.ShowDialog(Window);
 			return;
 		}
-	}
+
+    pipelineModel.ExporterCreatorUid = (await _currentEntityProvider.GetCurrentExporterInfoAsync(cancellationToken))!.CreatorUid;
+    pipelineModel.ExporterSettings = exporter.GetSettings();
+
+    var topLevel = TopLevel.GetTopLevel(_desktopService.Desktop.MainWindow);
+
+    if (topLevel == null)
+    {
+      return;
+    }
+
+    var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+    {
+      Title = Resource.SavePipelineSettingsTitle,
+      ShowOverwritePrompt = true,
+    });
+
+    if (file is not null)
+    {
+      var path = file.TryGetLocalPath();
+
+      if (!string.IsNullOrWhiteSpace(path))
+      {
+				await File.WriteAllTextAsync(
+					path,
+					JsonConvert.SerializeObject(pipelineModel, Formatting.Indented),
+					cancellationToken
+				);
+      }
+    }
+  }
 }

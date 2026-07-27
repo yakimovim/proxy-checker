@@ -34,10 +34,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Storage\" />
-  </ItemGroup>
-
   <Target Name="MakePluginsFolderAfterBuild" AfterTargets="Build">
 	  <MakeDir Directories="$(TargetDir)Plugins" />
 	  <MakeDir Directories="$(TargetDir)Plugins\Loaders" />

@@ -27,18 +27,27 @@ public class CurrentEntityProvider
 		_exporterCreators = exporterCreators ?? throw new ArgumentNullException(nameof(exporterCreators));
 	}
 
-	public async Task<ILoader?> GetCurrentLoaderWithSettingsAsync(
+  public async Task<Loader?> GetCurrentLoaderInfoAsync(
+    CancellationToken cancellationToken
+  )
+  {
+    var appSettings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
+
+    if (appSettings.LoaderId is null)
+    {
+      return null;
+    }
+
+    var dbLoader = await _db.Loaders.SingleOrDefaultAsync(l => l.Id == appSettings.LoaderId.Value, cancellationToken);
+
+		return dbLoader;
+  }
+
+  public async Task<ILoader?> GetCurrentLoaderWithSettingsAsync(
 		CancellationToken cancellationToken
 	)
 	{
-		var appSettings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
-
-		if (appSettings.LoaderId is null)
-		{
-			return null;
-		}
-
-		var dbLoader = await _db.Loaders.SingleOrDefaultAsync(l => l.Id == appSettings.LoaderId.Value, cancellationToken);
+		var dbLoader = await GetCurrentLoaderInfoAsync(cancellationToken);
 
 		if (dbLoader is null)
 		{
@@ -59,18 +68,27 @@ public class CurrentEntityProvider
 		return loader;
 	}
 
-	public async Task<IExporter?> GetCurrentExporterWithSettingsAsync(
+  public async Task<Exporter?> GetCurrentExporterInfoAsync(
+      CancellationToken cancellationToken
+    )
+  {
+    var appSettings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
+
+    if (appSettings.ExporterId is null)
+    {
+      return null;
+    }
+
+    var dbExporter = await _db.Exporters.SingleOrDefaultAsync(e => e.Id == appSettings.ExporterId.Value, cancellationToken);
+
+		return dbExporter;
+  }
+
+  public async Task<IExporter?> GetCurrentExporterWithSettingsAsync(
 		CancellationToken cancellationToken
 	)
 	{
-		var appSettings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
-
-		if (appSettings.ExporterId is null)
-		{
-			return null;
-		}
-
-		var dbExporter = await _db.Exporters.SingleOrDefaultAsync(e => e.Id == appSettings.ExporterId.Value, cancellationToken);
+		var dbExporter = await GetCurrentExporterInfoAsync(cancellationToken);
 
 		if (dbExporter is null)
 		{
@@ -90,19 +108,27 @@ public class CurrentEntityProvider
 
 		return exporter;
 	}
+  public async Task<Checker?> GetCurrentCheckerInfoAsync(
+    CancellationToken cancellationToken
+  )
+  {
+    var appSettings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
 
-	public async Task<IChecker?> GetCurrentCheckerWithSettingsAsync(
+    if (appSettings.CheckerId is null)
+    {
+      return null;
+    }
+
+    var dbChecker = await _db.Checkers.SingleOrDefaultAsync(c => c.Id == appSettings.CheckerId.Value, cancellationToken);
+
+		return dbChecker;
+  }
+
+  public async Task<IChecker?> GetCurrentCheckerWithSettingsAsync(
 		CancellationToken cancellationToken
 	)
 	{
-		var appSettings = await _db.Settings.AsNoTracking().SingleAsync(cancellationToken);
-
-		if (appSettings.CheckerId is null)
-		{
-			return null;
-		}
-
-		var dbChecker = await _db.Checkers.SingleOrDefaultAsync(c => c.Id == appSettings.CheckerId.Value, cancellationToken);
+		var dbChecker = await GetCurrentCheckerInfoAsync(cancellationToken);
 
 		if (dbChecker is null)
 		{

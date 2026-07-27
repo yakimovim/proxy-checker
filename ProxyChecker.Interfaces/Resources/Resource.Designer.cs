@@ -340,6 +340,15 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save pipeline settings.
+        /// </summary>
+        public static string SavePipelineSettingsTitle {
+            get {
+                return ResourceManager.GetString("SavePipelineSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string SettingsButtonText {
