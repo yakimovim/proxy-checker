@@ -169,6 +169,15 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string EditButtonText {
+            get {
+                return ResourceManager.GetString("EditButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string ExitMainMenuItemHeader {

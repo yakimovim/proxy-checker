@@ -153,6 +153,9 @@
   <data name="DeleteButtonText" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="EditButtonText" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="ExitMainMenuItemHeader" xml:space="preserve">
     <value>Exit</value>
   </data>

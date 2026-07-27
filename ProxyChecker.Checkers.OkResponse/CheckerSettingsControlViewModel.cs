@@ -35,6 +35,13 @@ namespace ProxyChecker.Checkers.OkResponse
       TargetUris.Remove(uri);
     }
 
+    [RelayCommand]
+    private void EditTargetUri(Uri uri)
+    {
+      TargetUris.Remove(uri);
+      TargetUriCandidate = uri.ToString();
+    }
+
     [RelayCommand(CanExecute = nameof(CanAddTargetUri))]
     private void AddTargetUri()
     {

@@ -31,10 +31,14 @@
 								<TextBlock VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold" Text="{Binding}" />
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                   <Button Classes="action-button"
+										Command="{Binding $parent[vm:CheckerSettingsControl].((vm:CheckerSettingsControlViewModel)DataContext).EditTargetUriCommand}"
+										CommandParameter="{Binding}"
+										Content="{x:Static asts:Resource.EditButtonText}" />
+									<Button Classes="action-button"
 										Command="{Binding $parent[vm:CheckerSettingsControl].((vm:CheckerSettingsControlViewModel)DataContext).DeleteTargetUriCommand}"
 										CommandParameter="{Binding}"
 										Content="{x:Static asts:Resource.DeleteButtonText}" />
-                </StackPanel>
+								</StackPanel>
 							</DockPanel>
 						</Border>
 					</DataTemplate>
