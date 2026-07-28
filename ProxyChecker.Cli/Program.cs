@@ -11,7 +11,7 @@ internal class Program
     var parsingResult = parser.ParseArguments<Options>(args);
 
     var exitCode = await parsingResult.MapResult(
-      PipelineExecutor.ExecutePipeline, 
+      options => PipelineExecutor.ExecutePipeline(options, CancellationToken.None),
       errors => Task.FromResult(1)
     );
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProxyChecker.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "-s \"c:\\Users\\iyakimov\\Downloads\\settings.json\""
+    }
+  }
+}
