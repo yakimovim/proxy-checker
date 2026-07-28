@@ -49,7 +49,7 @@ namespace ProxyChecker
 
 		private static void RegisterApplicationServices(ServiceCollection collection, IConfigurationRoot configuration)
 		{
-			LogConfigurator.ConfigureLogging(collection, configuration);
+			LogConfigurator.ConfigureFileLogging(collection, configuration);
 
 			StorageConfigurator.ConfigureStorage(collection);
 

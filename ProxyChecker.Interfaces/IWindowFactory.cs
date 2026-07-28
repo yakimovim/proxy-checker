@@ -1,11 +1,10 @@
 ﻿using Avalonia.Controls;
 
-namespace ProxyChecker.Interfaces
-{
-  public interface IWindowFactory
-  {
-    TWindow CreateWindow<TWindow>() where TWindow : Window;
+namespace ProxyChecker.Interfaces;
 
-    Window CreateCreateWindow<TCreator>() where TCreator : ICreator;
-  }
+public interface IWindowFactory
+{
+  TWindow CreateWindow<TWindow>() where TWindow : Window;
+
+  Window CreateCreateWindow<TCreator>() where TCreator : ICreator;
 }
