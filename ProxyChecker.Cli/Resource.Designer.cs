@@ -61,6 +61,69 @@ namespace ProxyChecker.Cli {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checker creator is not found..
+        /// </summary>
+        internal static string CheckerCreatorNotFoundMessage {
+            get {
+                return ResourceManager.GetString("CheckerCreatorNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checker has invalid settings.
+        /// </summary>
+        internal static string CheckerInvalidSettingsMessage {
+            get {
+                return ResourceManager.GetString("CheckerInvalidSettingsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checker is not ready..
+        /// </summary>
+        internal static string CheckerNotReadyMessage {
+            get {
+                return ResourceManager.GetString("CheckerNotReadyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporter creator is not found..
+        /// </summary>
+        internal static string ExporterCreatorNotFoundMessage {
+            get {
+                return ResourceManager.GetString("ExporterCreatorNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporter has invalid settings.
+        /// </summary>
+        internal static string ExporterInvalidSettingsMessage {
+            get {
+                return ResourceManager.GetString("ExporterInvalidSettingsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loader creator is not found..
+        /// </summary>
+        internal static string LoaderCreatorNotFoundMessage {
+            get {
+                return ResourceManager.GetString("LoaderCreatorNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loader has invalid settings.
+        /// </summary>
+        internal static string LoaderInvalidSettingsMessage {
+            get {
+                return ResourceManager.GetString("LoaderInvalidSettingsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Desktop access is not available in command line application.
         /// </summary>
         internal static string NoDesktopService {

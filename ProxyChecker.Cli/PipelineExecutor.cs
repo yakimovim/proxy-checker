@@ -33,7 +33,7 @@ internal static class PipelineExecutor
 
     if (loaderCreator is null)
     {
-      AnsiConsole.MarkupLine($"[red]Loader creator is not found.[/]");
+      AnsiConsole.MarkupLine($"[red]{Resource.LoaderCreatorNotFoundMessage}[/]");
       return 1;
     }
 
@@ -41,12 +41,28 @@ internal static class PipelineExecutor
 
     loader.SetSettings(pipelineSettings.LoaderSettings);
 
+    var loaderValidationResult = loader.ValidateSettingsForCli();
+
+    if (!loaderValidationResult.IsValid)
+    {
+      AnsiConsole.MarkupLine($"[red]{Resource.LoaderInvalidSettingsMessage}[/]");
+      
+      AnsiConsole.WriteLine();
+
+      foreach (var error in loaderValidationResult.Errors)
+      {
+        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
+      }
+
+      return 1;
+    }
+
     var checkerCreator = servicesProvider.GetServices<ICheckerCreator>()
       .SingleOrDefault(c => c.Uid == pipelineSettings.CheckerCreatorUid);
 
     if (checkerCreator is null)
     {
-      AnsiConsole.MarkupLine($"[red]Checker creator is not found.[/]");
+      AnsiConsole.MarkupLine($"[red]{Resource.CheckerCreatorNotFoundMessage}[/]");
       return 1;
     }
 
@@ -54,12 +70,28 @@ internal static class PipelineExecutor
 
     checker.SetSettings(pipelineSettings.CheckerSettings);
 
+    var checkerValidationResult = checker.ValidateSettingsForCli();
+
+    if (!checkerValidationResult.IsValid)
+    {
+      AnsiConsole.MarkupLine($"[red]{Resource.CheckerInvalidSettingsMessage}[/]");
+
+      AnsiConsole.WriteLine();
+
+      foreach (var error in checkerValidationResult.Errors)
+      {
+        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
+      }
+
+      return 1;
+    }
+
     var exporterCreator = servicesProvider.GetServices<IExporterCreator>()
       .SingleOrDefault(e => e.Uid == pipelineSettings.ExporterCreatorUid);
 
     if (exporterCreator is null)
     {
-      AnsiConsole.MarkupLine($"[red]Exporter creator is not found.[/]");
+      AnsiConsole.MarkupLine($"[red]{Resource.ExporterCreatorNotFoundMessage}[/]");
       return 1;
     }
 
@@ -67,11 +99,27 @@ internal static class PipelineExecutor
 
     exporter.SetSettings(pipelineSettings.ExporterSettings);
 
+    var exporterValidationResult = exporter.ValidateSettingsForCli();
+
+    if (!exporterValidationResult.IsValid)
+    {
+      AnsiConsole.MarkupLine($"[red]{Resource.ExporterInvalidSettingsMessage}[/]");
+
+      AnsiConsole.WriteLine();
+
+      foreach (var error in exporterValidationResult.Errors)
+      {
+        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
+      }
+
+      return 1;
+    }
+
     var proxies = await loader.LoadAsync(cancellationToken).ToArrayAsync(cancellationToken);
 
     if (!(await checker.IsReadyAsync(cancellationToken)))
     {
-      AnsiConsole.MarkupLine($"[red]Checker is not ready.[/]");
+      AnsiConsole.MarkupLine($"[red]{Resource.CheckerNotReadyMessage}[/]");
       return 1;
     }
 
