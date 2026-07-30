@@ -138,6 +138,9 @@
   <data name="LimitLabel" xml:space="preserve">
     <value>Limit</value>
   </data>
+  <data name="LimitValidationMessage" xml:space="preserve">
+    <value>Limit must be greater than zero</value>
+  </data>
   <data name="MaximumResponseTimeLabel" xml:space="preserve">
     <value>Max response time, ms</value>
   </data>
@@ -153,7 +156,13 @@
   <data name="RequiredErrorMessage" xml:space="preserve">
     <value>This field can't be empty</value>
   </data>
+  <data name="SpeedMsValidationMessage" xml:space="preserve">
+    <value>Number of speed milliseconds must be positive</value>
+  </data>
   <data name="TimeoutLabel" xml:space="preserve">
     <value>Timeout, seconds</value>
+  </data>
+  <data name="TimeoutValidationMessage" xml:space="preserve">
+    <value>Timeout must be greater than 1 second</value>
   </data>
 </root>

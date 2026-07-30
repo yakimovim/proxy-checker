@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
@@ -162,5 +163,8 @@ internal class Loader : LoaderBase<LoaderSettings>
     return settings;
   }
 
-  public override bool CheckSettingsAreReadyForCli() => true;
+  public override ValidationResult ValidateSettingsForCli()
+  {
+    return new LoaderSettingsValidator().Validate(_settings);
+  }
 }

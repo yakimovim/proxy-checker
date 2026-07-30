@@ -79,11 +79,29 @@ namespace ProxyChecker.Loaders.UriTextFile {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File path must not be empty.
+        /// </summary>
+        public static string EmptyFilePathValidationMessage {
+            get {
+                return ResourceManager.GetString("EmptyFilePathValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File &apos;{0}&apos; does not exist.
         /// </summary>
         public static string FileNotFoundFormat {
             get {
                 return ResourceManager.GetString("FileNotFoundFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input file is not found.
+        /// </summary>
+        public static string FileNotFoundValidationMessage {
+            get {
+                return ResourceManager.GetString("FileNotFoundValidationMessage", resourceCulture);
             }
         }
         

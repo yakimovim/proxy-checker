@@ -140,5 +140,14 @@ namespace ProxyChecker.Loaders.GithubIpLocate {
                 return ResourceManager.GetString("TimeoutLabel", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout must be greater than 1 second.
+        /// </summary>
+        public static string TimeoutValidationMessage {
+            get {
+                return ResourceManager.GetString("TimeoutValidationMessage", resourceCulture);
+            }
+        }
     }
 }

@@ -132,7 +132,13 @@
   <data name="TargetUriLabel" xml:space="preserve">
     <value>Target URI</value>
   </data>
+  <data name="TargetUrisValidationMessage" xml:space="preserve">
+    <value>There must be at least one target URI</value>
+  </data>
   <data name="TimeoutLabel" xml:space="preserve">
     <value>Timeout (seconds)</value>
+  </data>
+  <data name="TimeoutValidationMessage" xml:space="preserve">
+    <value>Timeout must be greater than 1 second</value>
   </data>
 </root>

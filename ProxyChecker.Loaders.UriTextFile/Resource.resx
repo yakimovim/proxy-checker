@@ -123,9 +123,15 @@
   <data name="CreatorName" xml:space="preserve">
     <value>URI from Text file</value>
   </data>
+  <data name="EmptyFilePathValidationMessage" xml:space="preserve">
+    <value>File path must not be empty</value>
+  </data>
   <data name="FileNotFoundFormat" xml:space="preserve">
     <value>File '{0}' does not exist</value>
     <comment>0 - file path</comment>
+  </data>
+  <data name="FileNotFoundValidationMessage" xml:space="preserve">
+    <value>Input file is not found</value>
   </data>
   <data name="FilePathLabel" xml:space="preserve">
     <value>File path</value>

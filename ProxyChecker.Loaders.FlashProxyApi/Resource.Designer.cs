@@ -124,6 +124,15 @@ namespace ProxyChecker.Loaders.FlashProxyApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Limit must be greater than zero.
+        /// </summary>
+        public static string LimitValidationMessage {
+            get {
+                return ResourceManager.GetString("LimitValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max response time, ms.
         /// </summary>
         public static string MaximumResponseTimeLabel {
@@ -169,11 +178,29 @@ namespace ProxyChecker.Loaders.FlashProxyApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of speed milliseconds must be positive.
+        /// </summary>
+        public static string SpeedMsValidationMessage {
+            get {
+                return ResourceManager.GetString("SpeedMsValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timeout, seconds.
         /// </summary>
         public static string TimeoutLabel {
             get {
                 return ResourceManager.GetString("TimeoutLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout must be greater than 1 second.
+        /// </summary>
+        public static string TimeoutValidationMessage {
+            get {
+                return ResourceManager.GetString("TimeoutValidationMessage", resourceCulture);
             }
         }
     }

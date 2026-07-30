@@ -123,6 +123,9 @@
   <data name="CreatorName" xml:space="preserve">
     <value>URI to Text file</value>
   </data>
+  <data name="EmptyFilePathValidationMessage" xml:space="preserve">
+    <value>File path must not be empty</value>
+  </data>
   <data name="FilePathLabel" xml:space="preserve">
     <value>File path</value>
   </data>

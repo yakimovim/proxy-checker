@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
@@ -146,8 +147,8 @@ internal class Checker : CheckerBase<CheckerSettings>
     return true;
   }
 
-  public override bool CheckSettingsAreReadyForCli()
+  public override ValidationResult ValidateSettingsForCli()
   {
-    return _settings.TargetUris.Length > 0;
+    return new CheckerSettingsValidator().Validate(_settings);
   }
 }

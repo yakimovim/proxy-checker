@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 
 namespace ProxyChecker.Interfaces;
@@ -9,7 +10,7 @@ public interface IEntityWithSettings
 
   Control? GetSettingsControl();
 
-  bool CheckSettingsAreReadyForCli();
+  ValidationResult ValidateSettingsForCli();
 
   void SetSettings(JToken? settings);
 

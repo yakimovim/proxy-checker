@@ -106,11 +106,29 @@ namespace ProxyChecker.Checkers.OkResponse {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There must be at least one target URI.
+        /// </summary>
+        public static string TargetUrisValidationMessage {
+            get {
+                return ResourceManager.GetString("TargetUrisValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timeout (seconds).
         /// </summary>
         public static string TimeoutLabel {
             get {
                 return ResourceManager.GetString("TimeoutLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout must be greater than 1 second.
+        /// </summary>
+        public static string TimeoutValidationMessage {
+            get {
+                return ResourceManager.GetString("TimeoutValidationMessage", resourceCulture);
             }
         }
     }

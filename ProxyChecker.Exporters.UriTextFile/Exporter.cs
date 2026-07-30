@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using FluentValidation.Results;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Exporters;
 
@@ -89,8 +90,8 @@ internal class Exporter : ExporterBase<ExporterSettings>
     }
   }
 
-  public override bool CheckSettingsAreReadyForCli()
+  public override ValidationResult ValidateSettingsForCli()
   {
-    return !string.IsNullOrWhiteSpace(_settings.FilePath);
+    return new ExporterSettingsValidator().Validate(_settings);
   }
 }

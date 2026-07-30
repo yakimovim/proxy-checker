@@ -40,7 +40,7 @@ internal partial class LoaderSettingsControlViewModel
 
   [ObservableProperty]
   [NotifyDataErrorInfo]
-  [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.GreaterErrorMessage))]
+  [Range(1, 65535, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.RangeErrorMessage))]
   private int? _port;
 
   [ObservableProperty]

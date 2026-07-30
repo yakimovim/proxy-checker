@@ -106,15 +106,6 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value must be greater than {1}.
-        /// </summary>
-        public static string GreaterErrorMessage {
-            get {
-                return ResourceManager.GetString("GreaterErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Here should be absolute URI.
         /// </summary>
         public static string IsUriErrorMessage {
@@ -133,11 +124,29 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last checked must be positive.
+        /// </summary>
+        public static string LastCheckedValidationMessage {
+            get {
+                return ResourceManager.GetString("LastCheckedValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Limit.
         /// </summary>
         public static string LimitLabel {
             get {
                 return ResourceManager.GetString("LimitLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit must be greater than zero.
+        /// </summary>
+        public static string LimitValidationMessage {
+            get {
+                return ResourceManager.GetString("LimitValidationMessage", resourceCulture);
             }
         }
         
@@ -156,6 +165,15 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         public static string PortLabel {
             get {
                 return ResourceManager.GetString("PortLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port value must be between 0 and 65535.
+        /// </summary>
+        public static string PortValidationMessage {
+            get {
+                return ResourceManager.GetString("PortValidationMessage", resourceCulture);
             }
         }
         
@@ -223,11 +241,29 @@ namespace ProxyChecker.Loaders.GeonodeApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Timeout must be greater than 1 second.
+        /// </summary>
+        public static string TimeoutValidationMessage {
+            get {
+                return ResourceManager.GetString("TimeoutValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uptime, %.
         /// </summary>
         public static string UptimeLabel {
             get {
                 return ResourceManager.GetString("UptimeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uptime must be between 1 and 100.
+        /// </summary>
+        public static string UptimeValidationMessage {
+            get {
+                return ResourceManager.GetString("UptimeValidationMessage", resourceCulture);
             }
         }
     }

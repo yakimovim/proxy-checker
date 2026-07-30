@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Checkers;
@@ -106,5 +107,8 @@ internal class Checker : CheckerBase<CheckerSettings>
 
   public override Task<bool> IsReadyAsync(CancellationToken cancellationToken) => Task.FromResult(true);
 
-  public override bool CheckSettingsAreReadyForCli() => true;
+  public override ValidationResult ValidateSettingsForCli()
+  {
+    return new CheckerSettingsValidator().Validate(_settings);
+  }
 }

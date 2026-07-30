@@ -129,4 +129,7 @@
   <data name="TimeoutLabel" xml:space="preserve">
     <value>Timeout (seconds)</value>
   </data>
+  <data name="TimeoutValidationMessage" xml:space="preserve">
+    <value>Timeout must be greater than 1 second</value>
+  </data>
 </root>

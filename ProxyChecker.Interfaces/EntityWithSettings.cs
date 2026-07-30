@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 
 namespace ProxyChecker.Interfaces;
@@ -29,5 +30,5 @@ public abstract class EntityWithSettings<TSettings> : IEntityWithSettings
     _settings = settings?.ToObject<TSettings>() ?? new TSettings();
   }
 
-  public abstract bool CheckSettingsAreReadyForCli();
+  public abstract ValidationResult ValidateSettingsForCli();
 }

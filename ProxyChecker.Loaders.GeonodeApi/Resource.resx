@@ -132,23 +132,29 @@
   <data name="FastSpeedOption" xml:space="preserve">
     <value>Fast</value>
   </data>
-  <data name="GreaterErrorMessage" xml:space="preserve">
-    <value>The value must be greater than {1}</value>
-  </data>
   <data name="IsUriErrorMessage" xml:space="preserve">
     <value>Here should be absolute URI</value>
   </data>
   <data name="LastCheckedLabel" xml:space="preserve">
     <value>Last Checked, minutes</value>
   </data>
+  <data name="LastCheckedValidationMessage" xml:space="preserve">
+    <value>Last checked must be positive</value>
+  </data>
   <data name="LimitLabel" xml:space="preserve">
     <value>Limit</value>
+  </data>
+  <data name="LimitValidationMessage" xml:space="preserve">
+    <value>Limit must be greater than zero</value>
   </data>
   <data name="MediumSpeedOption" xml:space="preserve">
     <value>Medium</value>
   </data>
   <data name="PortLabel" xml:space="preserve">
     <value>Port</value>
+  </data>
+  <data name="PortValidationMessage" xml:space="preserve">
+    <value>Port value must be between 0 and 65535</value>
   </data>
   <data name="ProtocolLabel" xml:space="preserve">
     <value>Protocol</value>
@@ -171,7 +177,13 @@
   <data name="TimeoutLabel" xml:space="preserve">
     <value>Timeout, seconds</value>
   </data>
+  <data name="TimeoutValidationMessage" xml:space="preserve">
+    <value>Timeout must be greater than 1 second</value>
+  </data>
   <data name="UptimeLabel" xml:space="preserve">
     <value>Uptime, %</value>
+  </data>
+  <data name="UptimeValidationMessage" xml:space="preserve">
+    <value>Uptime must be between 1 and 100</value>
   </data>
 </root>

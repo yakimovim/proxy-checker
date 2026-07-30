@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using FluentValidation.Results;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
 using System.Runtime.CompilerServices;
@@ -103,8 +104,8 @@ internal class Loader : LoaderBase<LoaderSettings>
 		return settings;
 	}
 
-  public override bool CheckSettingsAreReadyForCli()
+  public override ValidationResult ValidateSettingsForCli()
   {
-    return !string.IsNullOrWhiteSpace(_settings.FilePath);
+    return new LoaderSettingsValidator().Validate(_settings);
   }
 }

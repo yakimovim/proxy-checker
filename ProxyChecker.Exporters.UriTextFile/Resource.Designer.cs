@@ -79,6 +79,15 @@ namespace ProxyChecker.Exporters.UriTextFile {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File path must not be empty.
+        /// </summary>
+        public static string EmptyFilePathValidationMessage {
+            get {
+                return ResourceManager.GetString("EmptyFilePathValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File path.
         /// </summary>
         public static string FilePathLabel {
