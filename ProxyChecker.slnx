@@ -16,6 +16,7 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
+    <File Path="publish.ps1" />
   </Folder>
   <Project Path="ProxyChecker.Cli/ProxyChecker.Cli.csproj" Id="1046c4a4-70fe-4c56-90cf-d02d31bddfa9" />
   <Project Path="ProxyChecker.Common/ProxyChecker.Common.csproj" Id="5446c9d2-3767-47f0-8dc8-86dfe4252e3d" />
