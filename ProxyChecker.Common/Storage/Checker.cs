@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProxyChecker.Common.Storage;
 
-public class Checker : INamedEntity
+public class Checker : IPipelineEntity
 {
 	[Key]
 	public int Id { get; set; }

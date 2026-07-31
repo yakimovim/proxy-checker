@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProxyChecker.Common.Storage;
 
-public class Exporter : INamedEntity
+public class Exporter : IPipelineEntity
 {
 	[Key]
 	public int Id { get; set; }

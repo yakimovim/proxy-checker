@@ -2,7 +2,7 @@
 
 namespace ProxyChecker.Common.Storage;
 
-public class Loader : INamedEntity
+public class Loader : IPipelineEntity
 {
 	[Key]
 	public int Id { get; set; }
