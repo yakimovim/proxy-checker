@@ -1,11 +1,15 @@
-﻿namespace ProxyChecker.Interfaces
+﻿namespace ProxyChecker.Interfaces;
+
+public interface ICreator
 {
-  public interface ICreator
-  {
-    Guid Uid { get; }
+  Guid Uid { get; }
 
-    string Name { get; }
+  string Name { get; }
 
-    string Description { get; }
-  }
+  string Description { get; }
+}
+
+public interface ICreator<T> : ICreator
+{
+  T Create();
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ProxyChecker.Cli.Services;
 using ProxyChecker.Common.Configuration;
 using ProxyChecker.Common.Logging;
@@ -28,90 +29,42 @@ internal static class PipelineExecutor
       return 1;
     }
 
-    var loaderCreator = servicesProvider.GetServices<ILoaderCreator>()
-      .SingleOrDefault(l => l.Uid == pipelineSettings.LoaderCreatorUid);
+    var loader = GetCreatedEntity<ILoader, ILoaderCreator>(
+      servicesProvider,
+      pipelineSettings.LoaderCreatorUid,
+      pipelineSettings.LoaderSettings,
+      Resource.LoaderCreatorNotFoundMessage,
+      Resource.LoaderInvalidSettingsMessage
+    );
 
-    if (loaderCreator is null)
+    if (loader == null)
     {
-      AnsiConsole.MarkupLine($"[red]{Resource.LoaderCreatorNotFoundMessage}[/]");
       return 1;
     }
 
-    var loader = loaderCreator.Create();
+    var checker = GetCreatedEntity<IChecker, ICheckerCreator>(
+      servicesProvider,
+      pipelineSettings.CheckerCreatorUid,
+      pipelineSettings.CheckerSettings,
+      Resource.CheckerCreatorNotFoundMessage,
+      Resource.CheckerInvalidSettingsMessage
+    );
 
-    loader.SetSettings(pipelineSettings.LoaderSettings);
-
-    var loaderValidationResult = loader.ValidateSettingsForCli();
-
-    if (!loaderValidationResult.IsValid)
+    if (checker == null)
     {
-      AnsiConsole.MarkupLine($"[red]{Resource.LoaderInvalidSettingsMessage}[/]");
-      
-      AnsiConsole.WriteLine();
-
-      foreach (var error in loaderValidationResult.Errors)
-      {
-        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
-      }
-
       return 1;
     }
 
-    var checkerCreator = servicesProvider.GetServices<ICheckerCreator>()
-      .SingleOrDefault(c => c.Uid == pipelineSettings.CheckerCreatorUid);
+    var exporter = GetCreatedEntity<IExporter, IExporterCreator>(
+      servicesProvider,
+      pipelineSettings.ExporterCreatorUid,
+      pipelineSettings.ExporterSettings,
+      Resource.ExporterCreatorNotFoundMessage,
+      Resource.ExporterInvalidSettingsMessage
+    );
 
-    if (checkerCreator is null)
+    if (exporter == null)
     {
-      AnsiConsole.MarkupLine($"[red]{Resource.CheckerCreatorNotFoundMessage}[/]");
-      return 1;
-    }
-
-    var checker = checkerCreator.Create();
-
-    checker.SetSettings(pipelineSettings.CheckerSettings);
-
-    var checkerValidationResult = checker.ValidateSettingsForCli();
-
-    if (!checkerValidationResult.IsValid)
-    {
-      AnsiConsole.MarkupLine($"[red]{Resource.CheckerInvalidSettingsMessage}[/]");
-
-      AnsiConsole.WriteLine();
-
-      foreach (var error in checkerValidationResult.Errors)
-      {
-        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
-      }
-
-      return 1;
-    }
-
-    var exporterCreator = servicesProvider.GetServices<IExporterCreator>()
-      .SingleOrDefault(e => e.Uid == pipelineSettings.ExporterCreatorUid);
-
-    if (exporterCreator is null)
-    {
-      AnsiConsole.MarkupLine($"[red]{Resource.ExporterCreatorNotFoundMessage}[/]");
-      return 1;
-    }
-
-    var exporter = exporterCreator.Create();
-
-    exporter.SetSettings(pipelineSettings.ExporterSettings);
-
-    var exporterValidationResult = exporter.ValidateSettingsForCli();
-
-    if (!exporterValidationResult.IsValid)
-    {
-      AnsiConsole.MarkupLine($"[red]{Resource.ExporterInvalidSettingsMessage}[/]");
-
-      AnsiConsole.WriteLine();
-
-      foreach (var error in exporterValidationResult.Errors)
-      {
-        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
-      }
-
       return 1;
     }
 
@@ -131,7 +84,7 @@ internal static class PipelineExecutor
   }
 
   private static async Task<IEnumerable<Proxy>> GetValidProxiesAsync(
-    IChecker checker, 
+    IChecker checker,
     IEnumerable<Proxy> proxies,
     CancellationToken cancellationToken)
   {
@@ -206,5 +159,47 @@ internal static class PipelineExecutor
   {
     collection.AddSingleton<IDesktopService, DesktopServiceStub>();
     collection.AddSingleton<IWindowFactory, WindowFactoryStub>();
+  }
+
+  private static TEntity? GetCreatedEntity<TEntity, TEntityCreator>(
+    IServiceProvider servicesProvider,
+    Guid creatorUid,
+    JToken? entitySettings,
+    string noCreatorMessage,
+    string invalidSettingsMessage
+    )
+    where TEntity : IEntityWithSettings
+    where TEntityCreator : ICreator<TEntity>
+  {
+    var creator = servicesProvider.GetServices<TEntityCreator>()
+      .SingleOrDefault(l => l.Uid == creatorUid);
+
+    if (creator is null)
+    {
+      AnsiConsole.MarkupLine($"[red]{noCreatorMessage}[/]");
+      return default;
+    }
+
+    var entity = creator.Create();
+
+    entity.SetSettings(entitySettings);
+
+    var validationResult = entity.ValidateSettingsForCli();
+
+    if (!validationResult.IsValid)
+    {
+      AnsiConsole.MarkupLine($"[red]{invalidSettingsMessage}[/]");
+
+      AnsiConsole.WriteLine();
+
+      foreach (var error in validationResult.Errors)
+      {
+        AnsiConsole.MarkupLine($"[red]- {error.ErrorMessage}[/]");
+      }
+
+      return default;
+    }
+
+    return entity;
   }
 }
