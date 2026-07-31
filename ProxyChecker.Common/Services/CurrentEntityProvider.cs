@@ -42,7 +42,7 @@ public class CurrentEntityProvider
       return default;
     }
 
-    return await _db.Set<TEntity>().SingleOrDefaultAsync(l => l.Id == entityId.Value, cancellationToken);
+    return await _db.Set<TEntity>().AsNoTracking().SingleOrDefaultAsync(l => l.Id == entityId.Value, cancellationToken);
   }
 
   public async Task<Loader?> GetCurrentLoaderInfoAsync(
