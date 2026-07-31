@@ -25,7 +25,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
-	<Target Name="CopyBuildResults" AfterTargets="AfterBuild">
+	<Target Name="CopyBuildResults" AfterTargets="AfterBuild" Condition="'$(SolutionDir)' != '*Undefined*'">
 		<ItemGroup>
 			<BuildResults Include="$(TargetDir)**\*.*" />
 		</ItemGroup>

@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-	<Target Name="CopyBuildResults" AfterTargets="AfterBuild">
+	<Target Name="CopyBuildResults" AfterTargets="AfterBuild" Condition="'$(SolutionDir)' != '*Undefined*'">
 		<ItemGroup>
 			<BuildResults Include="$(TargetDir)**\*.*" />
 		</ItemGroup>
