@@ -28,14 +28,19 @@ class Build : NukeBuild
   [Parameter]
   readonly string Runtime;
 
+  private void Cleanup()
+  {
+    (RootDirectory).GlobDirectories("ProxyChecker*/**/bin", "ProxyChecker*/**/obj").ForEach(d =>
+    {
+      d.DeleteDirectory();
+    });
+  }
+
   Target Clean => _ => _
       .Description("Clean output directory")
       .Executes(() =>
       {
-        (RootDirectory).GlobDirectories("ProxyChecker*/**/bin", "ProxyChecker*/**/obj").ForEach(d =>
-        {
-          d.DeleteDirectory();
-        });
+        Cleanup();
 
         (OutputDirectory).CreateOrCleanDirectory();
       });
@@ -117,6 +122,9 @@ class Build : NukeBuild
       (RootDirectory).GlobFiles("ProxyChecker.Exporters.UriTextFile/**/publish/ProxyChecker.Exporters.UriTextFile.*").ForEach(f => {
         f.Copy(OutputDirectory / "Plugins/Exporters/UriTextFile" / f.Name, ExistsPolicy.FileOverwrite);
       });
+
+      // Cleanup
+      Cleanup();
     });
 
 }
