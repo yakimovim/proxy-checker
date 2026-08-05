@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using ProxyChecker.ViewModels;
 
@@ -12,5 +13,12 @@ internal partial class CreateWindow : Window
     viewModel.Window = this;
 
     InitializeComponent();
+  }
+
+  protected override void OnOpened(EventArgs e)
+  {
+    base.OnOpened(e);
+
+    tbName.Focus();
   }
 }

@@ -171,6 +171,9 @@
   <data name="ExportersWindowTitle" xml:space="preserve">
     <value>Exporters</value>
   </data>
+  <data name="ExportFinishedMessage" xml:space="preserve">
+    <value>Export is finished.</value>
+  </data>
   <data name="ExportSettingsMainMenuItemHeader" xml:space="preserve">
     <value>Export settings...</value>
   </data>

@@ -15,13 +15,13 @@
 	<DockPanel LastChildFill="True">
 		<Grid DockPanel.Dock="Top" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
 			<TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static asts:Resource.NameLabel}" Classes="form-label" />
-			<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name}" MaxLength="256" Classes="m5"/>
+			<TextBox x:Name="tbName" Grid.Column="1" Grid.Row="0" Text="{Binding Name}" MaxLength="256" Classes="m5"/>
 			<TextBlock Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SettingsLabel}"
         HorizontalAlignment="Center" Margin="0,20,0,10" />
 		</Grid>
 		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
-			<Button Classes="action-button" Command="{Binding OkCommand}" Content="{x:Static asts:Resource.OkButtonText}"/>
-			<Button Classes="action-button" Command="{Binding CancelCommand}" Content="{x:Static asts:Resource.CancelButtonText}"/>
+			<Button Classes="action-button" Command="{Binding OkCommand}" Content="{x:Static asts:Resource.OkButtonText}" IsDefault="True"/>
+			<Button Classes="action-button" Command="{Binding CancelCommand}" Content="{x:Static asts:Resource.CancelButtonText}" IsCancel="True"/>
 		</StackPanel>
 		<ScrollViewer>
 			<ContentControl Content="{Binding SettingsControl}"/>

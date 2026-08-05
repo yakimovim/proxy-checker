@@ -13,12 +13,12 @@
         Title="">
 	<DockPanel LastChildFill="True" Margin="5">
 		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
-			<Button Classes="action-button" Command="{Binding OkCommand}" Content="{x:Static asts:Resource.OkButtonText}"/>
-			<Button Classes="action-button" Command="{Binding CancelCommand}" Content="{x:Static asts:Resource.CancelButtonText}"/>
+			<Button Classes="action-button" Command="{Binding OkCommand}" Content="{x:Static asts:Resource.OkButtonText}" IsDefault="True"/>
+			<Button Classes="action-button" Command="{Binding CancelCommand}" Content="{x:Static asts:Resource.CancelButtonText}" IsCancel="True"/>
 		</StackPanel>
 		<Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto">
 			<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static asts:Resource.NameLabel}" Classes="form-label" />
-			<TextBox Grid.Row ="0" Grid.Column="1" Text="{Binding Name}" MaxLength="256" Classes="m5" />
+      <TextBox x:Name="tbName" Grid.Row ="0" Grid.Column="1" Text="{Binding Name}" MaxLength="256" Classes="m5" />
 			<TextBlock Grid.Row ="1" Grid.Column="0" Classes="form-label" Text="{x:Static asts:Resource.CreatorLabel}" />
 			<ComboBox Grid.Row ="1" Grid.Column="1" Classes="m5" HorizontalAlignment="Stretch" ItemsSource="{Binding Creators}"
 				SelectedItem="{Binding SelectedCreator}">

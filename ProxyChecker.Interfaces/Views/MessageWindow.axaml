@@ -14,7 +14,7 @@
         Title="{x:Static asts:Resource.MessageWindowTitle}">
 	<DockPanel LastChildFill="True" Margin="5">
 		<StackPanel DockPanel.Dock="Bottom" Classes="buttons-panel" Orientation="Horizontal" HorizontalAlignment="Right">
-			<Button Classes="action-button" Command="{Binding OkCommand}" Content="{x:Static asts:Resource.OkButtonText}"/>
+			<Button Classes="action-button" Command="{Binding OkCommand}" Content="{x:Static asts:Resource.OkButtonText}" IsDefault="True" IsCancel="True"/>
 		</StackPanel>
 		<TextBlock TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"
 			Margin="5"

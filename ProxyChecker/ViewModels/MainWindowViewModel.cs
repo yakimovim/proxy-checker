@@ -219,6 +219,10 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
     }
 
     await exporter.ExportAsync(ValidProxies.Select(vm => vm.ToProxy()), cancellationToken);
+
+    var dialog = new MessageWindow(Resource.ExportFinishedMessage);
+
+    await dialog.ShowDialog(Window);
   }
 
   private bool CanExportProxies() => ValidProxies.Any();

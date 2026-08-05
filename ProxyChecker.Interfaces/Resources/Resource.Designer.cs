@@ -223,6 +223,15 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export is finished..
+        /// </summary>
+        public static string ExportFinishedMessage {
+            get {
+                return ResourceManager.GetString("ExportFinishedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export settings....
         /// </summary>
         public static string ExportSettingsMainMenuItemHeader {
