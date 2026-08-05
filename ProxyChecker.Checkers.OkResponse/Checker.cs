@@ -10,7 +10,7 @@ namespace ProxyChecker.Checkers.OkResponse;
 
 internal class Checker : CheckerBase<CheckerSettings>
 {
-  private static readonly Random _rnd = new Random((int)DateTime.Now.Ticks);
+  private static readonly Random _rnd = new((int)DateTime.Now.Ticks);
   private readonly IDesktopService _desktopService;
   private readonly ILogger<Checker> _logger;
   private CheckerSettings? _currentSettings = null;
@@ -90,19 +90,13 @@ internal class Checker : CheckerBase<CheckerSettings>
     }
     catch (Exception ex)
     {
-      if(_logger.IsEnabled(LogLevel.Debug))
-      {
-        _logger.LogError(ex, $"Error while checking proxy {proxyUri}");
-      }
-      else
-      {
-        _logger.LogError($"Error while checking proxy {proxyUri}: {ex.Message}");
-      }
+      _logger.LogDebug(ex, $"Error while checking proxy {proxyUri}");
+
       return false;
     }
   }
 
-  private Uri GetRandomTargetUri(Uri[] targetUris)
+  private static Uri GetRandomTargetUri(Uri[] targetUris)
   {
     return targetUris[_rnd.Next(targetUris.Length)];
   }

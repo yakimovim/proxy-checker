@@ -87,14 +87,7 @@ internal class Loader : LoaderBase<LoaderSettings>
     }
     catch (Exception ex)
     {
-      if (_logger.IsEnabled(LogLevel.Debug))
-      {
-        _logger.LogError(ex, "Error while loading list of proxies");
-      }
-      else
-      {
-        _logger.LogError($"Error while loading list of proxies: {ex.Message}");
-      }
+      _logger.LogDebug(ex, "Error while loading list of proxies");
 
       return null;
     }

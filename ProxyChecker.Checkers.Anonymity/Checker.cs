@@ -83,14 +83,8 @@ internal class Checker : CheckerBase<CheckerSettings>
     }
     catch (Exception ex)
     {
-      if (_logger.IsEnabled(LogLevel.Debug))
-      {
-        _logger.LogError(ex, $"Error while checking proxy {proxyUri}");
-      }
-      else
-      {
-        _logger.LogError($"Error while checking proxy {proxyUri}: {ex.Message}");
-      }
+      _logger.LogDebug(ex, $"Error while checking proxy {proxyUri}");
+
       return false;
     }
   }
