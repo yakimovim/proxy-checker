@@ -1,6 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.ViewModels;
+using ProxyChecker.Services;
+using TextCopy;
 
 namespace ProxyChecker.ViewModels
 {
@@ -35,5 +40,13 @@ namespace ProxyChecker.ViewModels
 
     public Proxy ToProxy()
       => new Proxy(Scheme, Host, Port, User, Password);
+
+    [RelayCommand]
+    private async Task CopyToClipboardAsync(CancellationToken cancellationToken)
+    {
+      var text = ToProxy().GetUri().ToString();
+
+      await ClipboardService.SetTextAsync(text, cancellationToken);
+    }
   }
 }

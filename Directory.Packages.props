@@ -33,5 +33,6 @@
     <PackageVersion Include="System.ComponentModel.Composition" Version="10.0.10" />
     <PackageVersion Include="System.Security.Cryptography.OpenSsl" Version="5.0.0" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
+    <PackageVersion Include="TextCopy" Version="6.2.1" />
   </ItemGroup>
 </Project>
