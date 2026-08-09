@@ -27,6 +27,8 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
   private readonly AppDbContext _db;
   private readonly CurrentEntityProvider _currentEntityProvider;
 
+  private bool _processing = false;
+
   public MainWindowViewModel(
     IDesktopService desktopService,
     IWindowFactory windowFactory,
@@ -63,7 +65,7 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 
   public Window Window { get; set; } = default!;
 
-  [RelayCommand]
+  [RelayCommand(CanExecute = nameof(CanLoadProxies))]
   private async Task LoadProxiesAsync(CancellationToken cancellationToken)
   {
     var appSettings = await _db.Settings.SingleAsync();
@@ -81,17 +83,37 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
       return;
     }
 
-    await foreach (var proxy in loader.LoadAsync(cancellationToken))
+    try
     {
-      LoadedProxies.Add(
-        new ProxyViewModel(
-        proxy
-        )
-      );
-    }
+      _processing = true;
 
+      NotifyCommands();
+
+      await foreach (var proxy in loader.LoadAsync(cancellationToken))
+      {
+        LoadedProxies.Add(
+          new ProxyViewModel(
+          proxy
+          )
+        );
+      }
+    }
+    finally
+    {
+      _processing = false;
+
+      NotifyCommands();
+    }
+  }
+
+  private bool CanLoadProxies() => !_processing;
+
+  private void NotifyCommands()
+  {
+    LoadProxiesCommand.NotifyCanExecuteChanged();
     ClearProxiesCommand.NotifyCanExecuteChanged();
     CheckProxiesCommand.NotifyCanExecuteChanged();
+    ExportProxiesCommand.NotifyCanExecuteChanged();
   }
 
   [RelayCommand(CanExecute = nameof(CanClearProxies))]
@@ -99,11 +121,10 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
   {
     LoadedProxies.Clear();
 
-    ClearProxiesCommand.NotifyCanExecuteChanged();
-    CheckProxiesCommand.NotifyCanExecuteChanged();
+    NotifyCommands();
   }
 
-  private bool CanClearProxies() => LoadedProxies.Any();
+  private bool CanClearProxies() => !_processing && LoadedProxies.Any();
 
   private CancellationTokenSource? _proxyCheckingCancellationTokenSource;
 
@@ -134,6 +155,10 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
 
     try
     {
+      _processing = true;
+
+      NotifyCommands();
+
       _proxyCheckingCancellationTokenSource = new CancellationTokenSource();
       cancellationToken.Register(() =>
       {
@@ -154,8 +179,8 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
             if (await checker.CheckAsync(proxy, ct))
             {
               ValidProxies.Add(
-          new ProxyViewModel(proxy)
-        );
+                new ProxyViewModel(proxy)
+              );
             }
           }
         );
@@ -177,15 +202,18 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
           }
         }
       }
-
     }
+    catch (TaskCanceledException) { }
     finally
     {
       _proxyCheckingCancellationTokenSource?.Dispose();
       _proxyCheckingCancellationTokenSource = null;
 
+      _processing = false;
+
+      NotifyCommands();
+
       CancelProxyCheckingCommand.NotifyCanExecuteChanged();
-      ExportProxiesCommand.NotifyCanExecuteChanged();
     }
   }
 
@@ -198,7 +226,7 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
   public bool CanCancelProxyChecking()
     => _proxyCheckingCancellationTokenSource != null;
 
-  private bool CanCheckProxies() => LoadedProxies.Any();
+  private bool CanCheckProxies() => !_processing && LoadedProxies.Any();
 
   [RelayCommand(CanExecute = nameof(CanExportProxies))]
   private async Task ExportProxiesAsync(CancellationToken cancellationToken)
@@ -218,14 +246,27 @@ internal partial class MainWindowViewModel : ViewModelBase, IRequireWindow
       return;
     }
 
-    await exporter.ExportAsync(ValidProxies.Select(vm => vm.ToProxy()), cancellationToken);
+    try
+    {
+      _processing = true;
+
+      NotifyCommands();
+
+      await exporter.ExportAsync(ValidProxies.Select(vm => vm.ToProxy()), cancellationToken);
+    }
+    finally
+    {
+      _processing = false;
+
+      NotifyCommands();
+    }
 
     var dialog = new MessageWindow(Resource.ExportFinishedMessage);
 
     await dialog.ShowDialog(Window);
   }
 
-  private bool CanExportProxies() => ValidProxies.Any();
+  private bool CanExportProxies() => !_processing && ValidProxies.Any();
 
   [RelayCommand]
   private void Exit()
