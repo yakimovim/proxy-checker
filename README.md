@@ -39,3 +39,45 @@ ProxyChecker.Cli.exe --settings "c:\Temp\settings.json"
 ```
 
 File `settings.json` contains configurations of loader, checker and exported. The simplest way to create this file is through UI, as it is described above.
+
+## Contribution
+
+If you want to inform about an issue or propose an improvement, please, use
+
+* [Issues](https://github.com/yakimovim/proxy-checker/issues) or [Pull Requests](https://github.com/yakimovim/proxy-checker/pulls) on [GitHub](https://github.com/yakimovim/proxy-checker) or
+* [Issues](https://gitverse.ru/yakimovim/proxy-checker/tasktracker) or [Requests](https://gitverse.ru/yakimovim/proxy-checker/pulls) on [GitVerse](https://gitverse.ru/yakimovim/proxy-checker).
+
+## Extension
+
+Proxy Checker is based on [MEF technology](https://learn.microsoft.com/en-us/dotnet/standard/mef/). All loaders, checkers and exporters are just plugins. Nothing prevents you from creation your own entities. Here is how you can do it.
+
+Create a new project of type `Class Library`. Use the same .NET version as [ProxyChecker](https://github.com/yakimovim/proxy-checker/blob/master/ProxyChecker/ProxyChecker.csproj) project. Add reference to the `ProxyChecker.Interfaces` assembly which you can take in the folder where you've installed Proxy Checker. If you need to add some NuGet packages, take a look at the versions of already used packages in the `Directory.Packages.props` file. Please, use the same versions to avoid compatibility issues.
+
+If you want to create a loader, you should implement `ILoader` interface from `ProxyChecker.Interfaces` assembly. Use `IChecker` for checker and `IExporter` for exporter. It is highly recommended to take a look at how similar entities are implemented in Proxy Checker project.
+
+Create a creator for your entity (`ILoaderCreator`, `ICheckerCreator` or `IExporterCreator`).
+
+Create a `ServicesRegistrator` class which should register your entities into a dependency container:
+
+```cs
+[Export(typeof(IServicesRegistrator))]
+public class ServicesRegistrator : IServicesRegistrator
+{
+  public void RegisterServices(IServiceCollection services)
+  {
+    services.AddTransient<ILoaderCreator, LoaderCreator>();
+  }
+}
+```
+
+When your implementation is finished, use self-contained .NET publishing:
+
+```ps
+dotnet publish -o publish --sc -r win-x64
+```
+
+Option `--sc` makes publishing to create self-contained result.
+
+You don't need to distribute all NuGet assemblies which are already part of Proxy Checker and can be found in the folder of Proxy Checker installation.
+
+In this main folder go into `Plugins` directory. If you create a loader, go to `Loaders` folder, for checker - to `Checkers` and `Exporters` for exporter. Here create a new directory for your plugin. The name of the directory is not important. Place result of your publishing into this new directory.

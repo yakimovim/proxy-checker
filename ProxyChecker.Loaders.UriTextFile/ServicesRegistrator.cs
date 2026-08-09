@@ -3,14 +3,13 @@ using ProxyChecker.Interfaces;
 using ProxyChecker.Interfaces.Loaders;
 using System.ComponentModel.Composition;
 
-namespace ProxyChecker.Loaders.UriTextFile
+namespace ProxyChecker.Loaders.UriTextFile;
+
+[Export(typeof(IServicesRegistrator))]
+public class ServicesRegistrator : IServicesRegistrator
 {
-  [Export(typeof(IServicesRegistrator))]
-  public class ServicesRegistrator : IServicesRegistrator
+  public void RegisterServices(IServiceCollection services)
   {
-    public void RegisterServices(IServiceCollection services)
-    {
-      services.AddTransient<ILoaderCreator, LoaderCreator>();
-    }
+    services.AddTransient<ILoaderCreator, LoaderCreator>();
   }
 }
