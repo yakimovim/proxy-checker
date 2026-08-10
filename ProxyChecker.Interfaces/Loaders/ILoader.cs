@@ -1,7 +1,6 @@
-﻿namespace ProxyChecker.Interfaces.Loaders
+﻿namespace ProxyChecker.Interfaces.Loaders;
+
+public interface ILoader : IEntityWithSettings
 {
-  public interface ILoader : IEntityWithSettings
-  {
-    IAsyncEnumerable<Proxy> LoadAsync(CancellationToken cancellationToken);
-  }
+  IAsyncEnumerable<Proxy> LoadAsync(CancellationToken cancellationToken);
 }
