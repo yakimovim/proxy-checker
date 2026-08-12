@@ -277,6 +277,24 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string LoadingMessage {
+            get {
+                return ResourceManager.GetString("LoadingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading.
+        /// </summary>
+        public static string LoadingWindowTitle {
+            get {
+                return ResourceManager.GetString("LoadingWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Proxy Checker.
         /// </summary>
         public static string MainWindowTitle {

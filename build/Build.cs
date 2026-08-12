@@ -90,10 +90,10 @@ class Build : NukeBuild
     .Description("Compose resulting project folder")
     .DependsOn(Publish)
     .Executes(() => {
-      (RootDirectory).GlobFiles("ProxyChecker/**/publish/*.*").ForEach(f => {
+      (RootDirectory).GlobFiles("ProxyChecker/**/publish/*").ForEach(f => {
         f.Copy(OutputDirectory / f.Name, ExistsPolicy.FileOverwrite);
       });
-      (RootDirectory).GlobFiles("ProxyChecker.Cli/**/publish/*.*").ForEach(f => {
+      (RootDirectory).GlobFiles("ProxyChecker.Cli/**/publish/*").ForEach(f => {
         f.Copy(OutputDirectory / f.Name, ExistsPolicy.FileOverwrite);
       });
 

@@ -189,6 +189,12 @@
   <data name="LoadersWindowTitle" xml:space="preserve">
     <value>Loaders</value>
   </data>
+  <data name="LoadingMessage" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LoadingWindowTitle" xml:space="preserve">
+    <value>Loading</value>
+  </data>
   <data name="MainWindowTitle" xml:space="preserve">
     <value>Proxy Checker</value>
   </data>

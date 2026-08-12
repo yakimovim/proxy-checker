@@ -2,5 +2,5 @@
   "$schema": "build.schema.json",
   "Solution": "ProxyChecker.slnx",
   "Configuration": "Release",
-  "Runtime": "win-x64"
+  "Runtime": "win-x64" // "linux-x64", "win-x64"
 }

@@ -1,17 +1,16 @@
 using Avalonia.Controls;
 using ProxyChecker.ViewModels;
 
-namespace ProxyChecker.Views
+namespace ProxyChecker.Views;
+
+internal partial class MainWindow : Window
 {
-  internal partial class MainWindow : Window
+  public MainWindow(MainWindowViewModel model)
   {
-    public MainWindow(MainWindowViewModel model)
-    {
-      DataContext = model;
+    DataContext = model;
 
-      model.Window = this;
+    model.Window = this;
 
-      InitializeComponent();
-    }
+    InitializeComponent();
   }
 }
