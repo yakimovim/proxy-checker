@@ -17,6 +17,7 @@
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
     <File Path="README.md" />
+    <File Path="README.ru.md" />
   </Folder>
   <Project Path="build/_build.csproj" />
   <Project Path="ProxyChecker.Cli/ProxyChecker.Cli.csproj" Id="1046c4a4-70fe-4c56-90cf-d02d31bddfa9" />

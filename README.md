@@ -1,5 +1,7 @@
 # Proxy Checker
 
+[Русская версия](./README.ru.md)
+
 Proxy Checker is a desktop application to check availability of proxy servers. There are many sources of different proxy servers. But it does not mean that all of them will work at the place where you are. Proxy Checker allows you to download lists of proxy servers from different sources, check there availability and export those proxy servers that passed the test.
 
 ## Installation
@@ -22,7 +24,7 @@ Make sure you have created at least one loader, checker and exporter.
 
 When you have created loaders, you'll be able to use `Load` button in the main window. Dropdown near it allows to select active loader.
 
-After some proxies are loaded, you can use `Check` button to apply selected checker to thses proxies.
+After some proxies are loaded, you can use `Check` button to apply selected checker to these proxies.
 
 Checked proxies can be exported using `Export` button.
 
@@ -38,7 +40,7 @@ Application `ProxyChecker.Cli` can be used for automation of getting, checking a
 ProxyChecker.Cli.exe --settings "c:\Temp\settings.json"
 ```
 
-File `settings.json` contains configurations of loader, checker and exported. The simplest way to create this file is through UI, as it is described above.
+File `settings.json` contains configurations of loader, checker and exporter. The simplest way to create this file is through UI, as it is described above.
 
 ## Contribution
 
