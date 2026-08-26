@@ -70,6 +70,15 @@ namespace ProxyChecker.Interfaces.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to initialize the application. See &apos;startup.log&apos; file for details..
+        /// </summary>
+        public static string ApplicationInitializationErrorMessage {
+            get {
+                return ResourceManager.GetString("ApplicationInitializationErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string CancelButtonText {
@@ -336,6 +345,15 @@ namespace ProxyChecker.Interfaces.Resources {
         public static string NoCheckersMessage {
             get {
                 return ResourceManager.GetString("NoCheckersMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application can run only in classic desktop mode..
+        /// </summary>
+        public static string NoDesktopErrorMessage {
+            get {
+                return ResourceManager.GetString("NoDesktopErrorMessage", resourceCulture);
             }
         }
         

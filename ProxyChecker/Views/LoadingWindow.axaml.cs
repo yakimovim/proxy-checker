@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -11,6 +12,7 @@ using ProxyChecker.Common.Services;
 using ProxyChecker.Common.Storage;
 using ProxyChecker.Factories;
 using ProxyChecker.Interfaces;
+using ProxyChecker.Interfaces.Resources;
 using ProxyChecker.Services;
 using ProxyChecker.ViewModels;
 using ProxyChecker.Views;
@@ -19,6 +21,11 @@ namespace ProxyChecker;
 
 internal partial class LoadingWindow : Window
 {
+  private static readonly string StartupLogPath = Path.Combine(
+    PathsProvider.GetLogsFolder(),
+    "proxy-checker-startup.log"
+  );
+
   private readonly IClassicDesktopStyleApplicationLifetime? _desktop;
 
   public LoadingWindow()
@@ -36,7 +43,16 @@ internal partial class LoadingWindow : Window
   {
     base.OnOpened(e);
 
-    Task.Run(() => {
+    Task.Run(async () =>
+    {
+      await InitializeApplicationAsync();
+    });
+  }
+
+  private async Task InitializeApplicationAsync()
+  {
+    try
+    {
       var configuration = ConfigurationLoader.LoadConfiguration();
 
       var collection = new ServiceCollection();
@@ -53,7 +69,8 @@ internal partial class LoadingWindow : Window
       {
         serviceProvider.GetRequiredService<DesktopService>().Desktop = _desktop;
 
-        Dispatcher.Invoke(() => {
+        Dispatcher.Invoke(() =>
+        {
           var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
 
           mainWindow.Show();
@@ -63,7 +80,36 @@ internal partial class LoadingWindow : Window
           Close();
         });
       }
-    });
+      else
+      {
+        await Dispatcher.Invoke(async () =>
+        {
+          var dialog = new MessageWindow(Resource.NoDesktopErrorMessage);
+
+          await dialog.ShowDialog(this);
+
+          Close();
+
+          Environment.Exit(1);
+        });
+      }
+    }
+    catch (Exception ex)
+    {
+      LogStartup(ex.ToString());
+
+      await Dispatcher.Invoke(async () =>
+      {
+        var dialog = new MessageWindow(Resource.ApplicationInitializationErrorMessage);
+
+        await dialog.ShowDialog(this);
+
+        Close();
+
+        Environment.Exit(1);
+      });
+    }
+
   }
 
   private static void RegisterApplicationServices(ServiceCollection collection, IConfigurationRoot configuration)
@@ -94,4 +140,8 @@ internal partial class LoadingWindow : Window
     collection.AddSingleton<IDesktopService>(s => s.GetRequiredService<DesktopService>());
   }
 
+  private void LogStartup(string message)
+  {
+    File.AppendAllText(StartupLogPath, Environment.NewLine + message);
+  }
 }

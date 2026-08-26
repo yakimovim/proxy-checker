@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProxyChecker.Common.Services;
 using Serilog;
 
 namespace ProxyChecker.Common.Logging;
@@ -13,7 +14,7 @@ public static class LogConfigurator
 			loggingBuilder.AddSerilog(
 			  new LoggerConfiguration()
 				.ReadFrom.Configuration(configuration)
-				.WriteTo.File("app.log")
+				.WriteTo.File(Path.Combine(PathsProvider.GetLogsFolder(), "app.log"))
 				.CreateLogger()
 			);
 		});

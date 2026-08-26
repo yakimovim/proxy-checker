@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
@@ -90,12 +93,26 @@ class Build : NukeBuild
     .Description("Compose resulting project folder")
     .DependsOn(Publish)
     .Executes(() => {
-      (RootDirectory).GlobFiles("ProxyChecker/**/publish/*").ForEach(f => {
-        f.Copy(OutputDirectory / f.Name, ExistsPolicy.FileOverwrite);
-      });
-      (RootDirectory).GlobFiles("ProxyChecker.Cli/**/publish/*").ForEach(f => {
-        f.Copy(OutputDirectory / f.Name, ExistsPolicy.FileOverwrite);
-      });
+
+      var filesToExcludeFromUi = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+      {
+        "appsettings.local.json"
+      };
+      (RootDirectory).GlobFiles("ProxyChecker/**/publish/*")
+        .Where(f => !filesToExcludeFromUi.Contains(f.Name))
+        .ForEach(f => {
+          f.Copy(OutputDirectory / f.Name, ExistsPolicy.FileOverwrite);
+        });
+
+      var filesToExcludeFromCli= new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+      {
+        "appsettings.local.json"
+      };
+      (RootDirectory).GlobFiles("ProxyChecker.Cli/**/publish/*")
+        .Where(f => !filesToExcludeFromCli.Contains(f.Name))
+        .ForEach(f => {
+          f.Copy(OutputDirectory / f.Name, ExistsPolicy.FileOverwrite);
+        });
 
       // Loaders
       (RootDirectory).GlobFiles("ProxyChecker.Loaders.UriTextFile/**/publish/ProxyChecker.Loaders.UriTextFile.*").ForEach(f => {
