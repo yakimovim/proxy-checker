@@ -5,7 +5,11 @@
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>proxy-checker.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="proxy-checker.ico" />
+  </ItemGroup>
 
   <ItemGroup>
 		<PackageReference Include="Avalonia.Desktop" />

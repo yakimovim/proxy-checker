@@ -428,5 +428,8 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+.gigacode/
+**/.gigacode/
+
 **/appsettings.local.json
 output/

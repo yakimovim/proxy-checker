@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>proxychecker</id>
+    <version>1.0.2</version>
+    <title>ProxyChecker (Install)</title>
+    <authors>Ivan Yakimov</authors>
+    <projectUrl>https://github.com/yakimovim/proxy-checker</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/yakimovim/proxy-checker/refs/heads/master/ProxyChecker.png</iconUrl>
+    <licenseUrl>https://github.com/yakimovim/proxy-checker/raw/refs/heads/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/yakimovim/proxy-checker</projectSourceUrl>
+    <tags>proxychecker proxy</tags>
+    <summary>Application to check proxy servers availability</summary>
+    <description>This application can download lists of proxy servers from different sources, check their availability and export lists of available proxy servers.</description>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

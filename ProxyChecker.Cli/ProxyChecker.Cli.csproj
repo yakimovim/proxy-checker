@@ -5,7 +5,12 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>proxy-checker.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="proxy-checker.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" />
